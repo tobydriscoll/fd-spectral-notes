@@ -3,52 +3,9 @@ root: intro
 options:
     numbered: 2
 chapters:
-  - file: representation/overview
+  - file: finite-diffs/overview
     sections:
-    - file: representation/data-types
-    - file: representation/numpy
-    - file: representation/pandas
-    - file: representation/seaborn
-  - file: statistics/overview
-    sections:
-    - file: statistics/summary
-    - file: statistics/split-apply-combine
-    - file: statistics/outliers
-    - file: statistics/correlation
-    - file: statistics/exercises
-  - file: classification/overview
-    sections:
-    - file: classification/sklearn
-    - file: classification/performance
-    - file: classification/decision-trees
-    - file: classification/nearest-neighbors
-    - file: classification/svm
-    - file: classification/overfitting
-    - file: classification/model-selection
-    - file: classification/exercises
-  - file: regression/overview
-    sections:
-    - file: regression/linear
-    - file: regression/multilinear
-    - file: regression/regularization
-    - file: regression/nonlinear
-    - file: regression/prob_class
-    - file: regression/logistic
-    - file: regression/exercises
-  - file: clustering/overview
-    sections:
-    - file: clustering/similarity
-    - file: clustering/performance
-    - file: clustering/k-means
-    - file: clustering/hierarchical
-    - file: clustering/dbscan
-    - file: clustering/exercises
-  - file: network/overview
-    sections:
-    - file: network/networkx
-    - file: network/clustering
-    - file: network/distance
-    - file: network/degree
-    - file: network/centrality
-    - file: network/community
-    - file: network/exercises
+    - file: finite-diffs/integration
+  - file: tpbvp/overview
+    # sections:
+    # - file: bvp/overview
