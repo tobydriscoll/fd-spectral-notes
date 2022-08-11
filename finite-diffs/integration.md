@@ -49,8 +49,16 @@ $$
 \begin{bmatrix} g(x_0) \\ g(x_1) \\ \vdots \\ g(x_{n-1}) \\ g(x_n)   \end{bmatrix}. 
 $$
 
+We will call the matrix in this system a **differentiation matrix**. It maps a vector of function values to a vector of (approximate) values of its derivative.
+
 ```{code-cell}
 using LinearAlgebra
+function diffmat1(x)
+    # assumes evenly spaced nodes
+    h = x[2]-x[1]
+    m = length(x)
+    Dx = 1/2h*diagm(-1=>[-1;-2*ones(m-2)],0=>[-2;zeros(m-2);2],1=>[2;ones(m-2)])
+end
 
 a,b = 0,1
 g = x->cos(x)
@@ -58,11 +66,7 @@ g = x->cos(x)
 n = 8
 h = (b-a)/n
 x = [a + i*h for i in 0:n]
-A = 1/2h * diagm(
-    -1=>[-ones(n-1);-2],
-    0=>[-2;zeros(n-1);2],
-    1=>[2;ones(n-1)] 
-    )
+A = diffmat1(x)
 ```
 
 ```{code-cell}
@@ -101,17 +105,10 @@ Compare to the exact solution, $u(x)=\sin(x)$:
 While that's plausible, it's not conclusively correct. Let's do a convergence study.
 
 ```{code-cell}
-function fdintegrate(n)
-    a,b = 0,1
-    g = x->cos(x)
-
+function fdintegrate(g,a,b,n)
     h = (b-a)/n
     x = [a + i*h for i in 0:n]
-    A = 1/2h * diagm(
-        -1=>[-ones(n-1);-2],
-        0=>[-2;zeros(n-1);2],
-        1=>[2;ones(n-1)] 
-        )
+    A = diffmat1(g,a,b,n)
     b = g.(x)
 
     A[1,1:2] = [1,0];  b[1] = 0;
@@ -123,7 +120,7 @@ end
 n = [2^k for k in 1:10]
 err = []
 for n in n
-    x,u = fdintegrate(n)
+    x,u = fdintegrate(cos,0,1,n)
     û = sin.(x)
     push!(err,norm(u-û)/norm(û))
 end

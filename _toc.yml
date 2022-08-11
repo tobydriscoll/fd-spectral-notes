@@ -9,8 +9,9 @@ chapters:
     - file: finite-diffs/series
     - file: finite-diffs/fourier
     - file: finite-diffs/interpolation
-    - file: finite-diffs/tpbvp
-    - file: finite-diffs/bc
+    - file: finite-diffs/diffmats
   - file: tpbvp/overview
-    # sections:
-    # - file: bvp/overview
+    sections:
+    - file: tpbvp/linear
+    - file: tpbvp/bc
+    - file: tpbvp/nonlinear

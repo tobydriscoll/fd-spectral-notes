@@ -1,0 +1,110 @@
+{
+	// Place your fnc-julia workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+
+	"Side by side panels" : {
+		"scope": "markdown",
+		"prefix": ["panels","side-by-side"],
+		"body": ["::::{panels}\n:column: col-7 left-side\n:card: border-0 shadow-none\n${1}\n---\n:column: col-5 right-side\n:card: shadow-none comment\n${2}\n::::$0"]
+	},
+
+	"Function reference" : {
+		"scope": "markdown",
+		"prefix": "funref",
+		"body": "{numref}`Function {number} <function-$1>`$0"
+	},
+
+	"Section reference" : {
+		"scope": "markdown",
+		"prefix": "secref",
+		"body": "{numref}`section-${TM_DIRECTORY/.*\\/(.*)$/$1/}-$1`$0"
+	},
+
+	"Definition reference" : {
+		"scope": "markdown",
+		"prefix": "defref",
+		"body": "{numref}`Definition {number} <definition-$TM_FILENAME_BASE-$1>`$0"
+	},
+
+	"Table reference" : {
+		"scope": "markdown",
+		"prefix": "tabref",
+		"body": "{numref}`Table {number} <table-$TM_FILENAME_BASE-$1>`$0"
+	},
+
+	"Theorem reference" : {
+		"scope": "markdown",
+		"prefix": "thmref",
+		"body": "{numref}`Theorem {number} <theorem-$TM_FILENAME_BASE-$1>`$0"
+	},
+
+	"Demo reference" : {
+		"scope": "markdown",
+		"prefix": "demref",
+		"body": "{numref}`Demo {number} <demo-$TM_FILENAME_BASE-$1>`$0"
+	},
+
+	"Example reference" : {
+		"scope": "markdown",
+		"prefix": "exref,exaref",
+		"body": "{numref}`Example {number} <example-$TM_FILENAME_BASE-$1>`$0"
+	},
+
+	"Algorithm reference" : {
+		"scope": "markdown",
+		"prefix": "algref",
+		"body": "{numref}`Algorithm {number} <algorithm-$TM_FILENAME_BASE-$1>`$0"
+	},
+
+	"Index" : {
+		"scope": "markdown",
+		"prefix": "\\ind",
+		"body": "```{index} $1\n```\n$0"
+	},
+
+	"Code cell" : {
+		"scope": "markdown",
+		"prefix": "\\code",
+		"body": "```{code-cell}\n$1\n$0"
+	},
+
+	"Definition" : {
+		"scope": "markdown",
+		"prefix": "\\def",
+		"body": "::::{proof:definition} $1\n$2::::\n$0"
+	},
+
+	"BMatrix" : {
+		"scope": "markdown",
+		"prefix": "\\bmat",
+		"body": "\\begin{bmatrix}\n  $1\n\\end{bmatrix}"
+	},
+
+	"Mathbf A" : {
+		"scope": "markdown",
+		"prefix": "bfa,bfA,$bfa,$bfA",
+		"body": "\\mathbf{A}"
+	},
+
+	"mathbf" : {
+		"scope": "markdown",
+		"prefix": "\\mb",
+		"body": "\\mathbf{$1}$0"
+	}
+
+
+}

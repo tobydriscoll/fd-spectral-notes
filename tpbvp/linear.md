@@ -33,7 +33,7 @@ $$
 
 There is a close correspondence between a function $u(x)$ and the vector $\bfu$ of its values at the nodes. In order to clarify when we are dealing with the exact solution of the BVP, we denote it by $\hat{u}(x)$ from now on, and its discretization is $\hat{\bfu}$.
 
-
+<!-- 
 We will replace $u''$ and $u'$ at the nodes by FD counterparts. If we aim for 2nd-order accuracy, then we can use centered differences at the interior nodes:
 
 $$
@@ -60,9 +60,9 @@ $$
 & & & -1 & 0 & 1 \\
 & & & & -2 & 2 
 \end{bmatrix}.
-$$
+$$ -->
 
-The discrete form of the ODE, sans boundary conditions, is now
+We can discretize $u''$ and $u'$ by using differentiation matrices. The discrete form of the ODE, sans boundary conditions, becomes
 
 $$
 \bfA \bfu = \bff, \qquad \bfA = \bfD_{xx} + \bfP \bfD_{x} + \bfQ,
@@ -106,9 +106,55 @@ $$
 
 where $\bfC$ is the $(n+1)\times(n+1)$ identity with first and last rows deleted. We're now going to rechristen the terms in this equation as $\bfA \bfu = \bff$ for simplicity.
 
+## Advection-diffusion
+
+The linear **advection-diffusion equation** in 1D is
+
+$$
+\partial_t u + c \partial_x u = k \partial_{xx} u, \quad c, k \ge 0. 
+$$
+
+When $k=0$, everything is simply transported with velocity $c$, and when $c=0$, the equation represents pure diffusion. The balance between the terms can be expressed by the **Peclet number**
+
+$$
+\text{Pe} = \frac{c}{k}. 
+$$
+
+Using $\lambda=\text{Pe}^{-1}$, we will solve the steady-state problem
+
+$$
+\partial_x u = \lambda \partial_{xx} u
+$$
+
+subject to $u(-1)=1$, $u(1)=-1$.
+
+```{code-cell}
+include("diffmats.jl")
+function advdiff(a,b,λ,n)
+  h = (b-a)/n
+  x = [a+i*h for i in 0:n]
+  Dx,Dxx = diffmats(x)
+  Ã = Dx - λ*Dxx
+  A = diagm(ones(n+1))
+  A[2:n,:] .= Ã[2:n,:]
+  f = [1; zeros(n-1); -1]
+  return x,A\f 
+end
+```
+
+```{code-cell}
+using Plots
+plt = plot(legend=:bottomleft)
+for λ in [10,1,0.5,0.1]
+    x,u = advdiff(-1,1,λ,400)
+    plot!(x,u,label="λ=$λ")
+end
+plt
+```
+
 ## Consistency
 
-We now define the **local truncation error** as the vector
+In the general problem, we define the **local truncation error** as the vector
 
 $$
 \bftau = \bfA \hat{\bfu} - \bff. 
