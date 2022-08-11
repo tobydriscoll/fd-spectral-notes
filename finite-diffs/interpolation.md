@@ -18,13 +18,13 @@ kernelspec:
 An equivalent but different way to look at finite differences is *interpolate-differentiate-evaluate*. For example, consider again the humble two-point forward difference
 
 $$
-\frac{a_1 u(h) + a_0 u(0)}{h} & \approx u'(0). 
+\frac{a_1 u(h) + a_0 u(0)}{h}  \approx u'(0). 
 $$
 
 If we draw the secant line through the points $(0,u(0))$ and $(h,u(h))$, then its slope is $(u(h)-u(0))/h$, and we recover the first-order formula. The three-point centered difference 
 
 $$
-\frac{a_{-1}u(-h) + a_0 u(0) + a_1u(h)}{h} & \approx u'(0) 
+\frac{a_{-1}u(-h) + a_0 u(0) + a_1u(h)}{h} \approx u'(0) 
 $$
 
 suggests interpolation by a parabola through three points:
@@ -45,7 +45,13 @@ $$
 u'(-h) \approx P'(-h) = -\frac{3}{2h} u(-h) + \frac{2}{h} u(0) - \frac{1}{2h} u(h), 
 $$
 
-which is the three-point forward formula we derived in the previous section.
+which is the three-point forward formula we derived by power series. For that matter, we can also derive a centered formula for the second derivative,
+
+$$
+u''(0) \approx P''(0) = \frac{1}{h^2} u(-h) - \frac{2}{h^2} u(0) + \frac{1}{h^2} u(h),
+$$
+
+which happens to be second-order accurate.
 
 ## Fornberg's algorithm
 

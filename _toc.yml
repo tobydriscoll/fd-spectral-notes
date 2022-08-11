@@ -6,6 +6,11 @@ chapters:
   - file: finite-diffs/overview
     sections:
     - file: finite-diffs/integration
+    - file: finite-diffs/series
+    - file: finite-diffs/fourier
+    - file: finite-diffs/interpolation
+    - file: finite-diffs/tpbvp
+    - file: finite-diffs/bc
   - file: tpbvp/overview
     # sections:
     # - file: bvp/overview

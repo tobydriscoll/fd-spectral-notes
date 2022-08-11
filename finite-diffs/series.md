@@ -54,7 +54,7 @@ cd2
 
 $$
 u(x+h) - u(x) & = hu'(x) + \frac{1}{2}h^2u''(x) + \cdots \\ 
-\frac{u(x+h)-u(x-h)}{2h} = u'(x) + \frac{1}{6} h^2 u'''(x) + O(h^4).
+\frac{u(x+h)-u(x-h)}{2h} &= u'(x) + \frac{1}{6} h^2 u'''(x) + O(h^4).
 $$
 
 One interpretation is that the antisymmetry around $h=0$ buys us an extra order.
@@ -97,7 +97,8 @@ We can handle centered (and any generally-offset) formula on evenly spaced nodes
 $$
 \frac{a_{-1}u(-h) + a_0 u(0) + a_1u(h)}{h} & \approx u'(0)  \\ 
 a_{-1}Z^{-1} + a_0 + a_1 Z & \approx \log(Z) \\ 
-a_{-1} + a_0 Z + a_1 Z^2 & \approx Z \log(Z) \\ 
+a_{-1} + a_0 Z + a_1 Z^2 & \approx Z \log(Z) 
+$$
 
 ```{code-cell} ipython3
 expand(taylor(z*log(z),z,1,2))
