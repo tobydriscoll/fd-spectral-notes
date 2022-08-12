@@ -1,0 +1,765 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>2.3. Nonlinear TPBVP &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfD": "\\mathbf{D}", "bfJ": "\\mathbf{J}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\varepsilon_\\text{mach}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.4. Resolving layers" href="layers.html" />
+    <link rel="prev" title="2.2. Boundary conditions for the TPBVP" href="bc.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   2. TPBVP
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/tpbvp/nonlinear.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/tpbvp/nonlinear.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/tpbvp/nonlinear.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jacobian-matrix">
+   Jacobian matrix
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exact-jacobian">
+     Exact Jacobian
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#automatic-differentiation">
+     Automatic differentiation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finite-differences">
+     Finite differences
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#continuation">
+   Continuation
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Nonlinear TPBVP</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jacobian-matrix">
+   Jacobian matrix
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exact-jacobian">
+     Exact Jacobian
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#automatic-differentiation">
+     Automatic differentiation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finite-differences">
+     Finite differences
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#continuation">
+   Continuation
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="nonlinear-tpbvp">
+<h1><span class="section-number">2.3. </span>Nonlinear TPBVP<a class="headerlink" href="#nonlinear-tpbvp" title="Permalink to this headline">#</a></h1>
+<p>Now consider the nonlinear TPBVP</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+F(x,u,u',u'') &amp;= 0, \quad a &lt; x &lt; b, \\ 
+g_a(u(a),u'(a))  &amp;= 0, \\ 
+g_b(u(b),u'(b))  &amp;= 0.
+\end{split}\]</div>
+<p>Our approach to discretization remains the same. We choose nodes <span class="math notranslate nohighlight">\(x_0,\ldots,x_n\)</span>, replace <span class="math notranslate nohighlight">\(u(x)\)</span> by a vector of its values at the nodes, and use FD formulas when derivatives of <span class="math notranslate nohighlight">\(u\)</span> are called for. However, the result is a nonlinear system of algebraic equations</p>
+<div class="math notranslate nohighlight">
+\[
+\bff(\bfu) = \bfzero.
+\]</div>
+<p>Using a black-box nonlinear equation solver, it’s rather easy to get solutions. For example, here is a solution of</p>
+<div class="math notranslate nohighlight">
+\[
+\lambda u'' + u(u'-1) = -x, \quad u(0)=-1, \quad u(1)=1. 
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span>
+<span class="k">using</span> <span class="n">NLsolve</span>
+<span class="k">function</span> <span class="n">bvp</span><span class="p">(</span><span class="n">λ</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+  <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+  <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
+  <span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">ode</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">u</span><span class="o">.*</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">u</span> <span class="o">.-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span>
+  <span class="n">residual</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">ode</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">];</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">u</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="o">.</span><span class="n">zero</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>bvp (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="ss">:topleft</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">λ</span> <span class="k">in</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.01</span><span class="p">]</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">u</span> <span class="o">=</span> <span class="n">bvp</span><span class="p">(</span><span class="n">λ</span><span class="p">,</span><span class="mi">300</span><span class="p">);</span>
+    <span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=</span><span class="si">$λ</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="n">plt</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/nonlinear_2_0.svg" src="../_images/nonlinear_2_0.svg" /></div>
+</div>
+<p>The standard approach is to use a Newton-style method in which we replace the nonlinear problem by a sequence of linear surrogates that we construct and solve iteratively, i.e,</p>
+<div class="math notranslate nohighlight">
+\[
+\bfA_k \bfs_k &amp;= \bff(\bfu_k),
+\bfu_{k+1} &amp;= \bfu_k - \bfs_k,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\bfA_k\)</span> is an approximation to the <strong>Jacobian matrix</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\bfJ(\bfu_k) = \left. \begin{bmatrix}
+  \pp{f_i}{u_j}
+\end{bmatrix} \right\lvert_{\bfu=\bfu_k}. 
+\]</div>
+<p>Good performance in the nonlinear solver boils down mainly to two factors: an efficient and sufficiently accurate way to produce/apply <span class="math notranslate nohighlight">\(\bfA_k\)</span>, and selection of the initial estimate <span class="math notranslate nohighlight">\(\bfu_0\)</span>.</p>
+<section id="jacobian-matrix">
+<h2>Jacobian matrix<a class="headerlink" href="#jacobian-matrix" title="Permalink to this headline">#</a></h2>
+<p>There are essentially three possibilities worth pursuing when the system size is <span class="math notranslate nohighlight">\(\approx O(1000)\)</span> or less.</p>
+<section id="exact-jacobian">
+<h3>Exact Jacobian<a class="headerlink" href="#exact-jacobian" title="Permalink to this headline">#</a></h3>
+<p>Using the exact Jacobian matrix ensures the fastest possible convergence of the solver iterations. However, it can take significant human effort to put this into practice.</p>
+<p>For example, consider solving the ODE</p>
+<div class="math notranslate nohighlight">
+\[
+u'' + u u' - 1 = 0,
+\]</div>
+<p>subject to Dirichlet boundary conditions at <span class="math notranslate nohighlight">\(x=0\)</span> and <span class="math notranslate nohighlight">\(x=1\)</span>.</p>
+<p>While the numerical method is “discretize-then-linearize,” to obtain expressions for the Jacobian it’s often easier to linearize first, then discretize. Suppose that we want to linearize the operator <span class="math notranslate nohighlight">\(f(u)=u''+uu'+1\)</span> around the function <span class="math notranslate nohighlight">\(u=U(x)\)</span>. If we perturb <span class="math notranslate nohighlight">\(u\)</span> to <span class="math notranslate nohighlight">\(U+ \epsilon v(x)\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+f(U+\epsilon v) &amp; = (U+\epsilon v)'' + (U+\epsilon v)(U'+\epsilon v') - 1 \\ 
+&amp;= U'' + \epsilon v'' + U U' + \epsilon (Uv'+U'v) + O(\epsilon^2) - 1 \\ 
+&amp;= f(U) +\epsilon (v'' + Uv' + U'v) + O(\epsilon^2). 
+\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(O(\epsilon)\)</span> term represents the action of the “Jacobian” on the perturbation. That is,</p>
+<div class="math notranslate nohighlight">
+\[
+J(v) = v'' + Uv' + U'v. 
+\]</div>
+<p>(Note that the result, like any derivative, depends on the evaluation “point” <span class="math notranslate nohighlight">\(U\)</span>.) Hence, the “Jacobian operator” is</p>
+<div class="math notranslate nohighlight">
+\[
+J = \partial_{xx} + U \partial_x + U'. 
+\]</div>
+<p>The boundary conditions imply that <span class="math notranslate nohighlight">\(U+\epsilon v\)</span> is zero at both ends, but since <span class="math notranslate nohighlight">\(U\)</span> is, then <span class="math notranslate nohighlight">\(v\)</span> must be as well. We would proceed by discretizing <span class="math notranslate nohighlight">\(J\)</span> as a <em>linear</em> ODE, subject to homogeneous Dirichlet conditions. Things get trickier with Neumann and mixed boundary conditions, particularly if fictitious points are used, but with enough gumption, you can follow it through.</p>
+</section>
+<section id="automatic-differentiation">
+<h3>Automatic differentiation<a class="headerlink" href="#automatic-differentiation" title="Permalink to this headline">#</a></h3>
+<p>As you know, differentiation, unlike antidifferentiation, is a purely mechanical process following simple rules. In AD, these rules are applied numerically, not symbolically. For example, consider the function <span class="math notranslate nohighlight">\(\cos(x^2)\)</span>, to be evaluated at <span class="math notranslate nohighlight">\(x=3\)</span>. The first step for the computer is to square 3 to get 9. At the same time, we know the derivative of the result is <span class="math notranslate nohighlight">\(2\cdot 3=6\)</span>. Next, <span class="math notranslate nohighlight">\(\cos(9)\)</span> is evaluated to get the value result, while we use the chain rule and also multiply 6 by <span class="math notranslate nohighlight">\(-\sin(9)\)</span> to get the numerical derivative. The same ideas work multidimensionally, for all the mathematical functions we are likely to evaluate.</p>
+<p>AD has taken off in popularity due to ML, where it is essential for training neural networks. There are many software tools for it, and when it works it can be fantastic. However, in the BVP context it can consume a lot of computing time as the number of unknowns grows, and most implementations can’t yet cope with every kind of statement you want to use in evaluating the BVP operator.</p>
+</section>
+<section id="finite-differences">
+<h3>Finite differences<a class="headerlink" href="#finite-differences" title="Permalink to this headline">#</a></h3>
+<p>Yo dawg, would you like some finite differences with your finite differences?</p>
+<p>The difference</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\bff(\bfu + \epsilon \bfv) - \bff(u)}{\epsilon}
+\]</div>
+<p>approximates the directional derivative <span class="math notranslate nohighlight">\(\bfJ(\bfu)\bfv\)</span>. The full Jacobian matrix can be recovered by applying this difference repeatedly in each of the coordinate axes directions. When there are <span class="math notranslate nohighlight">\(N\)</span> unknowns, this process requires at least <span class="math notranslate nohighlight">\(O(N^2)\)</span> work, but in principle that should be insignificant next to the <span class="math notranslate nohighlight">\(O(N^3)\)</span> work needed to solve the linear system with <span class="math notranslate nohighlight">\(\bfJ\)</span>.</p>
+<p>The advantage of an FD Jacobian is that is requires only that <span class="math notranslate nohighlight">\(\bff\)</span> be available, which is necessary for the entire problem. Because of this, it’s usually the default choice.</p>
+<p>However, it can be slow in practice, and it can be affected by roundoff error; we can expect an optimal accuracy that is only <span class="math notranslate nohighlight">\(O(\sqrt{\epsilon_\text{mach}})\)</span>. That could be improved by using a central difference for the directional derivative, but doing so requires twice as many evaluations of <span class="math notranslate nohighlight">\(\bff\)</span>, which is usually considered prohibitive. The drawbacks are mitigated somewhat in a quasi-Newton algorithm that tries to update the Jacobian at each nonlinear iteration, rather than computing it from scratch each time.</p>
+</section>
+</section>
+<section id="continuation">
+<h2>Continuation<a class="headerlink" href="#continuation" title="Permalink to this headline">#</a></h2>
+<p>Here’s an example known as the <strong>Allen-Cahn equation</strong>.</p>
+<div class="math notranslate nohighlight">
+\[
+\lambda u'' + u - u^3 = -\sin(5x), \quad u(0)=-1, \quad u(1)=1. 
+\]</div>
+<p>At <span class="math notranslate nohighlight">\(\lambda=0.08\)</span>, this equation gives us no trouble.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+<span class="n">λ</span> <span class="o">=</span> <span class="mf">0.08</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
+<span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">ode</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">u</span> <span class="o">-</span> <span class="n">u</span><span class="o">.^</span><span class="mi">3</span> <span class="o">+</span> <span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">)</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">ode</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">];</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="nd">@elapsed</span> <span class="n">u1</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.329690583
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, when we decrease <span class="math notranslate nohighlight">\(\lambda\)</span> just a bit, the solution takes <em>much</em> longer and looks very different.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">λ</span> <span class="o">=</span> <span class="mf">0.07</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
+<span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">ode</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">u</span> <span class="o">-</span> <span class="n">u</span><span class="o">.^</span><span class="mi">3</span> <span class="o">+</span> <span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">)</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">ode</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">];</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="nd">@elapsed</span> <span class="n">u2</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.64388425
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,[</span><span class="n">u1</span><span class="o">.</span><span class="n">zero</span> <span class="n">u2</span><span class="o">.</span><span class="n">zero</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/nonlinear_7_0.svg" src="../_images/nonlinear_7_0.svg" /></div>
+</div>
+<p>A closer look at the nonlinear solver results shows that the iteration did not converge in the second case:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u1</span><span class="o">.</span><span class="n">residual_norm</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.95784541093758e-11
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u2</span><span class="o">.</span><span class="n">residual_norm</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.606195234491817
+</pre></div>
+</div>
+</div>
+</div>
+<p>A simple way to fight back is <strong>continuation</strong>, in which we use the solution at a more tractable version of the problem as the initial estimate for the tougher problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@elapsed</span> <span class="n">u2</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">u1</span><span class="o">.</span><span class="n">zero</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.041596292
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u2</span><span class="o">.</span><span class="n">zero</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/nonlinear_13_0.svg" src="../_images/nonlinear_13_0.svg" /></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./tpbvp"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="bc.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">2.2. </span>Boundary conditions for the TPBVP</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="layers.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2.4. </span>Resolving layers</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

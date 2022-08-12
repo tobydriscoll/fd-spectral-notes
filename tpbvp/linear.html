@@ -1,0 +1,688 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>2.1. Two-point boundary-value problem &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfD": "\\mathbf{D}", "bfJ": "\\mathbf{J}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\varepsilon_\\text{mach}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.2. Boundary conditions for the TPBVP" href="bc.html" />
+    <link rel="prev" title="2. TPBVP" href="overview.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   2. TPBVP
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/tpbvp/linear.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/tpbvp/linear.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/tpbvp/linear.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advection-diffusion">
+   Advection-diffusion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#consistency">
+   Consistency
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#convergence">
+   Convergence
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Two-point boundary-value problem</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advection-diffusion">
+   Advection-diffusion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#consistency">
+   Consistency
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#convergence">
+   Convergence
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="two-point-boundary-value-problem">
+<h1><span class="section-number">2.1. </span>Two-point boundary-value problem<a class="headerlink" href="#two-point-boundary-value-problem" title="Permalink to this headline">#</a></h1>
+<p>Let’s look at methods for the <strong>linear TPBVP</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+u''(x) + p(x)u'(x) + q(x)u(x) &amp;= f(x), \quad a &lt; x &lt; b, \\ 
+G_{11}u(a) + G_{12}u'(a)  &amp;= \alpha, \\ 
+G_{21}u(b) + G_{22}u'(b)  &amp;= \beta. 
+\end{split}\]</div>
+<p>For now, we will consider only <strong>Dirichlet conditions</strong> in which <span class="math notranslate nohighlight">\(G_{11}=G_{21}=1\)</span>, <span class="math notranslate nohighlight">\(G_{12}=G_{22}=0\)</span>.</p>
+<p>We begin with evenly spaced nodes on the domain:</p>
+<div class="math notranslate nohighlight">
+\[
+x_i = a + ih, \quad h = \frac{b-a}{n}, \quad i=0,\ldots,n.
+\]</div>
+<p>There is a close correspondence between a function <span class="math notranslate nohighlight">\(u(x)\)</span> and the vector <span class="math notranslate nohighlight">\(\bfu\)</span> of its values at the nodes. In order to clarify when we are dealing with the exact solution of the BVP, we denote it by <span class="math notranslate nohighlight">\(\hat{u}(x)\)</span> from now on, and its discretization is <span class="math notranslate nohighlight">\(\hat{\bfu}\)</span>.</p>
+<!-- 
+We will replace $u''$ and $u'$ at the nodes by FD counterparts. If we aim for 2nd-order accuracy, then we can use centered differences at the interior nodes:
+
+$$
+u''(x_i) \approx \frac{u_{i-1}-2u_i+u_{i+1}}{h^2}, \quad u'(x_i) \approx \frac{-u_{i-1}+u_{i+1}}{2h}, \quad i=1,\dots,n-1. 
+$$
+
+At the first and last nodes, these formulas refer to fictitious values outside the domain. We could use second-order forward and backward-difference formulas, but it will turn out that the first-order formulas will be fine. So we define the **differentiation matrices** 
+
+$$
+\bfD_{xx} = \frac{1}{h^2}  \begin{bmatrix} 
+1 & -2 & 1 & & & \\ 
+1 & -2 & 1 & & & \\ 
+0 & 1 & -2 & 1 & & \\ 
+& & \ddots & \ddots & \ddots & \\ 
+& & & 1 & -2 & 1 \\
+& & & 1 & -2 & 1 
+\end{bmatrix}, 
+\qquad 
+\bfD_{x} = \frac{1}{2h}  \begin{bmatrix} 
+-2 & 2 & & & & \\ 
+-1 & 0 & 1 & & & \\ 
+0 & -1 & 0 & 1 & & \\ 
+& & \ddots & \ddots & \ddots & \\ 
+& & & -1 & 0 & 1 \\
+& & & & -2 & 2 
+\end{bmatrix}.
+$$ -->
+<p>We can discretize <span class="math notranslate nohighlight">\(u''\)</span> and <span class="math notranslate nohighlight">\(u'\)</span> by using differentiation matrices. The discrete form of the ODE, sans boundary conditions, becomes</p>
+<div class="math notranslate nohighlight">
+\[
+\bfA \bfu = \bff, \qquad \bfA = \bfD_{xx} + \bfP \bfD_{x} + \bfQ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\bfP\)</span> and <span class="math notranslate nohighlight">\(\bfQ\)</span> are diagonal matrices of the evaluations of the coefficient functions <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(q\)</span>.</p>
+<p>The boundary conditions imply that</p>
+<div class="math notranslate nohighlight">
+\[
+u_0 = \alpha, \, u_n = \beta. 
+\]</div>
+<!-- Recall that matrix-vector multiplication is identical to a linear combination of the matrix columns:
+
+$$
+\bfA \bfu = u_0 \bfa_0 + u_1 \bfa_1 + \cdots + u_n \bfa_n. 
+$$
+
+Hence the linear system is 
+
+$$
+\alpha \bfa_0 + u_1 \bfa_1 + \cdots + \beta \bfa_n & = \bff \\ 
+u_1 \bfa_1 + \cdots + u_{n-1} \bfa_{n-1} & = \bff - \alpha \bfa_0  - \beta \bfa_n,
+$$
+
+where the right-hand side is a known vector. The left-hand side has $n+1$ rows but only $n-1$ unknowns. Let $\bfC$ be the $(n+1)\times(n+1)$ identity with first and last rows deleted. We arrive at the square linear system
+
+$$
+\bfC \bfA \begin{bmatrix} u_1 \\ u_2 \\ \vdots \\ u_{n-1} \end{bmatrix} 
+= \begin{bmatrix} f(x_1) - \alpha (1/h^2 + p(x_1)/2h + q(x_1)) \\ f(x_2) \\ \vdots \\ f(x_{n-1}) - \beta (1/h^2 + p(x_{n-1})/2h + q(x_{n-1}))  \end{bmatrix}. 
+$$ -->
+<p>The easy way to impose these linear conditions is to delete the first and rows of the system and replace them with the boundary conditions:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix} 1 &amp; 0 &amp; \dots &amp; 0 \\ \bfC \bfA  \\ 0 &amp; \cdots &amp; 0 &amp; 1 \end{bmatrix} 
+\begin{bmatrix} u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_{n} \end{bmatrix} 
+= \begin{bmatrix} \alpha \\ f(x_1) \\ \vdots \\ f(x_{n-1}) &amp; \beta \end{bmatrix},
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\bfC\)</span> is the <span class="math notranslate nohighlight">\((n+1)\times(n+1)\)</span> identity with first and last rows deleted. We’re now going to rechristen the terms in this equation as <span class="math notranslate nohighlight">\(\bfA \bfu = \bff\)</span> for simplicity.</p>
+<section id="advection-diffusion">
+<h2>Advection-diffusion<a class="headerlink" href="#advection-diffusion" title="Permalink to this headline">#</a></h2>
+<p>The linear <strong>advection-diffusion equation</strong> in 1D is</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t u + c \partial_x u = k \partial_{xx} u, \quad c, k \ge 0. 
+\]</div>
+<p>When <span class="math notranslate nohighlight">\(k=0\)</span>, everything is simply transported with velocity <span class="math notranslate nohighlight">\(c\)</span>, and when <span class="math notranslate nohighlight">\(c=0\)</span>, the equation represents pure diffusion. The balance between the terms can be expressed by the <strong>Peclet number</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\text{Pe} = \frac{c}{k}. 
+\]</div>
+<p>Using <span class="math notranslate nohighlight">\(\lambda=\text{Pe}^{-1}\)</span>, we will solve the steady-state problem</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_x u = \lambda \partial_{xx} u
+\]</div>
+<p>subject to <span class="math notranslate nohighlight">\(u(-1)=1\)</span>, <span class="math notranslate nohighlight">\(u(1)=-1\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span>
+<span class="k">function</span> <span class="n">advdiff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">λ</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+  <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
+  <span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">Ã</span> <span class="o">=</span> <span class="n">Dx</span> <span class="o">-</span> <span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span>
+  <span class="n">A</span> <span class="o">=</span> <span class="n">diagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+  <span class="n">A</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="n">Ã</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="o">:</span><span class="p">]</span>
+  <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span> <span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="k">return</span> <span class="n">x</span><span class="p">,</span><span class="n">A</span><span class="o">\</span><span class="n">f</span> 
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>advdiff (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="ss">:bottomleft</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">λ</span> <span class="k">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">u</span> <span class="o">=</span> <span class="n">advdiff</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">λ</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span>
+    <span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=</span><span class="si">$λ</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="n">plt</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/linear_2_0.svg" src="../_images/linear_2_0.svg" /></div>
+</div>
+</section>
+<section id="consistency">
+<h2>Consistency<a class="headerlink" href="#consistency" title="Permalink to this headline">#</a></h2>
+<p>In the general problem, we define the <strong>local truncation error</strong> as the vector</p>
+<div class="math notranslate nohighlight">
+\[
+\bftau = \bfA \hat{\bfu} - \bff. 
+\]</div>
+<p>Recall that <span class="math notranslate nohighlight">\(\hat{\bfu}\)</span> is the exact solution evaluated at the nodes. The first and last entries of <span class="math notranslate nohighlight">\(\bftau\)</span> are zero, and the others all have size <span class="math notranslate nohighlight">\(O(h^2)\)</span> thanks to our series work on FD formulas. In particular,</p>
+<div class="math notranslate nohighlight">
+\[
+\lim_{h\to 0} \norm{\bftau} = 0
+\]</div>
+<p>in any vector norm, a property known as <strong>consistency</strong>. This is a basic requirement of the numerical method: faithful reproduction of the problem.</p>
+</section>
+<section id="convergence">
+<h2>Convergence<a class="headerlink" href="#convergence" title="Permalink to this headline">#</a></h2>
+<p>Now consider the <strong>error</strong> <span class="math notranslate nohighlight">\(\bfe = \hat{\bfu} - \bfu\)</span>. We calculate</p>
+<div class="math notranslate nohighlight">
+\[
+\bfA \bfe = \bfA \hat{\bfu} - \bfA \bfu = \bftau + \bff - \bff = \bftau,
+\]</div>
+<p>so that</p>
+<div class="math notranslate nohighlight">
+\[
+\bfe = \bfA^{-1} \bftau. 
+\]</div>
+<p>This leads us to another requirement of the numerical method:</p>
+<div class="math notranslate nohighlight">
+\[
+\norm{\bfA^{-1}} = O(1),
+\]</div>
+<p>i.e., it remains bounded as <span class="math notranslate nohighlight">\(h\to 0\)</span>. This property is called <strong>stability</strong>. With it, we can conclude that <span class="math notranslate nohighlight">\(\norm{\bfe} = O(h^2)\)</span>, that is, second-order convergence to the solution.</p>
+<p>Consider what a lack of stability would imply. If we perturb <span class="math notranslate nohighlight">\(\bff\)</span> by <em>any</em> small vector <span class="math notranslate nohighlight">\(\bfv\)</span>, then the solution is perturbed by <span class="math notranslate nohighlight">\(\bfA^{-1} \bfv\)</span>, which could grow unboundedly as <span class="math notranslate nohighlight">\(h\to 0\)</span>. Truncation error is one such perturbation, but so are roundoff and physical measurement error. Without stability, the computed solution is way too sensitive to such errors.</p>
+<p>It is possible to prove stability of our discretization with some conditions on the coefficient functions <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(q\)</span>. LeVeque points out that in the particular case <span class="math notranslate nohighlight">\(p=q=0\)</span>, the matrix is symmetric and its eigenvalues (indeed, its inverse) can be found in closed form.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./tpbvp"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">2. </span>TPBVP</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="bc.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2.2. </span>Boundary conditions for the TPBVP</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

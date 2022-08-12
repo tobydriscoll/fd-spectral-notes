@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Finite differences and spectral methods for PDEs &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfD": "\\mathbf{D}", "bfJ": "\\mathbf{J}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\varepsilon_\\text{mach}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Finite differences" href="finite-diffs/overview.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="tpbvp/overview.html">
+   2. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/intro.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Finite differences and spectral methods for PDEs</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="finite-differences-and-spectral-methods-for-pdes">
+<h1>Finite differences and spectral methods for PDEs<a class="headerlink" href="#finite-differences-and-spectral-methods-for-pdes" title="Permalink to this headline">#</a></h1>
+<p>Here are the three major PDE problem types:</p>
+<table class="table" id="table-pdes">
+<caption><span class="caption-number">Table 1 </span><span class="caption-text">PDE Problems</span><a class="headerlink" href="#table-pdes" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>Nonlinear</p></th>
+<th class="head"><p>Linear</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Boundary-value</p></td>
+<td><p><span class="math notranslate nohighlight">\(F(u)=0\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(Lu = 0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Time-dependent</p></td>
+<td><p><span class="math notranslate nohighlight">\(u_t = F(u)\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(u_t = Lu\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Eigenvalue</p></td>
+<td><p><span class="math notranslate nohighlight">\(-\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(Au = \lambda Bu\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>In each case, <span class="math notranslate nohighlight">\(u\)</span> is a (possibly vector-valued) function of space, and perhaps time, and the operators include differential operations in space dimensions. Boundary-value problems represent steady state and require boundary conditions depending on the order of the differential operator. (Of course, the underlying problem is an ODE, not a PDE, if there is just one space dimension.) Time-dependent problems also require an initial condition; we have limited ourselves to first-order in time, but there are ways to transform higher-order problems down to first-order by adding dimensions to <span class="math notranslate nohighlight">\(u\)</span>. Finally, while there are ways to pose nonlinear eigenvalue problems, the linear case is the standard one and has many applications in physics.</p>
+<p>Since the solution of a PDE is a function, our first decision in a numerical solution is how to represent the function on a computer. The <strong>finite-difference</strong> approach is to replace the function with a collection of its values at specific locations called <strong>nodes</strong> in space and/or time. Typically, one then determines those values through approximations to the differential operators in the original problem. When the approximations are imposed pointwise at the same set of nodes as the function values, the resulting approach may be called <strong>collocation.</strong></p>
+<p>A finite-difference method does not directly address the connection between the collocated values and an approximation to the solution function <span class="math notranslate nohighlight">\(u(x)\)</span>. One might use simple piecewise linear interpolation, for example, if this function is desired, but there is no intrinsic need to do so. By contrast, a <strong>spectral method</strong> assumes that the discrete function values are connected to an interpolating or least-squares approximation of maximum accuracy for smooth functions. Alternatively, the approximate solution may be viewed as a linear combination of basis functions with optimal approximation properties. (Sometimes, in order to distinguish from a spectral method based on expansion coefficients, a spectral collocation method is referred to as a <em>pseudospectral</em> method, although this term is not universally liked.) These methods can be viewed through the lens of finite differences or through the lens of classical orthogonal polynomials and Fourier transformations.</p>
+<p>The point of finite differences or spectral collocation is to reduce the original continuous problem to a discrete system: linear or nonlinear algebraic equations, ODEs, or a matrix eigenvalue problem. The finite-dimensional analogs are all major problem types in scientific computation; in fact, the interest in and development of the finite-dimensional problems is driven to a great extent by discretizations of PDEs. We might then ask whether the discrete solution <strong>converges</strong> to the continuous one as the size of the discrete problem increases. There are two elements that create convergence: <strong>accuracy</strong>, which is how well the discrete problem represents the original one, and <strong>stability</strong>, whose definition is dependent on the problem type but essentially ensures that the discrete mapping from data to solution does not grow without bound as the problem size increases to infinity.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='right-next' id="next-link" href="finite-diffs/overview.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Finite differences</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

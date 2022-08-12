@@ -1,0 +1,699 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1.1. Indefinite integration &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfD": "\\mathbf{D}", "bfJ": "\\mathbf{J}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\varepsilon_\\text{mach}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.2. Power series and finite differences" href="series.html" />
+    <link rel="prev" title="1. Finite differences" href="overview.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   1. Finite differences
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tpbvp/overview.html">
+   2. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/finite-diffs/integration.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/finite-diffs/integration.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/finite-diffs/integration.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Indefinite integration</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="indefinite-integration">
+<h1><span class="section-number">1.1. </span>Indefinite integration<a class="headerlink" href="#indefinite-integration" title="Permalink to this headline">#</a></h1>
+<p>The simplest possible context for our first finite-difference method is the BVP</p>
+<div class="math notranslate nohighlight">
+\[
+u'(x) = g(x), \quad u(a)=0, \quad a &lt; x &lt; b. 
+\]</div>
+<p>The solution of this problem is just an indefinite integral of <span class="math notranslate nohighlight">\(g\)</span>. Suppose we discretize the domain <span class="math notranslate nohighlight">\([a,b]\)</span> by choosing the nodes</p>
+<div class="math notranslate nohighlight">
+\[
+x_i = a + ih, \quad h = \frac{b-a}{n}, \quad i=0,\ldots,n,
+\]</div>
+<p>for a positive integer <span class="math notranslate nohighlight">\(n\)</span>. If we want to write a discrete analog of the ODE at each node, then at the first node <span class="math notranslate nohighlight">\(x_0\)</span> we really only have one of the three options above available, the forward difference. Likewise, at <span class="math notranslate nohighlight">\(x_n\)</span> we can only use the backward difference. At the interior nodes, suppose that we use a centered difference. This gives us the discrete equations</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{u_1-u_0}{h} = g(x_0), \, \frac{u_2-u_0}{2h} = g(x_1), \, \cdots \, \frac{u_n-u_{n-2}}{2h} = g(x_{n-1}),  \, \frac{u_n-u_{n-1}}{h} = g(x_{n}). 
+\]</div>
+<p>It’s much saner to express these using linear algebra:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{1}{2h}
+\begin{bmatrix} 
+-2 &amp; 2 &amp; &amp; &amp; \\ 
+-1 &amp; 0 &amp; 1 &amp; &amp; \\ 
+&amp; \ddots &amp; \ddots &amp; \ddots  &amp; \\ 
+&amp; &amp; -1 &amp; 0 &amp; 1 \\ 
+&amp; &amp; &amp; -2 &amp; 2 
+\end{bmatrix} 
+\begin{bmatrix} u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n   \end{bmatrix}
+= 
+\begin{bmatrix} g(x_0) \\ g(x_1) \\ \vdots \\ g(x_{n-1}) \\ g(x_n)   \end{bmatrix}. 
+\end{split}\]</div>
+<p>We will call the matrix in this system a <strong>differentiation matrix</strong>. It maps a vector of function values to a vector of (approximate) values of its derivative.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">LinearAlgebra</span>
+<span class="k">function</span> <span class="n">diffmat1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="c"># assumes evenly spaced nodes</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">Dx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">)],</span><span class="mi">0</span><span class="o">=&gt;</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="mi">2</span><span class="p">],</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="mi">2</span><span class="p">;</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">)])</span>
+<span class="k">end</span>
+
+<span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">x</span><span class="o">-&gt;</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">diffmat1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9×9 Matrix{Float64}:
+ -8.0   8.0   0.0   0.0   0.0   0.0   0.0   0.0  0.0
+ -4.0   0.0   4.0   0.0   0.0   0.0   0.0   0.0  0.0
+  0.0  -8.0   0.0   4.0   0.0   0.0   0.0   0.0  0.0
+  0.0   0.0  -8.0   0.0   4.0   0.0   0.0   0.0  0.0
+  0.0   0.0   0.0  -8.0   0.0   4.0   0.0   0.0  0.0
+  0.0   0.0   0.0   0.0  -8.0   0.0   4.0   0.0  0.0
+  0.0   0.0   0.0   0.0   0.0  -8.0   0.0   4.0  0.0
+  0.0   0.0   0.0   0.0   0.0   0.0  -8.0   0.0  4.0
+  0.0   0.0   0.0   0.0   0.0   0.0   0.0  -8.0  8.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">SingularException</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="ne">Stacktrace</span>:
+ <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">checknonsingular</span>
+   <span class="o">@</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Julia</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Resources</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">stdlib</span><span class="o">/</span><span class="n">v1</span><span class="mf">.8</span><span class="o">/</span><span class="n">LinearAlgebra</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">factorization</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">19</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="n">checknonsingular</span>
+   <span class="o">@</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Julia</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Resources</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">stdlib</span><span class="o">/</span><span class="n">v1</span><span class="mf">.8</span><span class="o">/</span><span class="n">LinearAlgebra</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">factorization</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">21</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#lu!#172</span>
+   <span class="o">@</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Julia</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Resources</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">stdlib</span><span class="o">/</span><span class="n">v1</span><span class="mf">.8</span><span class="o">/</span><span class="n">LinearAlgebra</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lu</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">82</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="c1">#lu#179</span>
+   <span class="o">@</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Julia</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Resources</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">stdlib</span><span class="o">/</span><span class="n">v1</span><span class="mf">.8</span><span class="o">/</span><span class="n">LinearAlgebra</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lu</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">279</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="n">lu</span> <span class="p">(</span><span class="n">repeats</span> <span class="mi">2</span> <span class="n">times</span><span class="p">)</span>
+   <span class="o">@</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Julia</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Resources</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">stdlib</span><span class="o">/</span><span class="n">v1</span><span class="mf">.8</span><span class="o">/</span><span class="n">LinearAlgebra</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lu</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">278</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">6</span><span class="p">]</span> \<span class="p">(</span><span class="n">A</span><span class="p">::</span><span class="n">Matrix</span><span class="p">{</span><span class="n">Float64</span><span class="p">},</span> <span class="n">B</span><span class="p">::</span><span class="n">Vector</span><span class="p">{</span><span class="n">Float64</span><span class="p">})</span>
+   <span class="o">@</span> <span class="n">LinearAlgebra</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Julia</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Resources</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">julia</span><span class="o">/</span><span class="n">stdlib</span><span class="o">/</span><span class="n">v1</span><span class="mf">.8</span><span class="o">/</span><span class="n">LinearAlgebra</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">generic</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">1110</span>
+ <span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="n">top</span><span class="o">-</span><span class="n">level</span> <span class="n">scope</span>
+   <span class="o">@</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="mi">2</span>
+ <span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="nb">eval</span>
+   <span class="o">@</span> <span class="o">./</span><span class="n">boot</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">368</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="n">include_string</span><span class="p">(</span><span class="n">mapexpr</span><span class="p">::</span><span class="n">typeof</span><span class="p">(</span><span class="n">REPL</span><span class="o">.</span><span class="n">softscope</span><span class="p">),</span> <span class="n">mod</span><span class="p">::</span><span class="n">Module</span><span class="p">,</span> <span class="n">code</span><span class="p">::</span><span class="n">String</span><span class="p">,</span> <span class="n">filename</span><span class="p">::</span><span class="n">String</span><span class="p">)</span>
+   <span class="o">@</span> <span class="n">Base</span> <span class="o">./</span><span class="n">loading</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">1428</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Wait, what??</p>
+<p>Sometimes when the discrete analog of the problem fails spectacularly, it’s actually reflecting an important property of the original problem. Here, we’ve forgotten to impose the boundary/initial condition <span class="math notranslate nohighlight">\(u(a)=0\)</span>, and that makes the problem ill-posed. In fact, we know that the integration problem has a 1-dimensional nonuniqueness, and so does the matrix problem here:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">U</span><span class="p">,</span><span class="n">σ</span><span class="p">,</span><span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">σ</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9-element Vector{Float64}:
+ 13.45941957293787
+ 12.625604205405399
+ 11.136682555872522
+ 10.450537021010256
+  8.837104501385673
+  7.6459024473422526
+  5.8264386573718125
+  4.867966022835773
+  7.279248367202743e-16
+</pre></div>
+</div>
+</div>
+</div>
+<p>The null space even consists of a constant solution:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="k">end</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9-element Vector{Float64}:
+ 0.07647191129018731
+ 0.07647191129018736
+ 0.07647191129018707
+ 0.15294382258037456
+ 0.15294382258037462
+ 0.30588764516074896
+ 0.3058876451607489
+ 0.6117752903214978
+ 0.6117752903214979
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s impose the boundary condition now. In order to keep this a square linear system, we need to replace a row, not add one; the natural choice is the first row.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span>  <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">b</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9-element Vector{Float64}:
+ -0.0
+  0.22780875281957613
+  0.24804941680733225
+  0.6978456110668134
+  0.7287257390927431
+  1.61508686260622
+  1.6601922580617907
+  3.4130959424308953
+  3.4806337306644126
+</pre></div>
+</div>
+</div>
+</div>
+<p>Compare to the exact solution, <span class="math notranslate nohighlight">\(u(x)=\sin(x)\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">u</span> <span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9×2 Matrix{Float64}:
+ -0.0       0.0
+  0.227809  0.124675
+  0.248049  0.247404
+  0.697846  0.366273
+  0.728726  0.479426
+  1.61509   0.585097
+  1.66019   0.681639
+  3.4131    0.767544
+  3.48063   0.841471
+</pre></div>
+</div>
+</div>
+</div>
+<p>While that’s plausible, it’s not conclusively correct. Let’s do a convergence study.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">fdintegrate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">diffmat1</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span>  <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    
+    <span class="n">u</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">b</span> 
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span><span class="n">u</span>
+<span class="k">end</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">^</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="k">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">err</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="k">in</span> <span class="n">n</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">u</span> <span class="o">=</span> <span class="n">fdintegrate</span><span class="p">(</span><span class="n">cos</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">û</span> <span class="o">=</span> <span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">push!</span><span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="o">-</span><span class="n">û</span><span class="p">)</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">û</span><span class="p">))</span>
+<span class="k">end</span>
+
+<span class="k">using</span> <span class="n">Plots</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">err</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">xaxis</span><span class="o">=</span><span class="ss">:log10</span><span class="p">,</span><span class="n">yaxis</span><span class="o">=</span><span class="ss">:log10</span><span class="p">)</span>
+<span class="n">order1</span> <span class="o">=</span> <span class="nd">@.</span> <span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">order1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="ss">:dash</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">MethodError</span>: no method matching diffmat1(::typeof(cos), ::Int64, ::Int64, ::Int64)
+<span class="n">Closest</span> <span class="n">candidates</span> <span class="n">are</span><span class="p">:</span>
+  <span class="n">diffmat1</span><span class="p">(::</span><span class="n">Any</span><span class="p">)</span> <span class="n">at</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="mi">2</span>
+
+<span class="ne">Stacktrace</span>:
+ <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">fdintegrate</span><span class="p">(</span><span class="n">g</span><span class="p">::</span><span class="n">Function</span><span class="p">,</span> <span class="n">a</span><span class="p">::</span><span class="n">Int64</span><span class="p">,</span> <span class="n">b</span><span class="p">::</span><span class="n">Int64</span><span class="p">,</span> <span class="n">n</span><span class="p">::</span><span class="n">Int64</span><span class="p">)</span>
+   <span class="o">@</span> <span class="n">Main</span> <span class="o">./</span><span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span><span class="mi">4</span>
+ <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="n">top</span><span class="o">-</span><span class="n">level</span> <span class="n">scope</span>
+   <span class="o">@</span> <span class="o">./</span><span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span><span class="mi">16</span>
+ <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="nb">eval</span>
+   <span class="o">@</span> <span class="o">./</span><span class="n">boot</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">368</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="n">include_string</span><span class="p">(</span><span class="n">mapexpr</span><span class="p">::</span><span class="n">typeof</span><span class="p">(</span><span class="n">REPL</span><span class="o">.</span><span class="n">softscope</span><span class="p">),</span> <span class="n">mod</span><span class="p">::</span><span class="n">Module</span><span class="p">,</span> <span class="n">code</span><span class="p">::</span><span class="n">String</span><span class="p">,</span> <span class="n">filename</span><span class="p">::</span><span class="n">String</span><span class="p">)</span>
+   <span class="o">@</span> <span class="n">Base</span> <span class="o">./</span><span class="n">loading</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">1428</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The straight-line convergence on log-log scales means <strong>algebraic convergence</strong> of the rate <span class="math notranslate nohighlight">\(C n^{-p}\)</span> for a positive <strong>order</strong> <span class="math notranslate nohighlight">\(p\)</span>. The dashed black line shows <span class="math notranslate nohighlight">\(p=2\)</span>. How do we explain this convergence order? Stay tuned.</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./finite-diffs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">1. </span>Finite differences</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="series.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1.2. </span>Power series and finite differences</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
