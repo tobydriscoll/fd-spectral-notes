@@ -7,6 +7,7 @@ chapters:
     sections:
     - file: finite-diffs/integration
     - file: finite-diffs/series
+    - file: finite-diffs/roundoff
     - file: finite-diffs/fourier
     - file: finite-diffs/interpolation
     - file: finite-diffs/diffmats
@@ -15,3 +16,4 @@ chapters:
     - file: tpbvp/linear
     - file: tpbvp/bc
     - file: tpbvp/nonlinear
+    - file: tpbvp/layers

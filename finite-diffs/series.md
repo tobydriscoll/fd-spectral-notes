@@ -59,7 +59,10 @@ $$
 
 One interpretation is that the antisymmetry around $h=0$ buys us an extra order.
 
-We can also use the connection between differentiation and shifting to derive formulas. Note that formally, $Z=e^{hD}$ around $h=0$, so that $hD = \log(Z)$ around $Z=1$. Hence finite difference formulas are always found as truncations of the series:
+The same series analysis can be used to derive methods as well. You decide which nodes to include, called the **stencil** of the method, give each function value an unknown coefficient, expand everything around the evaluation point, and choose the coefficients to cancel out as many terms as possible. 
+
+There is a better method, though, that uses the connection between differentiation and shifting to derive formulas. 
+Note that formally, $Z=e^{hD}$ around $h=0$, so that $hD = \log(Z)$ around $Z=1$. Hence finite difference formulas are always found as truncations of the series:
 
 ```{code-cell} ipython3
 var('z')
@@ -110,3 +113,29 @@ Similarly, we can derive a five-point centered formula via
 expand(taylor(z^2*log(z),z,1,4))
 ```
 
+## Higher derivatives
+
+We can play the same games for 2nd and higher derivative formulas. Here is the most famous formula for a second derivative: 3-point, centered, and 2nd-order:
+
+```{code-cell} ipython3
+expand(taylor(z*log(z)^2,z,1,3))
+```
+
+$$
+u''(0) = \frac{u_{-1}-2u_0+u_1}{h^2} + O(h^2)
+$$
+
+This can be carried out to 4th-order using 5 points:
+```{code-cell} ipython3
+expand(taylor(z^2*log(z)^2,z,1,5))
+```
+
+We can also do asymmetric (forward and backward) formulas:
+
+```{code-cell} ipython3
+expand(taylor(log(z)^2,z,1,3))
+```
+
+$$
+u''(0) = \frac{2u_{0}-5u_1+4u_2 - u_3}{h^2} + O(h^2)
+$$
