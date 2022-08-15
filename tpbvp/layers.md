@@ -30,9 +30,9 @@ function advdiff(λ,n)
     h = (b-a)/n
     x = [a+i*h for i in 0:n]
     Dx,Dxx = diffmats(x)
-    Ã = Dx - λ*Dxx
+    Ã = Dx - λ*Dxx
     A = diagm(ones(n+1))
-    A[2:n,:] .= Ã[2:n,:]
+    A[2:n,:] .= Ã[2:n,:]
     f = [1; zeros(n-1); -1]
     return x,A\f 
 end
@@ -106,9 +106,9 @@ function advdiff(λ,M,n)
     Dx = diagm(@. 1/ξ₁)*Ds 
     Dxx = diagm(@. 1/(ξ₁)^2)*Dss - diagm(@. ξ₂/(ξ₁)^3)*Ds
 
-    Ã = Dx - λ*Dxx
+    Ã = Dx - λ*Dxx
     A = diagm(ones(n+1))
-    A[2:n,:] .= Ã[2:n,:]
+    A[2:n,:] .= Ã[2:n,:]
     f = [1; zeros(n-1); -1]
     return s,x,A\f 
 end

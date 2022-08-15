@@ -134,9 +134,9 @@ function advdiff(a,b,λ,n)
   h = (b-a)/n
   x = [a+i*h for i in 0:n]
   Dx,Dxx = diffmats(x)
-  Ã = Dx - λ*Dxx
+  Ã = Dx - λ*Dxx
   A = diagm(ones(n+1))
-  A[2:n,:] .= Ã[2:n,:]
+  A[2:n,:] .= Ã[2:n,:]
   f = [1; zeros(n-1); -1]
   return x,A\f 
 end
