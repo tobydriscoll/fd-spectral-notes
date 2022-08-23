@@ -17,3 +17,10 @@ chapters:
     - file: tpbvp/bc
     - file: tpbvp/nonlinear
     - file: tpbvp/layers
+    - file: tpbvp/bootstrap
+  - file: elliptic/overview
+    sections:
+    - file: elliptic/tensorproduct
+    - file: elliptic/poisson
+    - file: elliptic/iterative
+    - file: elliptic/decomp

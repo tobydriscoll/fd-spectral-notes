@@ -57,11 +57,13 @@ sphinx:
           "bfx" : "\\mathbf{x}"
           "bfX" : "\\mathbf{X}"
           "bfA" : "\\mathbf{A}"
-          "bfD" : "\\mathbf{D}"
           "bfJ" : "\\mathbf{J}"
+          "bfD" : "\\mathbf{D}"
+          "bfI" : "\\mathbf{I}"
           "bfC" : "\\mathbf{C}"
           "bfP" : "\\mathbf{P}"
-          "bfQ" : "\\mathbf{Q}"
+          "bfW" : "\\mathbf{W}"
+          "bfU" : "\\mathbf{U}"
           "bfW" : "\\mathbf{W}"
           "bfp" : "\\mathbf{p}"
           "bfs" : "\\mathbf{s}"
@@ -90,6 +92,7 @@ sphinx:
           "diag": ["\\operatorname{diag}"]
           "sign": ["\\operatorname{sign}"]
           "dist": ["\\operatorname{dist}"]
+          "myvec": ["\\operatorname{vec}"]
           "simil": ["\\operatorname{sim}"]
           "ee": ["\\times 10^"]
           "floor": ["\\lfloor#1\\rfloor",1]
