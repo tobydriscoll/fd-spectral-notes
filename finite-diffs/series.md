@@ -19,7 +19,7 @@ A standard way to uncover the accuracy of a finite-difference formula is by expa
 
 ```{code-cell} ipython3
 R.<hD> = QQ[[]]
-ser = hD + O(hD^6)
+ser = hD + O(hD^8)
 Z = ser.exp()
 Z
 ```
@@ -35,10 +35,10 @@ That is,
 
 $$
 u(x+h) - u(x) & = hu'(x) + \frac{1}{2}h^2u''(x) + \cdots \\ 
-\frac{u(x+h)-u(x)}{h} = u'(x) + \frac{1}{2}h u''(x) + O(h^2).
+\frac{u(x+h)-u(x)}{h} &= u'(x) + \frac{1}{2}h u''(x) + O(h^2).
 $$
 
-Hence we say this formula is **first-order accurate**, since its error is led by the $O(h^1)$ term. Similarly, the two-term backward difference is also first-order:
+We say this formula is **first-order accurate**, since its error is led by the $O(h^1)$ term. Similarly, the two-term backward difference is also first-order:
 
 ```{code-cell} ipython3
 bd1 = 1 - Z^(-1) 
@@ -121,13 +121,22 @@ We can play the same games for 2nd and higher derivative formulas. Here is the m
 expand(taylor(z*log(z)^2,z,1,3))
 ```
 
+```{code-cell} ipython3
+(Z^2-2*Z+1)/Z
+```
+
 $$
-u''(0) = \frac{u_{-1}-2u_0+u_1}{h^2} + O(h^2)
+u''(0) = \frac{u_{-1}-2u_0+u_1}{h^2} - \frac{1}{12}h^2 u^{(4)}(0) + O(h^4)
 $$
 
 This can be carried out to 4th-order using 5 points:
+
 ```{code-cell} ipython3
 expand(taylor(z^2*log(z)^2,z,1,5))
+```
+
+```{code-cell} ipython3
+(-1/12*Z^4 + 4/3*Z^3 - 5/2*Z^2 + 4/3*Z - 1/12)/Z^2
 ```
 
 We can also do asymmetric (forward and backward) formulas:
