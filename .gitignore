@@ -2,3 +2,4 @@ _build
 .ipynb_checkpoints
 Manifest.toml
 Untitled.ipynb
+.DS_Store

@@ -24,3 +24,9 @@ chapters:
     - file: elliptic/poisson
     - file: elliptic/iterative
     - file: elliptic/decomp
+  - file: mol/overview
+    sections:
+    - file: mol/ivp
+    - file: mol/stability
+    - file: mol/diffusion
+
