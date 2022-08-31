@@ -126,6 +126,15 @@ contour(x,y,(U-g.(grid))',color=:viridis,aspect_ratio=1,
 
 Note that while the Laplacian operator is nominally symmetric and negative definite, boundary conditions can wreck that structure.
 
+## Preconditioning 
+
+Krylov methods converge at a rate that depends strongly on the underlying linear operator. For symmetric matrices, the dependence can be characterized in terms of the spectrum of the matrix. When the ratio between the eigenvalues farthest from and closest to the origin is very large, the convergence becomes unacceptably slow. 
+
+In the case of Poisson's equation, a second-order FD method produces a matrix with condition number $O(h^{-2})$ when using grid spacing $h$, and the number of MINRES or CG iterations grows as $O(h^{-1})$. 
+
+The best response is to use a **preconditioner**, which is a way to apply an approximate solution process to improve the convergence rate to the actual solution. For example, if one uses a recursive coarsening procedure to approximate the original FD method, the result is a *multigrid* preconditioner that can provide convergence in $O(1)$ iterations in ideal circumstances. Another approach is to decompose the domain into pieces and simplify or ignore the interactions between them.
+
+
 ## Newton--Krylov methods
 
 In a nonlinear problem, we have an *outer iteration* of changing linear problems for the nonlinear part, and an *inner iteration* of a Krylov method to solve the linear part. Typically one starts the inner iterations with a rather large error tolerance, since finding accurate values for a bad solution to the nonlinear problem is a waste of time. This tolerance decreases as the outer iteration homes in on the solution of the nonlinear problem. Even so, the Newton corrections need be found accurately relative to the outer solution only.  

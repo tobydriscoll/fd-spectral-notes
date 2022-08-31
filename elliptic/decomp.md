@@ -23,7 +23,7 @@ There are two major types of domain decomposition.
 
 In a nonoverlapping DD method, domain $\Omega$ is broken into $\Omega_i$ that intersect only at lower-dimensional interfaces. 
 
-For simplicity, consider a domain with two subregions $\Omega_1$ and $\Omega_2$, with $\Gamma_i = \partial \Omega_i \cap \partial \Omega$ and $\Gamma_{12} = \partial \Omega_1 \cap \partial \Omega_2$. You can imagine that both $\Omega_i$ are rectangles in practice, but this is not really important in principle. It can be shown that the solution of 
+For simplicity, consider a domain with two subregions $\Omega_1$ and $\Omega_2$, with $\Gamma_i = \partial \Omega_i \cap \partial \Omega$ and $\Gamma_{12} = \partial \Omega_1 \cap \partial \Omega_2$. You can imagine that both $\Omega_i$ are rectangles in practice, but this is not important in principle. It can be shown that the solution of 
 
 $$
 \Delta u &= 0, \quad \text{in } \Omega, \\ 
@@ -73,15 +73,12 @@ $$
 \end{bmatrix}. 
 $$
 
-
 ```{code-cell}
 using LinearAlgebra
 ⊗ = kron
 include("diffmats.jl")
 
 n = 8
-R₁ = (x=range(-1,0,n+1),y=range(-1,1,2n+1))
-R₂ = (x=range(0,1,n+1),y=range(-1,0,n+1)) 
 R₁ = (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1))
 R₂ = (nx=n,xspan=(0,1),ny=n,yspan=(-1,0)) 
 
@@ -99,9 +96,6 @@ end
 
 region = []
 for R in (R₁,R₂)
-    # x,y = R.x,R.y
-    # nx,ny = length(x),length(y)
-    # N = nx*ny
     nx,ny = R.nx,R.ny
     x,Dx,Dxx = diffmats(R.nx,R.xspan...)
     y,Dy,Dyy = diffmats(R.ny,R.yspan...)
@@ -188,4 +182,125 @@ We could again use the Schur complementation technique to remove the interface u
 
 ## Overlapping
 
-A more versatile technique is to use overlapping subdomains. 
+A more versatile technique is to use overlapping subdomains. The two subdomains $\Omega_1$ and $\Omega_2$ still have the true boundaries $\Gamma_i = \partial \Omega_i \cap \partial \Omega$, but now we let 
+
+$$
+\tilde{\Gamma}_{1} = \partial \Omega_1 \cap \Omega_2, \quad \tilde{\Gamma}_{2} = \partial \Omega_1 \cap \Omega_1. 
+$$
+
+This decomposes $\partial \Omega_i$ as $\Gamma_i \cup \tilde{\Gamma}_i$ in nonintersecting fashion. Now the solution of the global problem 
+
+$$
+\Delta u &= 0, \quad \text{in } \Omega, \\ 
+Bu &= 0, \quad \text{on } \partial \Omega, 
+$$
+
+is equivalent to the solution of the subproblems
+
+$$
+\Delta u_i &= 0, \quad \text{in } \Omega_i, \\ 
+B u_i &= 0, \quad \text{on } \Gamma_i,  
+u_i &= P_i u_{3-i}, \quad \text{on } \tilde{Gamma}_i,
+$$
+
+where $P_i$ represents the projection, say by interpolation, of a function defined in $\Omega_{3-i}$ into one defined on $\tilde{\Gamma}_i$. That is, a subsolution on one subdomain must agree with the other subsolution on the part of its boundary that lies inside the other subdomain. Note that no normal derivative (Neumann condition) is required. This formulation is straightforward to generalize to more than two overlapping subdomains.
+
+The classical **Schwarz alternating method** (technically, *multiplicative* Schwarz) is to seek a fixed point of the new formulation solving alternately on the subdomains, each time pulling its boundary information from the most recent solution(s) on the other subdomain(s). Often we might prefer the *additive* form, in which the subdomain problems are all solved simultaneously with the "previous generation" of subsolutions. This gives an algorithm of the form parallel solve, communicate via interfaces, parallel solve, etc.
+
+While the Schwarz methods make it easy to parallelize the solution process and give some global geometric flexibility, the overlap regions are doubly discretized, which is in some sense wasteful. Furthermore, the convergence rate of the process degrades as the amount of overlap decreases, and when a large number of subdomains is used, there needs to be a coarse global discretization in order to speed up communication between distant parts of the domain. The method is frequently used as a preconditioner in an iterative solution of the global problem.
+
+
+<!--
+
+```{code-cell}
+using LinearAlgebra
+⊗ = kron
+include("diffmats.jl")
+
+n = 8
+R = [ 
+    (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1)),
+    (nx=n,xspan=(-0.23,1),ny=n,yspan=(-1,0))
+    ]
+
+f(x) = x[1]+2
+
+function isboundary(xy)
+    x,y = xy
+    return (x==-1) | (x==1) | (y==-1) | (y==1) | 
+        ((x==0) & (y>=0)) | ((y==0) & (x>=0))
+end
+
+function isinside(xy,xspan,yspan)
+    x,y = xy
+    return (xspan[1] < x < xspan[2]) && (yspan[1] < y < yspan[2])
+end
+
+function isinterface(xy)
+    return ((xy[1]==0) & (-1<xy[2]<0))
+end
+```
+
+```{code-cell}
+region = []
+for i in 1:2
+    nx,ny = R[i].nx,R[i].ny
+    x,Dx,Dxx = diffmats(R[i].nx,R[i].xspan...)
+    y,Dy,Dyy = diffmats(R[i].ny,R[i].yspan...)
+    N = (nx+1)*(ny+1)
+    Δ = I(ny+1)⊗Dxx + Dyy'⊗I(nx+1)
+    grid = [[x,y] for x in x, y in y]
+    interior = falses(nx+1,ny+1)
+    interior[2:nx,2:ny] .= true
+    oniface = .!interior
+    otherR = R[3-i]
+    for idx in findall(oniface)
+        if !isinside(grid[idx],otherR.xspan,otherR.yspan)
+            oniface[idx] = false
+        end
+    end
+    onbdy = isboundary.(grid)
+    push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior))
+end
+```
+
+```{code-cell}
+using Plots
+fig = plot(aspect_ratio=1,m=3,leg=false)
+for (r,sym) in zip(region,[:x,:+])
+    for s in [r.interior,r.onbdy,r.oniface]
+        x,y = [p[1] for p in r.grid[s]],[p[2] for p in r.grid[s]]
+        scatter!(x,y,m=sym,msw=2)
+    end
+end
+fig
+```
+
+```{code-cell}
+u = [zeros(region[1].N),zeros(region[2].N)  ]
+A = region[1].Δ
+b = zeros(region[1].N)
+
+for idx in findall(vec(region[1].onbdy))
+    b[idx] = f(region[1].grid[idx])
+    A[idx,:] .= 0
+    A[idx,idx] = 1
+end
+
+for idx in findall(vec(region[1].oniface))
+    b[idx] = u[2]region[1].grid[idx])
+    A[idx,:] .= 0
+    A[idx,idx] = 1
+end
+
+
+```
+
+```{code-cell}
+f.(region[1].grid[idx])
+```
+
+```{code-cell}
+size(A),size(b)
+```
+-->
