@@ -1,0 +1,982 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>3.2. Solving the Poisson equation &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\varepsilon_\\text{mach}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.3. Iterative linear algebra" href="iterative.html" />
+    <link rel="prev" title="3.1. Tensor-product grids" href="tensorproduct.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tpbvp/overview.html">
+   2. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bootstrap.html">
+     2.5. Bootstrapping methods
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   3. Elliptic PDE
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="tensorproduct.html">
+     3.1. Tensor-product grids
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     3.2. Solving the Poisson equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="iterative.html">
+     3.3. Iterative linear algebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="decomp.html">
+     3.4. Domain decomposition
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mol/overview.html">
+   4. Method of lines
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/ivp.html">
+     4.1. Multistep and RK methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/stability.html">
+     4.2. Absolute stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/diffusion.html">
+     4.3. Diffusion equation
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/elliptic/poisson.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/elliptic/poisson.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/elliptic/poisson.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#kronecker-product">
+   Kronecker product
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#boundary-conditions">
+   Boundary conditions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#implementation">
+   Implementation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sparsity">
+   Sparsity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nonlinear-problems">
+   Nonlinear problems
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Solving the Poisson equation</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#kronecker-product">
+   Kronecker product
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#boundary-conditions">
+   Boundary conditions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#implementation">
+   Implementation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sparsity">
+   Sparsity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nonlinear-problems">
+   Nonlinear problems
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="solving-the-poisson-equation">
+<h1><span class="section-number">3.2. </span>Solving the Poisson equation<a class="headerlink" href="#solving-the-poisson-equation" title="Permalink to this headline">#</a></h1>
+<p>To solve <span class="math notranslate nohighlight">\(\Delta u = f\)</span>, our approach is the same as for the 1D TPBVP. We discretize the functions and differentiation operators, collocate the PDE at interior nodes, and collocate boundary conditions at boundary nodes, all to get a square linear algebraic system. For rectangular domains, this process is pretty straightforward.</p>
+<section id="kronecker-product">
+<h2>Kronecker product<a class="headerlink" href="#kronecker-product" title="Permalink to this headline">#</a></h2>
+<p>If <span class="math notranslate nohighlight">\(\bfU\)</span> is the matrix discretization of a function <span class="math notranslate nohighlight">\(u(x,y)\)</span> on the rectangle, then we can discretize the action of the Laplacian as</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta u = \partial_{xx} u + \partial_{yy} u \approx \bfD_{xx} \bfU + \bfU \bfD_{yy}^T. 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\bfD_{xx}\)</span> and <span class="math notranslate nohighlight">\(\bfD_{yy}\)</span> are 1D differentiation matrices. If we collocate at all of the nodes, then, we get an equation of the form</p>
+<div class="math notranslate nohighlight">
+\[
+\bfD_{xx} \bfU + \bfU \bfD_{yy}^T = \bfF. 
+\]</div>
+<p>This is known as a <strong>Sylvester equation</strong>. There are methods for solving it, but they are not of the familiar type with LU factorization, etc. To use those methods, we need a <em>vector</em> of unknowns,</p>
+<div class="math notranslate nohighlight">
+\[
+\bfu = \myvec(\bfU). 
+\]</div>
+<p>Fortunately we have a handy identity to exploit:</p>
+<div class="math notranslate nohighlight">
+\[
+\myvec(\bfA\mathbf{B}\bfC) = (\bfC^T \otimes \bfA ) \myvec(\mathbf{B}), 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\otimes\)</span> is the <strong>Kronecker matrix product,</strong></p>
+<div class="math notranslate nohighlight" id="equation-krondef">
+<span class="eqno">(3.2.1)<a class="headerlink" href="#equation-krondef" title="Permalink to this equation">#</a></span>\[\begin{split}    \mathbf{A}\otimes \mathbf{B} =
+    \begin{bmatrix}
+    A_{11} \mathbf{B} &amp; A_{12}\mathbf{B} &amp; \cdots &amp; A_{1n}\mathbf{B} \\
+    A_{21} \mathbf{B} &amp; A_{22}\mathbf{B} &amp; \cdots &amp; A_{2n}\mathbf{B} \\
+    \vdots &amp; \vdots &amp;  &amp; \vdots \\
+    A_{m1} \mathbf{B} &amp; A_{m2}\mathbf{B} &amp; \cdots &amp; A_{mn}\mathbf{B}
+    \end{bmatrix}.\end{split}\]</div>
+<p>The Kronecker product obeys several other notable identities:</p>
+<ol class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbf{A}\otimes (\mathbf{B} + \mathbf{C})   = \mathbf{A}\otimes \mathbf{B} + \mathbf{A}\otimes \mathbf{C}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((\mathbf{A} + \mathbf{B}) \otimes \mathbf{C}   = \mathbf{A}\otimes \mathbf{C} + \mathbf{B}\otimes \mathbf{C}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((\mathbf{A} \otimes \mathbf{B}) \otimes \mathbf{C}   =  \mathbf{A} \otimes (\mathbf{B} \otimes \mathbf{C})\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((\mathbf{A} \otimes \mathbf{B})^T  =  \mathbf{A}^T \otimes \mathbf{B}^T\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((\mathbf{A} \otimes \mathbf{B})^{-1}  =  \mathbf{A}^{-1} \otimes \mathbf{B}^{-1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((\mathbf{A} \otimes \mathbf{B})(\mathbf{C}\otimes \mathbf{D})  =  (\mathbf{A}\mathbf{C}) \otimes (\mathbf{B}\mathbf{D})\)</span></p></li>
+</ol>
+<p>Defining <span class="math notranslate nohighlight">\(\bfu=\myvec(\bfU)\)</span> and <span class="math notranslate nohighlight">\(\bff=\myvec(\bfF)\)</span>, the collocated Poisson equation is</p>
+<div class="math notranslate nohighlight">
+\[
+\underbrace{\bigl[ ({\mathbf{I}_{y}} \otimes {\mathbf{D}_{xx}}) + ({\mathbf{D}_{yy}}\otimes {\mathbf{I}_{x}})\bigr]}_{\mathbf{A}} \, \mathbf{u} = \mathbf{f},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{I}_{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{I}_{y}\)</span> are the <span class="math notranslate nohighlight">\((m+1)\times (m+1)\)</span> and <span class="math notranslate nohighlight">\((n+1)\times (n+1)\)</span> identities, respectively.</p>
+</section>
+<section id="boundary-conditions">
+<h2>Boundary conditions<a class="headerlink" href="#boundary-conditions" title="Permalink to this headline">#</a></h2>
+<p>The easiest way to incorporate the boundary conditions is to replace the PDE at each boundary node with a discretized form of the BC. This means altering rows of the matrix <span class="math notranslate nohighlight">\(\bfA\)</span> resulting from discretizing the interior. For a Dirichlet condition, the new row is just a row of the superidentity <span class="math notranslate nohighlight">\(\mathbf{I}_{y} \otimes \mathbf{I}_{y}\)</span>. We could clearly “solve” such rows manually and do algebra to remove the corresponding node from the unknowns, but the amount of additional work incurred by leaving them in is usually negligible.</p>
+<p>Here is a forcing function for Poisson’s equation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We make a crude discretization for illustrative purposes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">unvec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we evaluate <span class="math notranslate nohighlight">\(f\)</span> on the grid.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8×6 Matrix{Float64}:
+  3.0       2.6       2.2       1.8       1.4       1.0
+  3.18367   2.78367   2.38367   1.98367   1.58367   1.18367
+  3.73469   3.33469   2.93469   2.53469   2.13469   1.73469
+  4.65306   4.25306   3.85306   3.45306   3.05306   2.65306
+  5.93878   5.53878   5.13878   4.73878   4.33878   3.93878
+  7.59184   7.19184   6.79184   6.39184   5.99184   5.59184
+  9.61224   9.21224   8.81224   8.41224   8.01224   7.61224
+ 12.0      11.6      11.2      10.8      10.4      10.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here are the equations for the PDE collocation, before any modifications are made for the boundary conditions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">Dxx</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">kron</span><span class="p">(</span><span class="n">Dyy</span><span class="p">,</span><span class="n">I</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">F</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The number of equations is equal to <span class="math notranslate nohighlight">\((m+1)(n+1)\)</span>, which is the total number of points on the grid.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@show</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">F</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>N = length(F) = 48
+</pre></div>
+</div>
+</div>
+</div>
+<p>The combination of Kronecker products and finite differences produces a characteristic sparsity pattern.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">spy</span><span class="p">(</span><span class="n">sparse</span><span class="p">(</span><span class="n">A</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="ss">:blues</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;System matrix before boundary conditions&quot;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/poisson_11_0.svg" src="../_images/poisson_11_0.svg" /></div>
+</div>
+<p>We now construct a Boolean array the same size as <code class="docutils literal notranslate"><span class="pre">F</span></code> to indicate where the boundary points lie in the grid.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">isboundary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trues</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">isboundary</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">m</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="nb">false</span><span class="w"></span>
+<span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">isboundary</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">spy</span><span class="p">(</span><span class="n">sparse</span><span class="p">(</span><span class="n">isboundary</span><span class="p">),</span><span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:darkblue</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="ss">:none</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Boundary points&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">xaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;column index&quot;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">]),</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;row index&quot;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/poisson_14_0.svg" src="../_images/poisson_14_0.svg" /></div>
+</div>
+<p>In order to impose Dirichlet boundary conditions, we replace the boundary rows of the system by rows of the identity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">I_N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">I_N</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="o">:</span><span class="p">];</span><span class="w">     </span><span class="c"># Dirichlet conditions</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">spy</span><span class="p">(</span><span class="n">sparse</span><span class="p">(</span><span class="n">A</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="ss">:blues</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;System matrix with boundary conditions&quot;</span><span class="p">)</span><span class="w">    </span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/poisson_17_0.svg" src="../_images/poisson_17_0.svg" /></div>
+</div>
+<p>Finally, we must replace the rows in the vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span> by the boundary values being assigned to the boundary points. Here, we let the boundary values be 1 everywhere.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">                 </span><span class="c"># Dirichlet values</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can solve for <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> and reinterpret it as the matrix-shaped <span class="math notranslate nohighlight">\(\mathbf{U}\)</span>, the solution on our grid.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="o">\</span><span class="n">b</span><span class="w"></span>
+<span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unvec</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8×6 Matrix{Float64}:
+ 1.0   1.0        1.0        1.0        1.0        1.0
+ 1.0   0.509076   0.327231   0.37017    0.598914   1.0
+ 1.0   0.174627  -0.165761  -0.108608   0.290864   1.0
+ 1.0  -0.104071  -0.57609   -0.514796   0.0194179  1.0
+ 1.0  -0.327163  -0.890936  -0.829642  -0.203674   1.0
+ 1.0  -0.409269  -0.979476  -0.922322  -0.293032   1.0
+ 1.0  -0.133634  -0.54072   -0.497781  -0.0437956  1.0
+ 1.0   1.0        1.0        1.0        1.0        1.0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;poisson.jl&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">foreach</span><span class="p">(</span><span class="n">println</span><span class="p">,</span><span class="n">readlines</span><span class="p">(</span><span class="s">&quot;poisson.jl&quot;</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>include(&quot;diffmats.jl&quot;)
+function poissonfd(f,g,m,xspan,n,yspan)
+    # Discretize the domain.
+    x,Dx,Dxx = diffmats(m,xspan...)
+    y,Dy,Dyy = diffmats(n,yspan...)
+    grid = [(x,y) for x in x, y in y]
+    N = (m+1)*(n+1)   # total number of unknowns
+
+    # Form the collocated PDE as a linear system.
+    A = kron(I(n+1),Dxx) + kron(Dyy,I(m+1))
+    b = vec( f.(grid) )
+
+    # Identify boundary locations.
+    isboundary = trues(m+1,n+1)
+    isboundary[2:m,2:n] .= false
+    idx = vec(isboundary)
+
+    # Apply Dirichlet condition.
+    scale = maximum(abs,A[n+2,:])
+    A[idx,:] = scale * I(N)[idx,:]        # Dirichlet assignment
+    b[idx] = scale * g.(grid[idx])    # assigned values
+
+    # Solve the linear system and reshape the output.
+    u = A\b
+    U = reshape(u,m+1,n+1)
+    return x,y,U
+end
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can engineer an example by choosing the solution first. Let <span class="math notranslate nohighlight">\(u(x,y)=\sin(3xy-4y)\)</span>. Then one can derive <span class="math notranslate nohighlight">\(f=\Delta u = -\sin(3xy-4y)\bigl(9y^2+(3x-4)^2\bigr)\)</span> for the forcing function and use <span class="math notranslate nohighlight">\(g=u\)</span> on the boundary.</p>
+<p>First we define the problem on <span class="math notranslate nohighlight">\([0,1]\times[0,2]\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">4</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">9</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">^</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="mi">3</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">4</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"></span>
+<span class="n">xspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">];</span><span class="w">  </span><span class="n">yspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here is the finite-difference solution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">poissonfd</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="n">xspan</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="n">yspan</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">surface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">U</span><span class="o">&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:viridis</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Solution of Poisson&#39;s equation&quot;</span><span class="p">,</span><span class="w">      </span>
+<span class="w">    </span><span class="n">xaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">),</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">),</span><span class="n">zaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;u(x,y)&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">right_margin</span><span class="o">=</span><span class="mi">3</span><span class="n">Plots</span><span class="o">.</span><span class="n">mm</span><span class="p">,</span><span class="n">camera</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">50</span><span class="p">))</span><span class="w">    </span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/poisson_28_0.svg" src="../_images/poisson_28_0.svg" /></div>
+</div>
+<p>The error is a smooth function of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. It must be zero on the boundary; otherwise, we have implemented boundary conditions incorrectly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">g</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">U</span><span class="p">;</span><span class="w"></span>
+<span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">maximum</span><span class="p">(</span><span class="n">abs</span><span class="p">,</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">error</span><span class="o">&#39;</span><span class="p">,</span><span class="n">levels</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">clims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="ss">:redsblues</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="ss">:bottom</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Error&quot;</span><span class="p">,</span><span class="n">xaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">),</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">right_margin</span><span class="o">=</span><span class="mi">7</span><span class="n">Plots</span><span class="o">.</span><span class="n">mm</span><span class="p">)</span><span class="w"></span>
+<span class="n">plot!</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">l</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="ss">:black</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/poisson_30_0.svg" src="../_images/poisson_30_0.svg" /></div>
+</div>
+</section>
+<section id="sparsity">
+<h2>Sparsity<a class="headerlink" href="#sparsity" title="Permalink to this headline">#</a></h2>
+<p>The implementation of <code class="docutils literal notranslate"><span class="pre">diffmats</span></code> changed just a bit from the 1D case:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">foreach</span><span class="p">(</span><span class="n">println</span><span class="p">,</span><span class="n">readlines</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>using LinearAlgebra,SparseArrays
+function diffmats(m,a,b)
+    # assumes evenly spaced nodes
+    h = (b-a)/m
+    x = [ a+i*h for i in 0:m ]
+    Dx = 1/2h*spdiagm(-1=&gt;[-ones(m-1);-2],0=&gt;[-2;zeros(m-1);2],1=&gt;[2;ones(m-1)])
+    Dxx = 1/h^2*spdiagm(-1=&gt;[ones(m-1);-2],0=&gt;[1;-2*ones(m-1);1],1=&gt;[-2;ones(m-1)])
+    Dxx[m+1,m-1] = Dxx[1,3] = 1/h^2
+    return x,Dx,Dxx
+end
+</pre></div>
+</div>
+</div>
+</div>
+<p>The differentiation matrices are returned in <strong>sparse</strong> form. While they are sparse even considered as 1D matrices, the sizes were too small to worry about it then. But now we should be more careful. The system matrix is of size <span class="math notranslate nohighlight">\(O(mn)\)</span>, while the number of nonzero elements per row is small and bounded by constant.</p>
+<p>Say <span class="math notranslate nohighlight">\(m=O(n)\)</span> for simplicity. Then a naive dense factorization of the system would take <span class="math notranslate nohighlight">\(O(n^6)\)</span> operations. Exploiting sparsity, the count should be no more than <span class="math notranslate nohighlight">\(O(n^4)\)</span>, which still grows quickly but is far better.</p>
+</section>
+<section id="nonlinear-problems">
+<h2>Nonlinear problems<a class="headerlink" href="#nonlinear-problems" title="Permalink to this headline">#</a></h2>
+<p>A nonlinear elliptic PDE, like a nonlinear TPBVP, leads to a nonlinear algebraic system. As before, we usually want to apply a quasi-Newton method to solve that system. This will entail the solution of multiple linear systems with a changing matrix (Jacobian or approximation).</p>
+<p>Unless <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(n\)</span> are quite small, the linear solver within the nonlinear iterations will have to support sparsity. Some solvers accept a sparsity pattern that they can exploit; in most cases you are best off supplying your own Jacobian.</p>
+<p>For example, to solve</p>
+<div class="math notranslate nohighlight">
+\[
+\epsilon \Delta u + u u_x + 1 = 0, 
+\]</div>
+<p>with Dirichlet boundary value 1, note that the linearization of the PDE around function <span class="math notranslate nohighlight">\(u_0\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[
+\epsilon \Delta + u_0 \partial_x + (\partial_x u_0),
+\]</div>
+<p>and it has homogeneous Dirichlet BC.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">bdy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trues</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">bdy</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="nb">false</span><span class="w"></span>
+<span class="n">bdy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">bdy</span><span class="p">)</span><span class="w"></span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"> </span>
+<span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.05</span><span class="o">*</span><span class="p">(</span><span class="n">Dxx</span><span class="o">*</span><span class="n">U</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">U</span><span class="o">*</span><span class="n">Dyy</span><span class="o">&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">U</span><span class="o">.*</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">U</span><span class="p">)</span><span class="w"> </span><span class="o">.+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">R</span><span class="p">[</span><span class="n">bdy</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">U</span><span class="p">[</span><span class="n">bdy</span><span class="p">]</span><span class="w"> </span><span class="o">.-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">R</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">jac</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">Dxx</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">kron</span><span class="p">(</span><span class="n">Dyy</span><span class="p">,</span><span class="n">I</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">U_x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dx</span><span class="o">*</span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">J</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.05</span><span class="n">L</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">spdiagm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">*</span><span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">Dx</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">spdiagm</span><span class="p">(</span><span class="n">vec</span><span class="p">(</span><span class="n">U_x</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">J</span><span class="p">[</span><span class="n">bdy</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">J</span><span class="p">[</span><span class="n">bdy</span><span class="p">,</span><span class="n">bdy</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">count</span><span class="p">(</span><span class="n">bdy</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">J</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">NLsolve</span><span class="w"></span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">jac</span><span class="p">,</span><span class="n">vec</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)));</span><span class="w"></span>
+<span class="n">sol</span><span class="o">.</span><span class="n">residual_norm</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.015365734881925e-13
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">reshape</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/poisson_36_0.svg" src="../_images/poisson_36_0.svg" /></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./elliptic"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="tensorproduct.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">3.1. </span>Tensor-product grids</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="iterative.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3.3. </span>Iterative linear algebra</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

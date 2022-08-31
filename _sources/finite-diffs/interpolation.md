@@ -8,7 +8,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.14.1
 kernelspec:
-  display_name: Julia 1.8.0-rc3
+  display_name: Julia 1.8.0
   language: julia
   name: julia-1.8
 ---
@@ -64,7 +64,7 @@ $$
 where each $\ell_i$ is the **cardinal polynomial** 
 
 $$
-\ell_i(x) = \frac{\Phi(x)}{\Phi'(x_i)} = \frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)},
+\ell_i(x) = \frac{\Phi(x)}{\Phi'(x_i)(x-x_i)} = \frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)},
 $$
 
 where $\Phi(x)=\prod (x-x_i)$ is a polynomial we will keep in our pocket for later. This famous formula is not a good one to use directly for numerical computation, but it does lead to some recursive definitions that can be used to derive a general finite-difference formula. That is, given nodes $x_i$ for $i=0,\ldots,n$ and a derivative order $m$, we can find the **weights** $w_i$ such that
@@ -98,6 +98,40 @@ err2 = dot(w/h^2,f.(h*nodes)) + 4
 log2(err1/err2)
 ```
 
-```{code-cell}
+## Hermite error formula
 
+Another valuable byproduct of the connection to interpolation is the **Hermite error formula**. Consider first the cardinal function 
+
+$$
+\ell_i(x) = \frac{\Phi(x)}{\Phi'(x_i)(x-x_i)}. 
+$$
+
+We'll go into the complex plane with a closed contour $C_i$ that encloses $x_i$ but not any other node, nor the fixed (for now) point $x$. Cauchy tells us that
+
+$$
+\ell_i(x) = \frac{1}{2\pi i} \oint_{C_i} \frac{\Phi(x)}{\Phi'(z)(x-z)} \, dz,
+$$
+
+since the integrand is meromorphic with a simple pole at $z=x_i$. More generally, if $f(z)$ is analytic on and inside $C_i$, then
+
+$$
+\ell_i(x)f(x_i) = \frac{1}{2\pi i} \oint_{C_i} \frac{\Phi(x)f(z)}{\Phi'(z)(x-z)} \, dz.
+$$
+
+Now suppose $C$ is a closed contour enclosing all of the nodes, but not the point $x$. Then we extend the logic above to get 
+
+$$
+P(x) = \sum_i \ell_i(x)f(x_i) = \frac{1}{2\pi i} \oint_{C} \frac{\Phi(x)f(z)}{\Phi'(z)(x-z)} \, dz,
+$$
+
+which is a lovely expression for the interpolating polynomial $P$. Finally, if we extend the contour to include $x$ as well, we get one more pole at $x$ and the following result.
+
+```{prf:theorem} Hermite error formula
+If $\Gamma$ is a simple closed contour enclosing all the nodes $x_0,\ldots,x_n$ and the real point $x$, $f$ is analytic on and inside $\Gamma$, and $P$ is the Lagrange interpolating polynomial for $f$ at the nodes, then 
+
+$$
+P(x) - f(x) = \frac{1}{2\pi i} \oint_{\Gamma} \frac{\Phi(x)f(z)}{\Phi'(z)(x-z)} \, dz. 
+$$
 ```
+
+For the special case of equally spaced nodes, this formula can be used to produce order bounds on derivative errors $P'(x)-f'(x)$ at the nodes, but we won't pursue these.

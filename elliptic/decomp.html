@@ -1,0 +1,877 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>3.4. Domain decomposition &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\varepsilon_\\text{mach}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Method of lines" href="../mol/overview.html" />
+    <link rel="prev" title="3.3. Iterative linear algebra" href="iterative.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tpbvp/overview.html">
+   2. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bootstrap.html">
+     2.5. Bootstrapping methods
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   3. Elliptic PDE
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="tensorproduct.html">
+     3.1. Tensor-product grids
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="poisson.html">
+     3.2. Solving the Poisson equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="iterative.html">
+     3.3. Iterative linear algebra
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     3.4. Domain decomposition
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mol/overview.html">
+   4. Method of lines
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/ivp.html">
+     4.1. Multistep and RK methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/stability.html">
+     4.2. Absolute stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/diffusion.html">
+     4.3. Diffusion equation
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/elliptic/decomp.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/elliptic/decomp.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/elliptic/decomp.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nonoverlapping">
+   Nonoverlapping
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overlapping">
+   Overlapping
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Domain decomposition</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nonoverlapping">
+   Nonoverlapping
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overlapping">
+   Overlapping
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="domain-decomposition">
+<h1><span class="section-number">3.4. </span>Domain decomposition<a class="headerlink" href="#domain-decomposition" title="Permalink to this headline">#</a></h1>
+<p>Rectangles are great and all, but we might like to go beyond them. One attractive technique that generalizes the geometry somewhat is <strong>domain decomposition</strong>. It can also break a large problem into smaller pieces that are more manageable and perhaps solvable in parallel.</p>
+<p>There are two major types of domain decomposition.</p>
+<section id="nonoverlapping">
+<h2>Nonoverlapping<a class="headerlink" href="#nonoverlapping" title="Permalink to this headline">#</a></h2>
+<p>In a nonoverlapping DD method, domain <span class="math notranslate nohighlight">\(\Omega\)</span> is broken into <span class="math notranslate nohighlight">\(\Omega_i\)</span> that intersect only at lower-dimensional interfaces.</p>
+<p>For simplicity, consider a domain with two subregions <span class="math notranslate nohighlight">\(\Omega_1\)</span> and <span class="math notranslate nohighlight">\(\Omega_2\)</span>, with <span class="math notranslate nohighlight">\(\Gamma_i = \partial \Omega_i \cap \partial \Omega\)</span> and <span class="math notranslate nohighlight">\(\Gamma_{12} = \partial \Omega_1 \cap \partial \Omega_2\)</span>. You can imagine that both <span class="math notranslate nohighlight">\(\Omega_i\)</span> are rectangles in practice, but this is not important in principle. It can be shown that the solution of</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\Delta u &amp;= 0, \quad \text{in } \Omega, \\ 
+Bu &amp;= 0, \quad \text{on } \partial \Omega, 
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(B\)</span> is a linear operator of differential order 0 or 1, is equivalent to the solution of the subproblems</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\Delta u_i &amp;= 0, \quad \text{in } \Omega_i, \\ 
+Bu_i &amp;= 0, \quad \text{on } \Gamma_i,  
+\end{split}\]</div>
+<p>coupled by the <strong>interface conditions</strong></p>
+<div class="math notranslate nohighlight">
+\[
+u_1 = u_2, \quad \pp{u_1}{n} = -\pp{u_2}{n}, \qquad \text{on }  \Gamma_{12}.
+\]</div>
+<p>Now let us discretize the subregions. The equations for the non-interface nodes of <span class="math notranslate nohighlight">\(\Omega_1\)</span> have the form</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}
+  \bfA_{1o} &amp; \bfA_{1i}
+\end{bmatrix}
+\begin{bmatrix}
+  bfu_{1o} \\ \bfu_{1i}
+\end{bmatrix}
+= \bfb_1, 
+\end{split}\]</div>
+<p>where we have partitioned into ordinary/interface nodes. Doing similarly for <span class="math notranslate nohighlight">\(\Omega_2\)</span> and adding the interface conditions gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}
+  \bfA_{1o} &amp; &amp; \bfA_{1i} &amp; \\ 
+  &amp; \bfA_{2o} &amp; &amp; \bfA_{2i} \\ 
+  &amp; &amp; &amp; \mathbf{I} &amp; -\mathbf{I} \\ 
+  &amp; &amp; \bfD_{n1} &amp; \bfD_{n2}
+\end{bmatrix}
+\begin{bmatrix}
+  bfu_{1o} \\ \bfu_{2o} \\ \bfu_{1i} \\ \bfu_{2i}
+\end{bmatrix}
+= 
+\begin{bmatrix}
+  \bfb_1 \\ \bfb_2 \\ \bfzero \\ \bfzero 
+\end{bmatrix}. 
+\end{split}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span><span class="w"></span>
+<span class="o">⊗</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kron</span><span class="w"></span>
+<span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"></span>
+<span class="n">R₁</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">ny</span><span class="o">=</span><span class="mi">2</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="n">R₂</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">ny</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span><span class="w"> </span>
+
+<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span><span class="w"></span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">isboundary</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xy</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span>
+<span class="w">        </span><span class="p">((</span><span class="n">x</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">y</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">isinterface</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">((</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">&lt;</span><span class="n">xy</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="n">R₁</span><span class="p">,</span><span class="n">R₂</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">R</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">ny</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">xspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">yspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Δ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">⊗</span><span class="n">Dxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Dyy</span><span class="o">&#39;⊗</span><span class="n">I</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">])</span><span class="w"></span>
+<span class="w">    </span><span class="n">onbdy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">isboundary</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">oniface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">isinterface</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">interior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="o">!</span><span class="n">onbdy</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">oniface</span><span class="w"></span>
+<span class="w">    </span><span class="n">Dnorm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">⊗</span><span class="n">Dx</span><span class="p">)[</span><span class="n">oniface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">region</span><span class="p">,(;</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">Δ</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">onbdy</span><span class="p">,</span><span class="n">oniface</span><span class="p">,</span><span class="n">interior</span><span class="p">,</span><span class="n">Dnorm</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">;</span><span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">]</span><span class="w"></span>
+<span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">N</span><span class="p">]</span><span class="w"></span>
+<span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span><span class="n">region</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="o">.+</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">r</span><span class="o">.</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">iface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="o">.+</span><span class="n">findall</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">oniface</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">bdy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="o">.+</span><span class="n">findall</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">onbdy</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">idx</span><span class="p">,(;</span><span class="n">all</span><span class="p">,</span><span class="n">iface</span><span class="p">,</span><span class="n">bdy</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">leg</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">sym</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">,[</span><span class="ss">:x</span><span class="p">,</span><span class="o">:+</span><span class="p">])</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">interior</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">onbdy</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">oniface</span><span class="p">]</span><span class="w"></span>
+<span class="w">        </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">]],[</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">]]</span><span class="w"></span>
+<span class="w">        </span><span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="n">sym</span><span class="p">,</span><span class="n">msw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/decomp_3_0.svg" src="../_images/decomp_3_0.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">N</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">region</span><span class="p">)</span><span class="w"></span>
+<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sparse</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span><span class="w"></span>
+<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">Δ</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">)))</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">spy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:redsblues</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/decomp_5_0.svg" src="../_images/decomp_5_0.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Ni</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">)</span><span class="w"></span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spdiagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">Ni</span><span class="p">))</span><span class="w"></span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">spdiagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">Ni</span><span class="p">))</span><span class="w"></span>
+<span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">all</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Dnorm</span><span class="w"></span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">all</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">Dnorm</span><span class="w"></span>
+<span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">spy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:redsblues</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/decomp_6_0.svg" src="../_images/decomp_6_0.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="o">\</span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">gr</span><span class="p">()</span><span class="w"></span>
+<span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">contour!</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">],</span><span class="n">levels</span><span class="o">=-</span><span class="mf">.25</span><span class="o">:</span><span class="mf">0.01</span><span class="o">:</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">plt</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/decomp_8_0.svg" src="../_images/decomp_8_0.svg" /></div>
+</div>
+<p>We could again use the Schur complementation technique to remove the interface unknowns from the linear system.</p>
+</section>
+<section id="overlapping">
+<h2>Overlapping<a class="headerlink" href="#overlapping" title="Permalink to this headline">#</a></h2>
+<p>A more versatile technique is to use overlapping subdomains. The two subdomains <span class="math notranslate nohighlight">\(\Omega_1\)</span> and <span class="math notranslate nohighlight">\(\Omega_2\)</span> still have the true boundaries <span class="math notranslate nohighlight">\(\Gamma_i = \partial \Omega_i \cap \partial \Omega\)</span>, but now we let</p>
+<div class="math notranslate nohighlight">
+\[
+\tilde{\Gamma}_{1} = \partial \Omega_1 \cap \Omega_2, \quad \tilde{\Gamma}_{2} = \partial \Omega_1 \cap \Omega_1. 
+\]</div>
+<p>This decomposes <span class="math notranslate nohighlight">\(\partial \Omega_i\)</span> as <span class="math notranslate nohighlight">\(\Gamma_i \cup \tilde{\Gamma}_i\)</span> in nonintersecting fashion. Now the solution of the global problem</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\Delta u &amp;= 0, \quad \text{in } \Omega, \\ 
+Bu &amp;= 0, \quad \text{on } \partial \Omega, 
+\end{split}\]</div>
+<p>is equivalent to the solution of the subproblems</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\Delta u_i &amp;= 0, \quad \text{in } \Omega_i, \\ 
+B u_i &amp;= 0, \quad \text{on } \Gamma_i,  
+u_i &amp;= P_i u_{3-i}, \quad \text{on } \tilde{Gamma}_i,
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(P_i\)</span> represents the projection, say by interpolation, of a function defined in <span class="math notranslate nohighlight">\(\Omega_{3-i}\)</span> into one defined on <span class="math notranslate nohighlight">\(\tilde{\Gamma}_i\)</span>. That is, a subsolution on one subdomain must agree with the other subsolution on the part of its boundary that lies inside the other subdomain. Note that no normal derivative (Neumann condition) is required. This formulation is straightforward to generalize to more than two overlapping subdomains.</p>
+<p>The classical <strong>Schwarz alternating method</strong> (technically, <em>multiplicative</em> Schwarz) is to seek a fixed point of the new formulation solving alternately on the subdomains, each time pulling its boundary information from the most recent solution(s) on the other subdomain(s). Often we might prefer the <em>additive</em> form, in which the subdomain problems are all solved simultaneously with the “previous generation” of subsolutions. This gives an algorithm of the form parallel solve, communicate via interfaces, parallel solve, etc.</p>
+<p>While the Schwarz methods make it easy to parallelize the solution process and give some global geometric flexibility, the overlap regions are doubly discretized, which is in some sense wasteful. Furthermore, the convergence rate of the process degrades as the amount of overlap decreases, and when a large number of subdomains is used, there needs to be a coarse global discretization in order to speed up communication between distant parts of the domain. The method is frequently used as a preconditioner in an iterative solution of the global problem.</p>
+<!--
+
+```{code-cell}
+using LinearAlgebra
+⊗ = kron
+include("diffmats.jl")
+
+n = 8
+R = [ 
+    (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1)),
+    (nx=n,xspan=(-0.23,1),ny=n,yspan=(-1,0))
+    ]
+
+f(x) = x[1]+2
+
+function isboundary(xy)
+    x,y = xy
+    return (x==-1) | (x==1) | (y==-1) | (y==1) | 
+        ((x==0) & (y>=0)) | ((y==0) & (x>=0))
+end
+
+function isinside(xy,xspan,yspan)
+    x,y = xy
+    return (xspan[1] < x < xspan[2]) && (yspan[1] < y < yspan[2])
+end
+
+function isinterface(xy)
+    return ((xy[1]==0) & (-1<xy[2]<0))
+end
+```
+
+```{code-cell}
+region = []
+for i in 1:2
+    nx,ny = R[i].nx,R[i].ny
+    x,Dx,Dxx = diffmats(R[i].nx,R[i].xspan...)
+    y,Dy,Dyy = diffmats(R[i].ny,R[i].yspan...)
+    N = (nx+1)*(ny+1)
+    Δ = I(ny+1)⊗Dxx + Dyy'⊗I(nx+1)
+    grid = [[x,y] for x in x, y in y]
+    interior = falses(nx+1,ny+1)
+    interior[2:nx,2:ny] .= true
+    oniface = .!interior
+    otherR = R[3-i]
+    for idx in findall(oniface)
+        if !isinside(grid[idx],otherR.xspan,otherR.yspan)
+            oniface[idx] = false
+        end
+    end
+    onbdy = isboundary.(grid)
+    push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior))
+end
+```
+
+```{code-cell}
+using Plots
+fig = plot(aspect_ratio=1,m=3,leg=false)
+for (r,sym) in zip(region,[:x,:+])
+    for s in [r.interior,r.onbdy,r.oniface]
+        x,y = [p[1] for p in r.grid[s]],[p[2] for p in r.grid[s]]
+        scatter!(x,y,m=sym,msw=2)
+    end
+end
+fig
+```
+
+```{code-cell}
+u = [zeros(region[1].N),zeros(region[2].N)  ]
+A = region[1].Δ
+b = zeros(region[1].N)
+
+for idx in findall(vec(region[1].onbdy))
+    b[idx] = f(region[1].grid[idx])
+    A[idx,:] .= 0
+    A[idx,idx] = 1
+end
+
+for idx in findall(vec(region[1].oniface))
+    b[idx] = u[2]region[1].grid[idx])
+    A[idx,:] .= 0
+    A[idx,idx] = 1
+end
+
+
+```
+
+```{code-cell}
+f.(region[1].grid[idx])
+```
+
+```{code-cell}
+size(A),size(b)
+```
+--></section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./elliptic"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="iterative.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">3.3. </span>Iterative linear algebra</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../mol/overview.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>Method of lines</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

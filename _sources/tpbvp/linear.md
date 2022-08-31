@@ -8,7 +8,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.14.1
 kernelspec:
-  display_name: Julia 1.8.0-rc3
+  display_name: Julia 1.8.0
   language: julia
   name: julia-1.8
 ---
@@ -134,9 +134,9 @@ function advdiff(a,b,λ,n)
   h = (b-a)/n
   x = [a+i*h for i in 0:n]
   Dx,Dxx = diffmats(x)
-  Ã = Dx - λ*Dxx
+  Ã = Dx - λ*Dxx
   A = diagm(ones(n+1))
-  A[2:n,:] .= Ã[2:n,:]
+  A[2:n,:] .= Ã[2:n,:]
   f = [1; zeros(n-1); -1]
   return x,A\f 
 end

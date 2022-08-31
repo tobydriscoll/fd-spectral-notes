@@ -8,7 +8,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.14.1
 kernelspec:
-  display_name: Julia 1.8.0-rc3
+  display_name: Julia 1.8.0
   language: julia
   name: julia-1.8
 ---
@@ -57,7 +57,7 @@ function diffmat1(x)
     # assumes evenly spaced nodes
     h = x[2]-x[1]
     m = length(x)
-    Dx = 1/2h*diagm(-1=>[-1;-2*ones(m-2)],0=>[-2;zeros(m-2);2],1=>[2;ones(m-2)])
+    Dx = 1/2h*diagm(-1=>[-ones(m-2);-2],0=>[-2;zeros(m-2);2],1=>[2;ones(m-2)])
 end
 
 a,b = 0,1
@@ -108,7 +108,7 @@ While that's plausible, it's not conclusively correct. Let's do a convergence st
 function fdintegrate(g,a,b,n)
     h = (b-a)/n
     x = [a + i*h for i in 0:n]
-    A = diffmat1(g,a,b,n)
+    A = diffmat1(x)
     b = g.(x)
 
     A[1,1:2] = [1,0];  b[1] = 0;

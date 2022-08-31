@@ -8,7 +8,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.14.1
 kernelspec:
-  display_name: Julia 1.8.0-rc3
+  display_name: Julia 1.8.0
   language: julia
   name: julia-1.8
 ---
