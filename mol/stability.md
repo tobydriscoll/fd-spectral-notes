@@ -15,7 +15,7 @@ kernelspec:
 
 # Absolute stability
 
-Like FD formulas, an IVP formula has a local truncation error and order of accuracy. These measure how well the formula approximates the ODE, but it's not immediate that the formula's solution converges to the true one. We also need **stability**, which (again) means that the solution remains bounded as the step size approaches zero. The celebrated **Dahlquist Equivalence Theorem** states that accuracy and stability together imply convergence (at the same order of accuracy as the LTE).
+Like FD formulas, an IVP formula has a local truncation error and order of accuracy. These measure how well the formula approximates the ODE, but it's not immediate that the formula's solution converges to the true one. We also need **zero stability**, which means that the solution remains bounded as the step size approaches zero. The celebrated **Dahlquist Equivalence Theorem** states that accuracy and stability together imply convergence (at the same order of accuracy as the LTE).
 
 However, there is another sense of stability which is just as important in practice, based on the model problem
 
@@ -34,9 +34,11 @@ Solutions of {eq}`absstabmodel` are bounded as $t\to\infty$ if and only if $\alp
 
 The fact that absolute stability depends only on the product $\zeta = \tau\lambda$, and not independently on the individual factors, is a result of how the IVP solvers are defined, as we will see below. Since $\lambda$ has units of inverse time, $\zeta$ is dimensionless.
 
+Note that both senses of stability have to do with taking infinitely many steps: $\tau\to 0$ for $t$ in a finite interval $[a,b]$ for zero stability, and $t\to \infty$ with $\tau$ fixed. We never actually take infinitely many steps, of course, but since the instabilities are generally exponential, they are manifested in practice well before reaching the limit.
+
 ## Linearization and diagonalization
 
-Before proceeding we ask, why should the model equation $y'=\lambda y$ of absolute stability have wide relevance? Through diagonalization, it is easily generalized to  $\mathbf{u}'=\mathbf{A} \mathbf{u}$ for a constant matrix $\mathbf{A}$. But that is still a severely limited type of problem.
+Before proceeding, we address why the model equation $y'=\lambda y$ of absolute stability has wide relevance. Through diagonalization, it is easily generalized to $\mathbf{u}'=\mathbf{A} \mathbf{u}$ for a constant matrix $\mathbf{A}$. But that is still a severely limited type of problem.
 
 Consider a general vector nonlinear system 
 
@@ -134,8 +136,6 @@ Suppose $\lambda=-4$ and Euler's method is applied. Since the time step is alway
 
 Now suppose instead that $\lambda=i$, so that $\zeta=i\tau$. Clearly $\zeta$ is always on the positive imaginary axis. But no part of this axis, aside from the origin, lies in the stability region of Euler's method, so it is unconditionally *unstable* in this circumstance. The conclusion for backward Euler is the opposite; any value of $\tau$ will do, because the entire imaginary axis is within the stability region.
 ::::
-
-{numref}`Example %s <example-absstab-FEBE>` does not contradict our earlier statements about the zero stability and convergence of Euler's method in general, even for the case $\lambda=i$. But those statements are based on the limit $\tau\to 0$ for $t$ in a finite interval $[a,b]$. Both this limit and the limit $t\to \infty$ imply the number of steps $n$ goes to infinity, but the limits behave differently.
 
 The fact that implicit methods have larger stability regions than their explicit counterparts is the primary justification for using them. While they have larger work requirements per step, they sometimes can take steps that are orders of magnitude larger than explicit methods and still remain stable.
 
