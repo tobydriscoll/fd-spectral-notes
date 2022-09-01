@@ -21,13 +21,28 @@ $$
 u(x) = e^{i\xi x},
 $$
 
-where $\xi$ is a wavenumber. For this analysis we ignore boundaries and suppose that there is an infinite set of nodes $x_k=kh$, $k\in\mathbb{Z}$. Because of the sampling rate, the behavior is periodic in the wavenumber with period $2\pi/h$, so we restrict attention to
+where $\xi$ is a wavenumber. For this analysis we ignore boundaries and suppose that there is an infinite set of nodes $x_k=kh$, $k\in\mathbb{Z}$. 
+
+Observe that 
+
+$$
+\exp[i(\xi+(2\pi/h)) x_k ] &= \exp(i \xi kh)\, \exp(i(2\pi/h)k h) \\ 
+&= e^{i\xi x_k} \, [e^{2\pi i}]^k = e^{i\xi x_k}. 
+$$
+
+::::{prf:observation} Aliasing
+On the grid $x_k=kh$, $k\in \mathbb{Z}$, the Fourier mode at wavenumber $\xi + (2\pi/h)$ is indistinguishable from the mode at wavenumber $\xi$.
+::::
+
+Because of aliasing, all behavior on the grid is periodic in the wavenumber with period $2\pi/h$, so we restrict attention to
 
 $$
 \xi \in \left. \left[ -\frac{\pi}{h},\frac{\pi}{h} \right. \right). 
 $$
 
-If we look at the simplest centered difference formula, for example, we get
+## Differentiation factors
+
+If we look at the simplest centered difference formula, we get
 
 $$
 \frac{u(h)-u(-h)}{2h} = \frac{ e^{i\xi h} - e^{-i\xi h}}{2h} = \frac{i}{h} \sin(\xi h) =: ig_2(\xi h). 
@@ -72,7 +87,9 @@ g₆(ξ) = imag( dot(FD6,cis.(ξ*(-3:3))) )
 plot!(g₆,-π,π,label="order 6")
 ```
 
-The story gets more complicated with noncentered formulas. The two-point forward formula has, for example,
+## Non-centered formulas
+
+The story gets more complicated with non-centered formulas. The two-point forward formula has, for example,
 
 $$
 \frac{ e^{i\xi h} - 1}{h} := ig_1(\xi),

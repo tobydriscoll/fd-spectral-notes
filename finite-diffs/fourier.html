@@ -51,7 +51,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\varepsilon_\\text{mach}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -429,12 +429,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#differentiation-factors">
+   Differentiation factors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#non-centered-formulas">
+   Non-centered formulas
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -446,6 +475,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#differentiation-factors">
+   Differentiation factors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#non-centered-formulas">
+   Non-centered formulas
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -460,12 +507,26 @@ title="Print to PDF"
 \[
 u(x) = e^{i\xi x},
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\xi\)</span> is a wavenumber. For this analysis we ignore boundaries and suppose that there is an infinite set of nodes <span class="math notranslate nohighlight">\(x_k=kh\)</span>, <span class="math notranslate nohighlight">\(k\in\mathbb{Z}\)</span>. Because of the sampling rate, the behavior is periodic in the wavenumber with period <span class="math notranslate nohighlight">\(2\pi/h\)</span>, so we restrict attention to</p>
+<p>where <span class="math notranslate nohighlight">\(\xi\)</span> is a wavenumber. For this analysis we ignore boundaries and suppose that there is an infinite set of nodes <span class="math notranslate nohighlight">\(x_k=kh\)</span>, <span class="math notranslate nohighlight">\(k\in\mathbb{Z}\)</span>.</p>
+<p>Observe that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\exp[i(\xi+(2\pi/h)) x_k ] &amp;= \exp(i \xi kh)\, \exp(i(2\pi/h)k h) \\ 
+&amp;= e^{i\xi x_k} \, [e^{2\pi i}]^k = e^{i\xi x_k}. 
+\end{split}\]</div>
+<div class="proof observation admonition" id="observation-0">
+<p class="admonition-title"><span class="caption-number">Observation 1.4.1 </span> (Aliasing)</p>
+<section class="observation-content" id="proof-content">
+<p>On the grid <span class="math notranslate nohighlight">\(x_k=kh\)</span>, <span class="math notranslate nohighlight">\(k\in \mathbb{Z}\)</span>, the Fourier mode at wavenumber <span class="math notranslate nohighlight">\(\xi + (2\pi/h)\)</span> is indistinguishable from the mode at wavenumber <span class="math notranslate nohighlight">\(\xi\)</span>.</p>
+</section>
+</div><p>Because of aliasing, all behavior on the grid is periodic in the wavenumber with period <span class="math notranslate nohighlight">\(2\pi/h\)</span>, so we restrict attention to</p>
 <div class="math notranslate nohighlight">
 \[
 \xi \in \left. \left[ -\frac{\pi}{h},\frac{\pi}{h} \right. \right). 
 \]</div>
-<p>If we look at the simplest centered difference formula, for example, we get</p>
+<section id="differentiation-factors">
+<h2>Differentiation factors<a class="headerlink" href="#differentiation-factors" title="Permalink to this headline">#</a></h2>
+<p>If we look at the simplest centered difference formula, we get</p>
 <div class="math notranslate nohighlight">
 \[
 \frac{u(h)-u(-h)}{2h} = \frac{ e^{i\xi h} - e^{-i\xi h}}{2h} = \frac{i}{h} \sin(\xi h) =: ig_2(\xi h). 
@@ -514,7 +575,10 @@ e^{i(\pi/h)(kh)} = e^{i\pi k} = (-1)^k,
 <div class="cell_output docutils container">
 <img alt="../_images/fourier_3_0.svg" src="../_images/fourier_3_0.svg" /></div>
 </div>
-<p>The story gets more complicated with noncentered formulas. The two-point forward formula has, for example,</p>
+</section>
+<section id="non-centered-formulas">
+<h2>Non-centered formulas<a class="headerlink" href="#non-centered-formulas" title="Permalink to this headline">#</a></h2>
+<p>The story gets more complicated with non-centered formulas. The two-point forward formula has, for example,</p>
 <div class="math notranslate nohighlight">
 \[
 \frac{ e^{i\xi h} - 1}{h} := ig_1(\xi),
@@ -535,6 +599,7 @@ e^{i(\pi/h)(kh)} = e^{i\pi k} = (-1)^k,
 <img alt="../_images/fourier_5_0.svg" src="../_images/fourier_5_0.svg" /></div>
 </div>
 <p>We’ll see later that the nonzero imaginary part here has important implications for PDEs.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
