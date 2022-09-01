@@ -97,7 +97,7 @@ sphinx:
           "ee": ["\\times 10^"]
           "floor": ["\\lfloor#1\\rfloor",1]
           "argmin": ["\\operatorname{argmin}"]
-          "epsm": ["\\varepsilon_\\text{mach}"]
+          "epsm": ["\\epsilon_{\\text{mach}}"]
           "logit": ["\\operatorname{logit}"]
     
     latex_additional_files: etc/preamble.tex
