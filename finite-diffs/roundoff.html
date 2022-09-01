@@ -244,8 +244,13 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../mol/diffusion.html">
-     4.3. Diffusion equation
+    <a class="reference internal" href="../mol/semidiscretization.html">
+     4.3. Semidiscretization
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/beyond.html">
+     4.4. Beyond the basics
     </a>
    </li>
   </ul>
@@ -535,12 +540,12 @@ title="Print to PDF"
 This is the phenomenon of <strong>subtractive cancellation</strong>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">PrettyTables</span><span class="w"></span>
-<span class="n">δ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="o">^</span><span class="p">(</span><span class="mi">2</span><span class="o">:</span><span class="mi">13</span><span class="p">)</span><span class="w"></span>
-<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.1416</span><span class="w"></span>
-<span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">δ</span><span class="p">)</span><span class="w"> </span>
-<span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">δ</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">δ</span><span class="w"></span>
-<span class="n">pretty_table</span><span class="p">([</span><span class="n">δ</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">eps</span><span class="p">()</span><span class="o">./</span><span class="n">δ</span><span class="p">],</span><span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;δ&quot;</span><span class="p">,</span><span class="s">&quot;result&quot;</span><span class="p">,</span><span class="s">&quot;rel. error&quot;</span><span class="p">,</span><span class="s">&quot;bound&quot;</span><span class="p">])</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">PrettyTables</span>
+<span class="n">δ</span> <span class="o">=</span> <span class="nd">@.</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="o">^</span><span class="p">(</span><span class="mi">2</span><span class="o">:</span><span class="mi">13</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mf">3.1416</span>
+<span class="n">d</span> <span class="o">=</span> <span class="nd">@.</span> <span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">δ</span><span class="p">)</span> 
+<span class="n">err</span> <span class="o">=</span> <span class="nd">@.</span> <span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">δ</span><span class="p">)</span> <span class="o">/</span> <span class="n">δ</span>
+<span class="n">pretty_table</span><span class="p">([</span><span class="n">δ</span> <span class="n">d</span> <span class="n">err</span> <span class="n">x</span><span class="o">*</span><span class="n">eps</span><span class="p">()</span><span class="o">./</span><span class="n">δ</span><span class="p">],</span><span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;δ&quot;</span><span class="p">,</span><span class="s">&quot;result&quot;</span><span class="p">,</span><span class="s">&quot;rel. error&quot;</span><span class="p">,</span><span class="s">&quot;bound&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>

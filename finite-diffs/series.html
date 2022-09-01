@@ -244,8 +244,13 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../mol/diffusion.html">
-     4.3. Diffusion equation
+    <a class="reference internal" href="../mol/semidiscretization.html">
+     4.3. Semidiscretization
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/beyond.html">
+     4.4. Beyond the basics
     </a>
    </li>
   </ul>
@@ -447,6 +452,11 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#derivations">
+   Derivations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#higher-derivatives">
    Higher derivatives
   </a>
@@ -471,6 +481,11 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#derivations">
+   Derivations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#higher-derivatives">
    Higher derivatives
   </a>
@@ -487,7 +502,29 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="power-series-and-finite-differences">
 <h1><span class="section-number">1.2. </span>Power series and finite differences<a class="headerlink" href="#power-series-and-finite-differences" title="Permalink to this headline">#</a></h1>
-<p>A standard way to uncover the accuracy of a finite-difference formula is by expansion in power series. We’ll use formal power series here, which is a bit tricky. Suppose <span class="math notranslate nohighlight">\(hD\)</span> represents the differentiation operator times a number <span class="math notranslate nohighlight">\(h\)</span>. Then define</p>
+<p>A standard way to uncover the accuracy of a finite-difference formula is by expansion in power series.</p>
+<div class="proof definition admonition" id="definition-0">
+<p class="admonition-title"><span class="caption-number">Definition 1.2.1 </span> (Truncation error for finite differences)</p>
+<section class="definition-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(d_h(u)\)</span> is a finite-difference approximation to <span class="math notranslate nohighlight">\(u'(0)\)</span>, the <strong>truncation error</strong> of the approximation is</p>
+<div class="math notranslate nohighlight">
+\[
+T(h) = d_h(u) - u'(0). 
+\]</div>
+<p>The power of <span class="math notranslate nohighlight">\(h\)</span> in the leading term of <span class="math notranslate nohighlight">\(T(h)\)</span> is the <strong>order of accuracy</strong> of the FD formula.</p>
+</section>
+</div><div class="proof example admonition" id="example-1">
+<p class="admonition-title"><span class="caption-number">Example 1.2.1 </span></p>
+<section class="example-content" id="proof-content">
+<p>For the forward-difference formula applied to a smooth <span class="math notranslate nohighlight">\(u(x)\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+T(h) &amp;= \frac{u(h)-u(0)}{h} - u'(0) \\ 
+&amp;= \frac{hu'(0) + \tfrac{1}{2}h^2u''(0) + \cdots}{h} - u'(0) = \tfrac{1}{2}hu''(0) + O(h^2). 
+\end{split}\]</div>
+<p>Thus, it is a first-order method.</p>
+</section>
+</div><p>There is a lot of boilerplate in these calculations that we can condense using formal power series. Suppose <span class="math notranslate nohighlight">\(hD\)</span> represents the differentiation operator times the step size <span class="math notranslate nohighlight">\(h\)</span>. Then define <span class="math notranslate nohighlight">\(Z=\exp(hD)\)</span>. In Sage, this is done via the following:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">R</span><span class="o">.&lt;</span><span class="n">hD</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">QQ</span><span class="p">[[]]</span>
@@ -503,7 +540,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>We can interpret Taylor’s theorem as stating that <span class="math notranslate nohighlight">\(Z\)</span> is an operator that “shifts” a smooth function <span class="math notranslate nohighlight">\(u(x)\)</span> to the function <span class="math notranslate nohighlight">\(u(x+h)\)</span>. Thus, for example, a forward difference operator has the series</p>
+<p>We can interpret Taylor’s theorem as stating that <span class="math notranslate nohighlight">\(Z\)</span> is an operator that <em>shifts</em> a smooth function <span class="math notranslate nohighlight">\(u(x)\)</span> to the function <span class="math notranslate nohighlight">\(u(x+h)\)</span>. Thus, for example, the forward difference formula is represented by the series</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fd1</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">-</span> <span class="mi">1</span>
@@ -517,13 +554,12 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>That is,</p>
+<p>Hence the truncation error is</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}
-u(x+h) - u(x) &amp; = hu'(x) + \frac{1}{2}h^2u''(x) + \cdots \\ 
-\frac{u(x+h)-u(x)}{h} &amp;= u'(x) + \frac{1}{2}h u''(x) + O(h^2).
-\end{split}\]</div>
-<p>We say this formula is <strong>first-order accurate</strong>, since its error is led by the <span class="math notranslate nohighlight">\(O(h^1)\)</span> term. Similarly, the two-term backward difference is also first-order:</p>
+\[
+\frac{Z-1}{h} - D = \frac{1}{2}h D^2 + O(h^2),
+\]</div>
+<p>which restates the example above. Similarly, the two-term backward difference is also first-order accurate:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bd1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Z</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
@@ -554,12 +590,13 @@ u(x+h) - u(x) &amp; = hu'(x) + \frac{1}{2}h^2u''(x) + \cdots \\
 <div class="math notranslate nohighlight">
 \[\begin{split}
 u(x+h) - u(x) &amp; = hu'(x) + \frac{1}{2}h^2u''(x) + \cdots \\ 
-\frac{u(x+h)-u(x-h)}{2h} &amp;= u'(x) + \frac{1}{6} h^2 u'''(x) + O(h^4).
+\frac{u(x+h)-u(x-h)}{2h} - u'(x) &amp;= \frac{1}{6} h^2 u'''(x) + O(h^4).
 \end{split}\]</div>
 <p>One interpretation is that the antisymmetry around <span class="math notranslate nohighlight">\(h=0\)</span> buys us an extra order.</p>
-<p>The same series analysis can be used to derive methods as well. You decide which nodes to include, called the <strong>stencil</strong> of the method, give each function value an unknown coefficient, expand everything around the evaluation point, and choose the coefficients to cancel out as many terms as possible.</p>
-<p>There is a better method, though, that uses the connection between differentiation and shifting to derive formulas.
-Note that formally, <span class="math notranslate nohighlight">\(Z=e^{hD}\)</span> around <span class="math notranslate nohighlight">\(h=0\)</span>, so that <span class="math notranslate nohighlight">\(hD = \log(Z)\)</span> around <span class="math notranslate nohighlight">\(Z=1\)</span>. Hence finite difference formulas are always found as truncations of the series:</p>
+<section id="derivations">
+<h2>Derivations<a class="headerlink" href="#derivations" title="Permalink to this headline">#</a></h2>
+<p>The power series analysis can be used to derive new FD methods on equispaced grids. You decide which nodes to include (i.e., the <strong>stencil</strong> of the method), give each function value an unknown coefficient, expand everything around the evaluation point, and choose the coefficients to cancel out as many terms as possible.</p>
+<p>There is a more direct method, though. Formally, <span class="math notranslate nohighlight">\(Z=e^{hD}\)</span> around <span class="math notranslate nohighlight">\(h=0\)</span>, so that <span class="math notranslate nohighlight">\(hD = \log(Z)\)</span> around <span class="math notranslate nohighlight">\(Z=1\)</span>. Hence, finite difference formulas are found by truncating expansions of <span class="math notranslate nohighlight">\(\log(z)\)</span> around <span class="math notranslate nohighlight">\(z=1\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
@@ -573,11 +610,11 @@ Note that formally, <span class="math notranslate nohighlight">\(Z=e^{hD}\)</spa
 </div>
 </div>
 </div>
-<p>So if we were setting out to find the two-point forward difference, for example, we’d start with</p>
+<p>If we didn’t already know the two-point forward difference formula, we’d start with</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\frac{a_1 u(h) + a_0 u(0)}{h} &amp; \approx u'(0) \\ 
-a_1 Zu(0) + a_0u(0) &amp; \approx hDu(0) \\ 
+\frac{a_1 u(h) + a_0 u(0)}{h} &amp; \approx u'(0), \\ 
+a_1 Zu(0) + a_0u(0) &amp; \approx hDu(0), \\ 
 a_1 Z + a_0 &amp; \approx \log(Z). 
 \end{split}\]</div>
 <p>Hence,</p>
@@ -593,7 +630,7 @@ a_1 Z + a_0 &amp; \approx \log(Z).
 </div>
 </div>
 </div>
-<p>If we add a node at <span class="math notranslate nohighlight">\(2h\)</span>, then we have <span class="math notranslate nohighlight">\(a_2 Z^2 + a_1 Z + a_0 \approx \log(Z)\)</span>:</p>
+<p>If we find a formula using values at <span class="math notranslate nohighlight">\(0\)</span>, <span class="math notranslate nohighlight">\(h\)</span>, and <span class="math notranslate nohighlight">\(2h\)</span> to get <span class="math notranslate nohighlight">\(u'(0)\)</span>, then we have <span class="math notranslate nohighlight">\(a_2 Z^2 + a_1 Z + a_0 \approx \log(Z)\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
@@ -611,7 +648,7 @@ a_1 Z + a_0 &amp; \approx \log(Z).
 \[
 \frac{-3u(0) + 4u(h) - u(2h)}{2h} = u'(0) + O(h^2). 
 \]</div>
-<p>We can handle centered (and any generally-offset) formula on evenly spaced nodes. In the centered three-point formula, for instance, we have</p>
+<p>We can derive centered, backward, and other formulas by generalizing the trick just a little. In the centered three-point formula, we have</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \frac{a_{-1}u(-h) + a_0 u(0) + a_1u(h)}{h} &amp; \approx u'(0)  \\ 
@@ -643,9 +680,10 @@ a_{-1} + a_0 Z + a_1 Z^2 &amp; \approx Z \log(Z)
 </div>
 </div>
 </div>
+</section>
 <section id="higher-derivatives">
 <h2>Higher derivatives<a class="headerlink" href="#higher-derivatives" title="Permalink to this headline">#</a></h2>
-<p>We can play the same games for 2nd and higher derivative formulas. Here is the most famous formula for a second derivative: 3-point, centered, and 2nd-order:</p>
+<p>We can play the same games for formulas for the 2nd and higher derivatives. Here is the most popular formula for a second derivative: centered, using three nodes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
@@ -658,6 +696,7 @@ a_{-1} + a_0 Z + a_1 Z^2 &amp; \approx Z \log(Z)
 </div>
 </div>
 </div>
+<p>We can verify that the formula is second-order accurate:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">Z</span><span class="o">^</span><span class="mi">2</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">Z</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">Z</span>
@@ -670,9 +709,10 @@ a_{-1} + a_0 Z + a_1 Z^2 &amp; \approx Z \log(Z)
 </div>
 </div>
 </div>
+<p>I.e.,</p>
 <div class="math notranslate nohighlight">
 \[
-u''(0) = \frac{u_{-1}-2u_0+u_1}{h^2} - \frac{1}{12}h^2 u^{(4)}(0) + O(h^4)
+u''(0) = \frac{u_{-1}-2u_0+u_1}{h^2} - \frac{1}{12}h^2 u^{(4)}(0) + O(h^4).
 \]</div>
 <p>This can be carried out to 4th-order using 5 points:</p>
 <div class="cell docutils container">
@@ -712,9 +752,10 @@ u''(0) = \frac{u_{-1}-2u_0+u_1}{h^2} - \frac{1}{12}h^2 u^{(4)}(0) + O(h^4)
 </div>
 </div>
 </div>
+<p>I.e.,</p>
 <div class="math notranslate nohighlight">
 \[
-u''(0) = \frac{2u_{0}-5u_1+4u_2 - u_3}{h^2} + O(h^2)
+u''(0) = \frac{2u_{0}-5u_1+4u_2 - u_3}{h^2} + O(h^2).
 \]</div>
 </section>
 </section>
