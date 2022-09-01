@@ -108,14 +108,14 @@ mp4(anim,"bratu.mp4")
 A different approach is to fold the algebraic BCs into the IVP, making it a type of **differential-algebraic equation**. In this case we have the form
 
 $$
-\bfM \partial_t \bfu = \boldsymbol{\phi}(t,\bfu), 
+\mathbf{M} \partial_t \bfu = \boldsymbol{\phi}(t,\bfu), 
 $$
 
-where $\bfM$ is a singular mass matrix. We are able to assume that $\bfM$ is diagonal with all entries 0 or 1, which lets the DAE system be decomposable into
+where $\mathbf{M}$ is a singular mass matrix. We are able to assume that $\mathbf{M}$ is diagonal with all entries 0 or 1, which lets us partition the variables and decompose the DAE system into
 
 $$
-\partial_t \bfv &= \bff(t,\bfv,\bfw), 
-0 &= \bfg(t,\bfv,\bfw). 
+\partial_t \bfv &= \bff(t,\bfv,\bfw), \\
+0 &= \mathbf{g}(t,\bfv,\bfw). 
 $$
 
 We call $\bfv$ the *differential variables* and $\bfw$ the *algebraic variables*.

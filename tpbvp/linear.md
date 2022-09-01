@@ -65,10 +65,10 @@ $$ -->
 We can discretize $u''$ and $u'$ by using differentiation matrices. The discrete form of the ODE, sans boundary conditions, becomes
 
 $$
-\bfA \bfu = \bff, \qquad \bfA = \bfD_{xx} + \bfP \bfD_{x} + \bfQ,
+\bfA \bfu = \bff, \qquad \bfA = \bfD_{xx} + \bfP \bfD_{x} + \mathbf{Q},
 $$
 
-where $\bfP$ and $\bfQ$ are diagonal matrices of the evaluations of the coefficient functions $p$ and $q$. 
+where $\bfP$ and $\mathbf{Q}$ are diagonal matrices of the evaluations of the coefficient functions $p$ and $q$. 
 
 The boundary conditions imply that
 
