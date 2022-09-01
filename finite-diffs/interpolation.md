@@ -73,17 +73,52 @@ $$
 \sum_{i=0}^n w_i u(x_i) \approx u^{(m)}(0)
 $$
 
-with order of accuracy at least $n-m+1$. The algorithm is due to Fornberg. We don't present it here, but we note that it is available in Julia's `FiniteDifferences` package:
+with order of accuracy at least $n-m+1$. The algorithm is due to Fornberg.
 
-```{code-cell}
-using FiniteDifferences
-nodes = [-3,-1.5,0,1,2]
-fd = FiniteDifferenceMethod(nodes,2)  # 2nd derivative
+```{code-cell} julia
+"""
+    fdweights(t,m)
+
+Compute weights for the `m`th derivative of a function at zero using
+values at the nodes in vector `t`.
+"""
+function fdweights(t,m)
+    # Recursion for one weight. 
+    function weight(t,m,r,k)
+        # Inputs
+        #   t: vector of nodes 
+        #   m: order of derivative sought 
+        #   r: number of nodes to use from t 
+        #   k: index of node whose weight is found
+
+        if (m<0) || (m>r)        # undefined coeffs must be zero
+            c = 0
+        elseif (m==0) && (r==0)  # base case of one-point interpolation
+            c = 1
+        else                     # generic recursion
+            if k<r
+                c = (t[r+1]*weight(t,m,r-1,k) -
+                    m*weight(t,m-1,r-1,k))/(t[r+1]-t[k+1])
+            else
+                numer = r > 1 ? prod(t[r]-x for x in t[1:r-1]) : 1
+                denom = r > 0 ? prod(t[r+1]-x for x in t[1:r]) : 1
+                β = numer/denom
+                c = β*(m*weight(t,m-1,r-1,r-1) - t[r]*weight(t,m,r-1,r-1))
+            end
+        end
+        return c
+    end
+    r = length(t)-1
+    w = zeros(size(t))
+    return [ weight(t,m,r,k) for k=0:r ]
+end;
 ```
 
-```{code-cell}
+
+```{code-cell} julia
 using LinearAlgebra
-w = fd.coefs
+nodes = [-3,-1.25,0,1,1.9]
+w = fdweights(nodes,2)  # 2nd derivative weights
 f = x->cos(2x)
 h = 0.05; 
 err1 = dot(w/h^2,f.(h*nodes)) + 4
