@@ -429,12 +429,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#double-integration">
+   Double integration
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#convergence">
+   Convergence
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -446,6 +475,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#double-integration">
+   Double integration
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#convergence">
+   Convergence
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -511,40 +558,64 @@ x_i = a + ih, \quad h = \frac{b-a}{n}, \quad i=0,\ldots,n,
 </div>
 </div>
 </div>
-<p>It’s unfortunate that the first and last rows in each differentiation matrix are first-order accurate, while the others are all second-order. However, in practice this often turns out not to matter.</p>
+<p>It’s unfortunate that the first and last rows in each differentiation matrix are first-order accurate, while the others are all second-order. More about that in a moment.</p>
+<section id="double-integration">
+<h2>Double integration<a class="headerlink" href="#double-integration" title="Permalink to this headline">#</a></h2>
 <p>The problem</p>
 <div class="math notranslate nohighlight">
 \[
 u''(x) = f(x)
 \]</div>
-<p>is solved by integrating twice. The two integration constants have to be specified by initial or boundary conditions. We’ll suppose that <span class="math notranslate nohighlight">\(u(0)=0\)</span> and <span class="math notranslate nohighlight">\(u(1)=-1\)</span>. Define the <em>chopping matrix</em> <span class="math notranslate nohighlight">\(\bfC\)</span> as an identity matrix with its first and last rows removed. Then we can express the BVP as</p>
+<p>is solved by integrating twice. The two integration constants have to be specified by initial or boundary conditions. We’ll suppose that <span class="math notranslate nohighlight">\(u(0)=1\)</span> and <span class="math notranslate nohighlight">\(u(1)=-1\)</span>.</p>
+<p>The discrete collocation system is <span class="math notranslate nohighlight">\(\bfD_{xx} \bfu = \bff\)</span>, where <span class="math notranslate nohighlight">\(\bff\)</span> represents the evaluation of <span class="math notranslate nohighlight">\(f(x)\)</span> on the nodes. We could proceed as we did before and modify the first and last rows of the system to express the boundary conditions, but we will take a different path here. If we put in the boundary values in place of <span class="math notranslate nohighlight">\(u_0\)</span> and <span class="math notranslate nohighlight">\(u_n\)</span>, we have</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
+\bfD_{xx} 
 \begin{bmatrix}
-\begin{bmatrix}
-  1 &amp; 0 &amp; \cdots &amp; 0 
+  1 \\ u_1 \\ u_2 \\ \vdots \\ u_{n-1} \\ -1
 \end{bmatrix}
-\\ \bfC \bfD_{xx} \\ 
-\begin{bmatrix}
-  0 &amp; \cdots &amp; 0 &amp; 1
-\end{bmatrix}
-\end{bmatrix} 
-= 
-\begin{bmatrix}
-  0 \\ \bfC\bff \\ -1
-\end{bmatrix}. 
+= [ g(x_i) ]_{i=0,\ldots,n}.  
 \end{split}\]</div>
+<p>Let <span class="math notranslate nohighlight">\(\bfd_0,\ldots,\bfd_n\)</span> be the columns of <span class="math notranslate nohighlight">\(\bfD_{xx}\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+1 \bfd_0 - 1 \bfd_n + 
+\begin{bmatrix}
+  \bfd_1 &amp; \cdots &amp; \bfd_{n-1}
+\end{bmatrix}
+\begin{bmatrix}
+  u_1 \\ u_2 \\ \vdots \\ u_{n-1}
+\end{bmatrix}
+= \bff. 
+\end{split}\]</div>
+<p>Define the <em>chopping matrix</em> <span class="math notranslate nohighlight">\(\bfC\)</span> as an <span class="math notranslate nohighlight">\((n+1)\)</span>-identity matrix with its first and last columns removed. Then we have</p>
+<div class="math notranslate nohighlight">
+\[
+(\bfD_{xx}\bfC) (\bfC^T \bfu) = \bff - \bfd_0 + \bfd_n. 
+\]</div>
+<p>This system has <span class="math notranslate nohighlight">\(n+1\)</span> rows but only <span class="math notranslate nohighlight">\(n-1\)</span> unknowns remaining, so we will chop off the first and last rows as well. Define</p>
+<div class="math notranslate nohighlight">
+\[
+\bfA = \bfC^T \bfD_{xx} \bfC, \quad \tilde{\bfu} = \bfC^T \bfu.
+\]</div>
+<p>The reduced linear system is now</p>
+<div class="math notranslate nohighlight">
+\[
+\bfA = \tilde{\bfu} = \bfC^T (\bff - \bfd_0 + \bfd_n). 
+\]</div>
+<p>In practice we can simply use row and column indexing rather than constructing the matrix <span class="math notranslate nohighlight">\(\bfC\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
-<span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="n">x</span><span class="p">)</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">50</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
 <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
 <span class="n">_</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">A</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="mi">1</span> <span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)];</span> <span class="n">Dxx</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="o">:</span><span class="p">];</span> <span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="mi">1</span><span class="p">]</span> <span class="p">]</span>
-<span class="n">f</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">;</span> <span class="n">g</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]);</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">u</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">f</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">Dxx</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
+<span class="n">rhs</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">Dxx</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">Dxx</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
+<span class="n">ũ</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">rhs</span>
+<span class="n">u</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span><span class="n">ũ</span><span class="p">;</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="k">using</span> <span class="n">Plots</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">)</span>
@@ -554,6 +625,24 @@ u''(x) = f(x)
 <div class="cell_output docutils container">
 <img alt="../_images/diffmats_3_0.svg" src="../_images/diffmats_3_0.svg" /></div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">norm</span><span class="p">(</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span><span class="o">-</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.009251046829423357
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="convergence">
+<h2>Convergence<a class="headerlink" href="#convergence" title="Permalink to this headline">#</a></h2>
+<p>Some experimentation will confirm that the code above converges like <span class="math notranslate nohighlight">\(O(h^2)\)</span>. While this seems to be a natural result of using second-order FD formulas, it’s not quite so simple—the formulas get the <em>problem</em> correct to 2nd order, but that doesn’t prove that the <em>solution</em> is as accurate. We will investigate the link between them in the next chapter.</p>
+<p>It is surprising, however, that our earlier code to solve <span class="math notranslate nohighlight">\(u'=f\)</span> also converged at second order, given that it used the first-order backward difference formula at the right endpoint. While the rigorous details are messy, in essence the saving grace of the method is that the less-accurate formula is used at only <span class="math notranslate nohighlight">\(O(1)\)</span> of the <span class="math notranslate nohighlight">\(O(1/h)\)</span> total equations, and this buys back one extra order of accuracy in the result. This is usually the case: the order of accuracy of the FD formula can be one lower at a fixed number of nodes as <span class="math notranslate nohighlight">\(h\to 0\)</span> without damaging the convergence.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
