@@ -92,6 +92,7 @@ sphinx:
           "pr" : ["^{(#1)}",1]
           "diag": ["\\operatorname{diag}"]
           "sign": ["\\operatorname{sign}"]
+          "mtx": ["\\operatorname{mtx}"]
           "dist": ["\\operatorname{dist}"]
           "myvec": ["\\operatorname{vec}"]
           "simil": ["\\operatorname{sim}"]

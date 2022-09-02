@@ -108,9 +108,9 @@ u,stats = gmres(A,b,rtol=1e-6)
 stats
 ```
 
-```{code-cell}
+```{code-cell} julia
 using Plots
-plotlyjs()
+# plotlyjs()
 U = reshape(u,m+1,n+1)
 surface(x,y,U',color=:viridis,
     title="Solution of Poisson's equation",      
