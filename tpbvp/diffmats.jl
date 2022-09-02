@@ -1,10 +1,10 @@
 using LinearAlgebra
-function diffmats(x)
+function diffmats(a,b,n)
     # assumes evenly spaced nodes
-    h = x[2]-x[1]
-    m = length(x)
-    Dx = 1/2h*diagm(-1=>[-ones(m-2);-2],0=>[-2;zeros(m-2);2],1=>[2;ones(m-2)])
-    Dxx = 1/h^2*diagm(-1=>[ones(m-2);-2],0=>[1;-2*ones(m-2);1],1=>[-2;ones(m-2)])
-    Dxx[m,m-2] = Dxx[1,3] = 1/h^2
-    return Dx,Dxx
+    h = (b-a)/n
+    x = [a + i*h for i in 0:n]
+    Dx = 1/2h*diagm(-1=>[fill(-1.,n-1);-2],0=>[-2;zeros(n-1);2],1=>[2;ones(n-1)])
+    Dxx = 1/h^2*diagm(-1=>[ones(n-1);-2],0=>[1;fill(-2.,n-1);1],1=>[-2;ones(n-1)])
+    Dxx[n+1,n-1] = Dxx[1,2] = 1/h^2
+    return x,Dx,Dxx
 end
