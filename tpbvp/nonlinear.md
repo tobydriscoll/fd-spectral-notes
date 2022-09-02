@@ -29,37 +29,34 @@ $$
 \bff(\bfu) = \bfzero.
 $$
 
-Using a black-box nonlinear equation solver, it's rather easy to get solutions. For example, here is a solution of 
+Using a black-box nonlinear equation solver, it's rather easy to get solutions to many problems. For example, here is a solution of 
 
 $$
 \lambda u'' + u(u'-1) = -x, \quad u(0)=-1, \quad u(1)=1. 
 $$
 
-```{code-cell}
+```{code-cell} julia
 include("diffmats.jl")
 using NLsolve
 function bvp(λ,n)
   a,b = 0,1
-  h = (b-a)/n
-  x = [a+i*h for i in 0:n]
-  Dx,Dxx = diffmats(x)
+  x,Dx,Dxx = diffmats(a,b,n)
   ode = u -> λ*Dxx*u + u.*(Dx*u .- 1) + x
   residual = u -> [ode(u)[2:n];u[1]+1;u[n+1]-1]
   u = nlsolve(residual,zeros(n+1))
   return x,u.zero
-end
+end;
 ```
 
-```{code-cell}
+```{code-cell} julia
 using Plots
 plt = plot(legend=:topleft)
-for λ in [0.1,0.05,0.01]
+for λ in [0.2,0.05,0.01]
     x,u = bvp(λ,300);
     plot!(x,u,label="λ=$λ")
 end
 plt
 ```
-
 The standard approach is to use a Newton-style method in which we replace the nonlinear problem by a sequence of linear surrogates that we construct and solve iteratively, i.e,
 
 $$
@@ -79,7 +76,7 @@ Good performance in the nonlinear solver boils down mainly to two factors: an ef
 
 ## Jacobian matrix
 
-There are essentially three possibilities worth pursuing when the system size is $\approx O(1000)$ or less. 
+There are essentially three possibilities worth pursuing for the Jacobian when the system size is $\approx O(1000)$ or less. (We'll discuss the large case when dealing with more space dimensions.)
 
 ### Exact Jacobian
 
@@ -117,14 +114,11 @@ $$
 That's just for the ODE. If there are linear boundary conditions on $u(x)$, then the same conditions hold *homogeneously* for $v$. If we replace the first and last rows of $\bff$ with discrete BC operators, then we also replace the first and last rows of $\bfJ$. 
 If we use fictitious points, the Schur complement trick can be applied to $\bfJ$, although it may be simpler to simply leave the fictitious points in the discrete system.
 
-```{code-cell}
-using LinearAlgebra
-
+```{code-cell} julia
 include("diffmats.jl")
 n = 200
-h = (1-0)/n
-x = [i*h for i in 0:n]
-Dx,Dxx = diffmats(x)
+h = 1/n
+x,Dx,Dxx = diffmats(0,1,n)
 
 function residual(u) 
     r = Dxx*u + 0*u.*(Dx*u) .- 1
@@ -145,7 +139,7 @@ end;
 
 It's advisable to check your Jacobian to see if it does the correct thing on at least one generic input. Remember as you set up the data that $u$ and $v$ are expected to obey certain boundary conditions.
 
-```{code-cell}
+```{code-cell} julia
 u = x.^2 .+ 1
 v = cos.(π*x/2)
 ϵ = 1e-5
@@ -156,8 +150,7 @@ norm(du-Jv)
 
 We don't have to make sure that the initial guess satisfies the boundary conditions, because a single Newton iteration will take care of that for us.
 
-```{code-cell}
-using NLsolve
+```{code-cell} julia
 sol = nlsolve(residual,jac,0*x)
 using Plots
 plot(x,sol.zero,title="residual norm = $(sol.residual_norm)")
@@ -193,7 +186,7 @@ AD has taken off in popularity due to ML, where it is essential for training neu
 
 ### Finite differences
 
-*Yo dawg, I gave you some finite differences with your finite differences.*
+![dawg](yo-dawg-fd.jpg)
 
 The difference
 
@@ -201,11 +194,9 @@ $$
 \frac{\bff(\bfu + \epsilon \bfv) - \bff(\bfu)}{\epsilon}
 $$
 
-approximates the directional derivative $\bfJ(\bfu)\bfv$. The full Jacobian matrix can be recovered by applying this difference repeatedly in each of the coordinate axes directions. When there are $N$ unknowns, this process requires at least $O(N^2)$ work, but in principle that should be insignificant next to the $O(N^3)$ work needed to solve the linear system with $\bfJ$. 
+is a first-order approximation to the directional derivative $\bfJ(\bfu)\bfv$. The full Jacobian matrix can be recovered by applying this difference repeatedly in each of the coordinate axes directions. When there are $N$ unknowns, this process requires at least $O(N^2)$ work, but that should be compared to the $O(N^3)$ work needed to solve the linear system with $\bfJ$. 
 
-The advantage of an FD Jacobian is that is requires only that $\bff$ be available, which is necessary for the entire problem. Because of this, it's usually the default choice.
-
-However, it can be slow in practice, and it can be affected by roundoff error; we can expect an optimal accuracy that is only $O(\sqrt{\epsilon_\text{mach}})$. That could be improved by using a central difference for the directional derivative, but doing so requires twice as many evaluations of $\bff$, which is usually considered prohibitive. The drawbacks are mitigated somewhat in a quasi-Newton algorithm that tries to update the Jacobian at each nonlinear iteration, rather than computing it from scratch each time.
+The primary advantage of an FD Jacobian is that is requires only that $\bff$ be available, which is necessary for the entire problem. Because of this, it's usually the default choice. However, it can be slow in practice, and it can be affected by roundoff error; we can expect an optimal accuracy that is only $O(\sqrt{\epsilon_\text{mach}})$. That could be improved by using a central difference for the directional derivative, but doing so requires twice as many evaluations of $\bff$. The drawbacks are mitigated somewhat in a quasi-Newton algorithm that tries to update the Jacobian at each nonlinear iteration, rather than computing it from scratch each time.
 
 ## Continuation
 
@@ -217,47 +208,44 @@ $$
 
 At $\lambda=0.08$, this equation gives us no trouble.
 
-```{code-cell}
+```{code-cell} julia
 n = 200
 a,b = 0,1
 λ = 0.08
-
-h = (b-a)/n
-x = [a+i*h for i in 0:n]
-Dx,Dxx = diffmats(x)
+x,Dx,Dxx = diffmats(a,b,n)
 ode = u -> λ*Dxx*u + u - u.^3 + sin.(5x)
 residual(u) =[ode(u)[2:n];u[1]+1;u[n+1]-1]
 @elapsed sol1 = nlsolve(residual,zeros(n+1))
 ```
 
-```{code-cell}
+```{code-cell} julia
 plot(x,sol1.zero,label="λ=0.08",leg=:bottomright)
 ```
 
 However, when we decrease $\lambda$ just a bit, the solution takes *much* longer and looks very different.
 
-```{code-cell}
+```{code-cell} julia
 λ = 0.07
 @elapsed sol2 = nlsolve(residual,zeros(n+1))
 ```
 
-```{code-cell}
+```{code-cell} julia
 plot!(x,sol2.zero,label="λ=0.07?!")
 ```
 
 A closer look at the nonlinear solver results shows that the iteration did not converge in the second case:
 
-```{code-cell}
+```{code-cell} julia
 (sol1.residual_norm,sol2.residual_norm)
 ```
 
 A simple way to fight back is **continuation**, in which we use the solution at a more tractable version of the problem as the initial estimate for the tougher problem.
 
-```{code-cell}
+```{code-cell} julia
 @elapsed sol2 = nlsolve(residual,sol1.zero)
 ```
 
-```{code-cell}
+```{code-cell} julia
 plot!(x,sol2.zero,label="λ=0.07")
 ```
 
