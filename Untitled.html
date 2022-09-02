@@ -1,0 +1,3649 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1. A title &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Finite differences" href="finite-diffs/overview.html" />
+    <link rel="prev" title="Finite differences and spectral methods for PDEs" href="intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   1. A title
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="finite-diffs/overview.html">
+   2. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/integration.html">
+     2.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/series.html">
+     2.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/roundoff.html">
+     2.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/fourier.html">
+     2.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/interpolation.html">
+     2.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="finite-diffs/diffmats.html">
+     2.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="tpbvp/overview.html">
+   3. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/linear.html">
+     3.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/bc.html">
+     3.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/nonlinear.html">
+     3.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/layers.html">
+     3.4. Resolving layers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tpbvp/bootstrap.html">
+     3.5. Bootstrapping methods
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="elliptic/overview.html">
+   4. Elliptic PDE
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="elliptic/tensorproduct.html">
+     4.1. Tensor-product grids
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="elliptic/poisson.html">
+     4.2. Solving the Poisson equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="elliptic/iterative.html">
+     4.3. Iterative linear algebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="elliptic/decomp.html">
+     4.4. Domain decomposition
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="mol/overview.html">
+   5. Method of lines
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="mol/ivp.html">
+     5.1. Multistep and RK methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="mol/stability.html">
+     5.2. Absolute stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="mol/semidiscretization.html">
+     5.3. Semidiscretization
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="mol/beyond.html">
+     5.4. Beyond the basics
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/Untitled.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/Untitled.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>A title</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="a-title">
+<h1><span class="section-number">1. </span>A title<a class="headerlink" href="#a-title" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plotlyjs</span><span class="p">()</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div style="padding: 1em; background-color: #f8d6da; border: 1px solid #f5c6cb; font-weight: bold;">
+<p>The WebIO Jupyter extension was not detected. See the
+<a href="https://juliagizmos.github.io/WebIO.jl/latest/providers/ijulia/" target="_blank">
+    WebIO Jupyter integration documentation
+</a>
+for more information.
+</div>
+</div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Plots.PlotlyJSBackend()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">surface</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">40</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">    <div id="c439a066-7284-44fa-b55f-5f30db883357" style="width:600px;height:400px;"></div>
+    <script>
+        requirejs.config({
+        paths: {
+            Plotly: 'https://cdn.plot.ly/plotly-2.6.3.min'
+        }
+    });
+    require(['Plotly'], function (Plotly) {
+
+        Plotly.newPlot('c439a066-7284-44fa-b55f-5f30db883357', [
+    {
+        "xaxis": "x",
+        "colorbar": {
+            "title": ""
+        },
+        "colorscale": [
+            [
+                0.0,
+                "rgba(0, 0, 4, 1.000)"
+            ],
+            [
+                0.00392156862745098,
+                "rgba(1, 0, 5, 1.000)"
+            ],
+            [
+                0.00784313725490196,
+                "rgba(1, 1, 6, 1.000)"
+            ],
+            [
+                0.011764705882352941,
+                "rgba(1, 1, 8, 1.000)"
+            ],
+            [
+                0.01568627450980392,
+                "rgba(2, 1, 10, 1.000)"
+            ],
+            [
+                0.0196078431372549,
+                "rgba(2, 2, 12, 1.000)"
+            ],
+            [
+                0.023529411764705882,
+                "rgba(2, 2, 14, 1.000)"
+            ],
+            [
+                0.027450980392156862,
+                "rgba(3, 2, 16, 1.000)"
+            ],
+            [
+                0.03137254901960784,
+                "rgba(4, 3, 18, 1.000)"
+            ],
+            [
+                0.03529411764705882,
+                "rgba(4, 3, 20, 1.000)"
+            ],
+            [
+                0.0392156862745098,
+                "rgba(5, 4, 23, 1.000)"
+            ],
+            [
+                0.043137254901960784,
+                "rgba(6, 4, 25, 1.000)"
+            ],
+            [
+                0.047058823529411764,
+                "rgba(7, 5, 27, 1.000)"
+            ],
+            [
+                0.050980392156862744,
+                "rgba(8, 5, 29, 1.000)"
+            ],
+            [
+                0.054901960784313725,
+                "rgba(9, 6, 31, 1.000)"
+            ],
+            [
+                0.058823529411764705,
+                "rgba(10, 7, 34, 1.000)"
+            ],
+            [
+                0.06274509803921569,
+                "rgba(11, 7, 36, 1.000)"
+            ],
+            [
+                0.06666666666666667,
+                "rgba(12, 8, 38, 1.000)"
+            ],
+            [
+                0.07058823529411765,
+                "rgba(13, 8, 41, 1.000)"
+            ],
+            [
+                0.07450980392156863,
+                "rgba(14, 9, 43, 1.000)"
+            ],
+            [
+                0.0784313725490196,
+                "rgba(16, 9, 45, 1.000)"
+            ],
+            [
+                0.08235294117647059,
+                "rgba(17, 10, 48, 1.000)"
+            ],
+            [
+                0.08627450980392157,
+                "rgba(18, 10, 50, 1.000)"
+            ],
+            [
+                0.09019607843137255,
+                "rgba(20, 11, 52, 1.000)"
+            ],
+            [
+                0.09411764705882353,
+                "rgba(21, 11, 55, 1.000)"
+            ],
+            [
+                0.09803921568627451,
+                "rgba(22, 11, 57, 1.000)"
+            ],
+            [
+                0.10196078431372549,
+                "rgba(24, 12, 60, 1.000)"
+            ],
+            [
+                0.10588235294117647,
+                "rgba(25, 12, 62, 1.000)"
+            ],
+            [
+                0.10980392156862745,
+                "rgba(27, 12, 65, 1.000)"
+            ],
+            [
+                0.11372549019607843,
+                "rgba(28, 12, 67, 1.000)"
+            ],
+            [
+                0.11764705882352941,
+                "rgba(30, 12, 69, 1.000)"
+            ],
+            [
+                0.12156862745098039,
+                "rgba(31, 12, 72, 1.000)"
+            ],
+            [
+                0.12549019607843137,
+                "rgba(33, 12, 74, 1.000)"
+            ],
+            [
+                0.12941176470588237,
+                "rgba(35, 12, 76, 1.000)"
+            ],
+            [
+                0.13333333333333333,
+                "rgba(36, 12, 79, 1.000)"
+            ],
+            [
+                0.13725490196078433,
+                "rgba(38, 12, 81, 1.000)"
+            ],
+            [
+                0.1411764705882353,
+                "rgba(40, 11, 83, 1.000)"
+            ],
+            [
+                0.1450980392156863,
+                "rgba(41, 11, 85, 1.000)"
+            ],
+            [
+                0.14901960784313725,
+                "rgba(43, 11, 87, 1.000)"
+            ],
+            [
+                0.15294117647058825,
+                "rgba(45, 11, 89, 1.000)"
+            ],
+            [
+                0.1568627450980392,
+                "rgba(47, 10, 91, 1.000)"
+            ],
+            [
+                0.1607843137254902,
+                "rgba(49, 10, 92, 1.000)"
+            ],
+            [
+                0.16470588235294117,
+                "rgba(50, 10, 94, 1.000)"
+            ],
+            [
+                0.16862745098039217,
+                "rgba(52, 10, 95, 1.000)"
+            ],
+            [
+                0.17254901960784313,
+                "rgba(54, 9, 97, 1.000)"
+            ],
+            [
+                0.17647058823529413,
+                "rgba(56, 9, 98, 1.000)"
+            ],
+            [
+                0.1803921568627451,
+                "rgba(57, 9, 99, 1.000)"
+            ],
+            [
+                0.1843137254901961,
+                "rgba(59, 9, 100, 1.000)"
+            ],
+            [
+                0.18823529411764706,
+                "rgba(61, 9, 101, 1.000)"
+            ],
+            [
+                0.19215686274509805,
+                "rgba(62, 9, 102, 1.000)"
+            ],
+            [
+                0.19607843137254902,
+                "rgba(64, 10, 103, 1.000)"
+            ],
+            [
+                0.2,
+                "rgba(66, 10, 104, 1.000)"
+            ],
+            [
+                0.20392156862745098,
+                "rgba(68, 10, 104, 1.000)"
+            ],
+            [
+                0.20784313725490197,
+                "rgba(69, 10, 105, 1.000)"
+            ],
+            [
+                0.21176470588235294,
+                "rgba(71, 11, 106, 1.000)"
+            ],
+            [
+                0.21568627450980393,
+                "rgba(73, 11, 106, 1.000)"
+            ],
+            [
+                0.2196078431372549,
+                "rgba(74, 12, 107, 1.000)"
+            ],
+            [
+                0.2235294117647059,
+                "rgba(76, 12, 107, 1.000)"
+            ],
+            [
+                0.22745098039215686,
+                "rgba(77, 13, 108, 1.000)"
+            ],
+            [
+                0.23137254901960785,
+                "rgba(79, 13, 108, 1.000)"
+            ],
+            [
+                0.23529411764705882,
+                "rgba(81, 14, 108, 1.000)"
+            ],
+            [
+                0.23921568627450981,
+                "rgba(82, 14, 109, 1.000)"
+            ],
+            [
+                0.24313725490196078,
+                "rgba(84, 15, 109, 1.000)"
+            ],
+            [
+                0.24705882352941178,
+                "rgba(85, 15, 109, 1.000)"
+            ],
+            [
+                0.25098039215686274,
+                "rgba(87, 16, 110, 1.000)"
+            ],
+            [
+                0.2549019607843137,
+                "rgba(89, 16, 110, 1.000)"
+            ],
+            [
+                0.25882352941176473,
+                "rgba(90, 17, 110, 1.000)"
+            ],
+            [
+                0.2627450980392157,
+                "rgba(92, 18, 110, 1.000)"
+            ],
+            [
+                0.26666666666666666,
+                "rgba(93, 18, 110, 1.000)"
+            ],
+            [
+                0.27058823529411763,
+                "rgba(95, 19, 110, 1.000)"
+            ],
+            [
+                0.27450980392156865,
+                "rgba(97, 19, 110, 1.000)"
+            ],
+            [
+                0.2784313725490196,
+                "rgba(98, 20, 110, 1.000)"
+            ],
+            [
+                0.2823529411764706,
+                "rgba(100, 21, 110, 1.000)"
+            ],
+            [
+                0.28627450980392155,
+                "rgba(101, 21, 110, 1.000)"
+            ],
+            [
+                0.2901960784313726,
+                "rgba(103, 22, 110, 1.000)"
+            ],
+            [
+                0.29411764705882354,
+                "rgba(105, 22, 110, 1.000)"
+            ],
+            [
+                0.2980392156862745,
+                "rgba(106, 23, 110, 1.000)"
+            ],
+            [
+                0.30196078431372547,
+                "rgba(108, 24, 110, 1.000)"
+            ],
+            [
+                0.3058823529411765,
+                "rgba(109, 24, 110, 1.000)"
+            ],
+            [
+                0.30980392156862746,
+                "rgba(111, 25, 110, 1.000)"
+            ],
+            [
+                0.3137254901960784,
+                "rgba(113, 25, 110, 1.000)"
+            ],
+            [
+                0.3176470588235294,
+                "rgba(114, 26, 110, 1.000)"
+            ],
+            [
+                0.3215686274509804,
+                "rgba(116, 26, 110, 1.000)"
+            ],
+            [
+                0.3254901960784314,
+                "rgba(117, 27, 110, 1.000)"
+            ],
+            [
+                0.32941176470588235,
+                "rgba(119, 28, 109, 1.000)"
+            ],
+            [
+                0.3333333333333333,
+                "rgba(120, 28, 109, 1.000)"
+            ],
+            [
+                0.33725490196078434,
+                "rgba(122, 29, 109, 1.000)"
+            ],
+            [
+                0.3411764705882353,
+                "rgba(124, 29, 109, 1.000)"
+            ],
+            [
+                0.34509803921568627,
+                "rgba(125, 30, 109, 1.000)"
+            ],
+            [
+                0.34901960784313724,
+                "rgba(127, 30, 108, 1.000)"
+            ],
+            [
+                0.35294117647058826,
+                "rgba(128, 31, 108, 1.000)"
+            ],
+            [
+                0.3568627450980392,
+                "rgba(130, 32, 108, 1.000)"
+            ],
+            [
+                0.3607843137254902,
+                "rgba(132, 32, 107, 1.000)"
+            ],
+            [
+                0.36470588235294116,
+                "rgba(133, 33, 107, 1.000)"
+            ],
+            [
+                0.3686274509803922,
+                "rgba(135, 33, 107, 1.000)"
+            ],
+            [
+                0.37254901960784315,
+                "rgba(136, 34, 106, 1.000)"
+            ],
+            [
+                0.3764705882352941,
+                "rgba(138, 34, 106, 1.000)"
+            ],
+            [
+                0.3803921568627451,
+                "rgba(140, 35, 105, 1.000)"
+            ],
+            [
+                0.3843137254901961,
+                "rgba(141, 35, 105, 1.000)"
+            ],
+            [
+                0.38823529411764707,
+                "rgba(143, 36, 105, 1.000)"
+            ],
+            [
+                0.39215686274509803,
+                "rgba(144, 37, 104, 1.000)"
+            ],
+            [
+                0.396078431372549,
+                "rgba(146, 37, 104, 1.000)"
+            ],
+            [
+                0.4,
+                "rgba(147, 38, 103, 1.000)"
+            ],
+            [
+                0.403921568627451,
+                "rgba(149, 38, 103, 1.000)"
+            ],
+            [
+                0.40784313725490196,
+                "rgba(151, 39, 102, 1.000)"
+            ],
+            [
+                0.4117647058823529,
+                "rgba(152, 39, 102, 1.000)"
+            ],
+            [
+                0.41568627450980394,
+                "rgba(154, 40, 101, 1.000)"
+            ],
+            [
+                0.4196078431372549,
+                "rgba(155, 41, 100, 1.000)"
+            ],
+            [
+                0.4235294117647059,
+                "rgba(157, 41, 100, 1.000)"
+            ],
+            [
+                0.42745098039215684,
+                "rgba(159, 42, 99, 1.000)"
+            ],
+            [
+                0.43137254901960786,
+                "rgba(160, 42, 99, 1.000)"
+            ],
+            [
+                0.43529411764705883,
+                "rgba(162, 43, 98, 1.000)"
+            ],
+            [
+                0.4392156862745098,
+                "rgba(163, 44, 97, 1.000)"
+            ],
+            [
+                0.44313725490196076,
+                "rgba(165, 44, 96, 1.000)"
+            ],
+            [
+                0.4470588235294118,
+                "rgba(166, 45, 96, 1.000)"
+            ],
+            [
+                0.45098039215686275,
+                "rgba(168, 46, 95, 1.000)"
+            ],
+            [
+                0.4549019607843137,
+                "rgba(169, 46, 94, 1.000)"
+            ],
+            [
+                0.4588235294117647,
+                "rgba(171, 47, 94, 1.000)"
+            ],
+            [
+                0.4627450980392157,
+                "rgba(173, 48, 93, 1.000)"
+            ],
+            [
+                0.4666666666666667,
+                "rgba(174, 48, 92, 1.000)"
+            ],
+            [
+                0.47058823529411764,
+                "rgba(176, 49, 91, 1.000)"
+            ],
+            [
+                0.4745098039215686,
+                "rgba(177, 50, 90, 1.000)"
+            ],
+            [
+                0.47843137254901963,
+                "rgba(179, 50, 90, 1.000)"
+            ],
+            [
+                0.4823529411764706,
+                "rgba(180, 51, 89, 1.000)"
+            ],
+            [
+                0.48627450980392156,
+                "rgba(182, 52, 88, 1.000)"
+            ],
+            [
+                0.49019607843137253,
+                "rgba(183, 53, 87, 1.000)"
+            ],
+            [
+                0.49411764705882355,
+                "rgba(185, 53, 86, 1.000)"
+            ],
+            [
+                0.4980392156862745,
+                "rgba(186, 54, 85, 1.000)"
+            ],
+            [
+                0.5019607843137255,
+                "rgba(188, 55, 84, 1.000)"
+            ],
+            [
+                0.5058823529411764,
+                "rgba(189, 56, 83, 1.000)"
+            ],
+            [
+                0.5098039215686274,
+                "rgba(191, 57, 82, 1.000)"
+            ],
+            [
+                0.5137254901960784,
+                "rgba(192, 58, 81, 1.000)"
+            ],
+            [
+                0.5176470588235295,
+                "rgba(193, 58, 80, 1.000)"
+            ],
+            [
+                0.5215686274509804,
+                "rgba(195, 59, 79, 1.000)"
+            ],
+            [
+                0.5254901960784314,
+                "rgba(196, 60, 78, 1.000)"
+            ],
+            [
+                0.5294117647058824,
+                "rgba(198, 61, 77, 1.000)"
+            ],
+            [
+                0.5333333333333333,
+                "rgba(199, 62, 76, 1.000)"
+            ],
+            [
+                0.5372549019607843,
+                "rgba(200, 63, 75, 1.000)"
+            ],
+            [
+                0.5411764705882353,
+                "rgba(202, 64, 74, 1.000)"
+            ],
+            [
+                0.5450980392156862,
+                "rgba(203, 65, 73, 1.000)"
+            ],
+            [
+                0.5490196078431373,
+                "rgba(204, 66, 72, 1.000)"
+            ],
+            [
+                0.5529411764705883,
+                "rgba(206, 67, 71, 1.000)"
+            ],
+            [
+                0.5568627450980392,
+                "rgba(207, 68, 70, 1.000)"
+            ],
+            [
+                0.5607843137254902,
+                "rgba(208, 69, 69, 1.000)"
+            ],
+            [
+                0.5647058823529412,
+                "rgba(210, 70, 68, 1.000)"
+            ],
+            [
+                0.5686274509803921,
+                "rgba(211, 71, 67, 1.000)"
+            ],
+            [
+                0.5725490196078431,
+                "rgba(212, 72, 66, 1.000)"
+            ],
+            [
+                0.5764705882352941,
+                "rgba(213, 74, 65, 1.000)"
+            ],
+            [
+                0.5803921568627451,
+                "rgba(215, 75, 63, 1.000)"
+            ],
+            [
+                0.5843137254901961,
+                "rgba(216, 76, 62, 1.000)"
+            ],
+            [
+                0.5882352941176471,
+                "rgba(217, 77, 61, 1.000)"
+            ],
+            [
+                0.592156862745098,
+                "rgba(218, 78, 60, 1.000)"
+            ],
+            [
+                0.596078431372549,
+                "rgba(219, 80, 59, 1.000)"
+            ],
+            [
+                0.6,
+                "rgba(221, 81, 58, 1.000)"
+            ],
+            [
+                0.6039215686274509,
+                "rgba(222, 82, 56, 1.000)"
+            ],
+            [
+                0.6078431372549019,
+                "rgba(223, 83, 55, 1.000)"
+            ],
+            [
+                0.611764705882353,
+                "rgba(224, 85, 54, 1.000)"
+            ],
+            [
+                0.615686274509804,
+                "rgba(225, 86, 53, 1.000)"
+            ],
+            [
+                0.6196078431372549,
+                "rgba(226, 87, 52, 1.000)"
+            ],
+            [
+                0.6235294117647059,
+                "rgba(227, 89, 51, 1.000)"
+            ],
+            [
+                0.6274509803921569,
+                "rgba(228, 90, 49, 1.000)"
+            ],
+            [
+                0.6313725490196078,
+                "rgba(229, 92, 48, 1.000)"
+            ],
+            [
+                0.6352941176470588,
+                "rgba(230, 93, 47, 1.000)"
+            ],
+            [
+                0.6392156862745098,
+                "rgba(231, 94, 46, 1.000)"
+            ],
+            [
+                0.6431372549019608,
+                "rgba(232, 96, 45, 1.000)"
+            ],
+            [
+                0.6470588235294118,
+                "rgba(233, 97, 43, 1.000)"
+            ],
+            [
+                0.6509803921568628,
+                "rgba(234, 99, 42, 1.000)"
+            ],
+            [
+                0.6549019607843137,
+                "rgba(235, 100, 41, 1.000)"
+            ],
+            [
+                0.6588235294117647,
+                "rgba(235, 102, 40, 1.000)"
+            ],
+            [
+                0.6627450980392157,
+                "rgba(236, 103, 38, 1.000)"
+            ],
+            [
+                0.6666666666666666,
+                "rgba(237, 105, 37, 1.000)"
+            ],
+            [
+                0.6705882352941176,
+                "rgba(238, 106, 36, 1.000)"
+            ],
+            [
+                0.6745098039215687,
+                "rgba(239, 108, 35, 1.000)"
+            ],
+            [
+                0.6784313725490196,
+                "rgba(239, 110, 33, 1.000)"
+            ],
+            [
+                0.6823529411764706,
+                "rgba(240, 111, 32, 1.000)"
+            ],
+            [
+                0.6862745098039216,
+                "rgba(241, 113, 31, 1.000)"
+            ],
+            [
+                0.6901960784313725,
+                "rgba(241, 115, 29, 1.000)"
+            ],
+            [
+                0.6941176470588235,
+                "rgba(242, 116, 28, 1.000)"
+            ],
+            [
+                0.6980392156862745,
+                "rgba(243, 118, 27, 1.000)"
+            ],
+            [
+                0.7019607843137254,
+                "rgba(243, 120, 25, 1.000)"
+            ],
+            [
+                0.7058823529411765,
+                "rgba(244, 121, 24, 1.000)"
+            ],
+            [
+                0.7098039215686275,
+                "rgba(245, 123, 23, 1.000)"
+            ],
+            [
+                0.7137254901960784,
+                "rgba(245, 125, 21, 1.000)"
+            ],
+            [
+                0.7176470588235294,
+                "rgba(246, 126, 20, 1.000)"
+            ],
+            [
+                0.7215686274509804,
+                "rgba(246, 128, 19, 1.000)"
+            ],
+            [
+                0.7254901960784313,
+                "rgba(247, 130, 18, 1.000)"
+            ],
+            [
+                0.7294117647058823,
+                "rgba(247, 132, 16, 1.000)"
+            ],
+            [
+                0.7333333333333333,
+                "rgba(248, 133, 15, 1.000)"
+            ],
+            [
+                0.7372549019607844,
+                "rgba(248, 135, 14, 1.000)"
+            ],
+            [
+                0.7411764705882353,
+                "rgba(248, 137, 12, 1.000)"
+            ],
+            [
+                0.7450980392156863,
+                "rgba(249, 139, 11, 1.000)"
+            ],
+            [
+                0.7490196078431373,
+                "rgba(249, 140, 10, 1.000)"
+            ],
+            [
+                0.7529411764705882,
+                "rgba(249, 142, 9, 1.000)"
+            ],
+            [
+                0.7568627450980392,
+                "rgba(250, 144, 8, 1.000)"
+            ],
+            [
+                0.7607843137254902,
+                "rgba(250, 146, 7, 1.000)"
+            ],
+            [
+                0.7647058823529411,
+                "rgba(250, 148, 7, 1.000)"
+            ],
+            [
+                0.7686274509803922,
+                "rgba(251, 150, 6, 1.000)"
+            ],
+            [
+                0.7725490196078432,
+                "rgba(251, 151, 6, 1.000)"
+            ],
+            [
+                0.7764705882352941,
+                "rgba(251, 153, 6, 1.000)"
+            ],
+            [
+                0.7803921568627451,
+                "rgba(251, 155, 6, 1.000)"
+            ],
+            [
+                0.7843137254901961,
+                "rgba(251, 157, 7, 1.000)"
+            ],
+            [
+                0.788235294117647,
+                "rgba(252, 159, 7, 1.000)"
+            ],
+            [
+                0.792156862745098,
+                "rgba(252, 161, 8, 1.000)"
+            ],
+            [
+                0.796078431372549,
+                "rgba(252, 163, 9, 1.000)"
+            ],
+            [
+                0.8,
+                "rgba(252, 165, 10, 1.000)"
+            ],
+            [
+                0.803921568627451,
+                "rgba(252, 166, 12, 1.000)"
+            ],
+            [
+                0.807843137254902,
+                "rgba(252, 168, 13, 1.000)"
+            ],
+            [
+                0.8117647058823529,
+                "rgba(252, 170, 15, 1.000)"
+            ],
+            [
+                0.8156862745098039,
+                "rgba(252, 172, 17, 1.000)"
+            ],
+            [
+                0.8196078431372549,
+                "rgba(252, 174, 18, 1.000)"
+            ],
+            [
+                0.8235294117647058,
+                "rgba(252, 176, 20, 1.000)"
+            ],
+            [
+                0.8274509803921568,
+                "rgba(252, 178, 22, 1.000)"
+            ],
+            [
+                0.8313725490196079,
+                "rgba(252, 180, 24, 1.000)"
+            ],
+            [
+                0.8352941176470589,
+                "rgba(251, 182, 26, 1.000)"
+            ],
+            [
+                0.8392156862745098,
+                "rgba(251, 184, 29, 1.000)"
+            ],
+            [
+                0.8431372549019608,
+                "rgba(251, 186, 31, 1.000)"
+            ],
+            [
+                0.8470588235294118,
+                "rgba(251, 188, 33, 1.000)"
+            ],
+            [
+                0.8509803921568627,
+                "rgba(251, 190, 35, 1.000)"
+            ],
+            [
+                0.8549019607843137,
+                "rgba(250, 192, 38, 1.000)"
+            ],
+            [
+                0.8588235294117647,
+                "rgba(250, 194, 40, 1.000)"
+            ],
+            [
+                0.8627450980392157,
+                "rgba(250, 196, 42, 1.000)"
+            ],
+            [
+                0.8666666666666667,
+                "rgba(250, 198, 45, 1.000)"
+            ],
+            [
+                0.8705882352941177,
+                "rgba(249, 199, 47, 1.000)"
+            ],
+            [
+                0.8745098039215686,
+                "rgba(249, 201, 50, 1.000)"
+            ],
+            [
+                0.8784313725490196,
+                "rgba(249, 203, 53, 1.000)"
+            ],
+            [
+                0.8823529411764706,
+                "rgba(248, 205, 55, 1.000)"
+            ],
+            [
+                0.8862745098039215,
+                "rgba(248, 207, 58, 1.000)"
+            ],
+            [
+                0.8901960784313725,
+                "rgba(247, 209, 61, 1.000)"
+            ],
+            [
+                0.8941176470588236,
+                "rgba(247, 211, 64, 1.000)"
+            ],
+            [
+                0.8980392156862745,
+                "rgba(246, 213, 67, 1.000)"
+            ],
+            [
+                0.9019607843137255,
+                "rgba(246, 215, 70, 1.000)"
+            ],
+            [
+                0.9058823529411765,
+                "rgba(245, 217, 73, 1.000)"
+            ],
+            [
+                0.9098039215686274,
+                "rgba(245, 219, 76, 1.000)"
+            ],
+            [
+                0.9137254901960784,
+                "rgba(244, 221, 79, 1.000)"
+            ],
+            [
+                0.9176470588235294,
+                "rgba(244, 223, 83, 1.000)"
+            ],
+            [
+                0.9215686274509803,
+                "rgba(244, 225, 86, 1.000)"
+            ],
+            [
+                0.9254901960784314,
+                "rgba(243, 227, 90, 1.000)"
+            ],
+            [
+                0.9294117647058824,
+                "rgba(243, 229, 93, 1.000)"
+            ],
+            [
+                0.9333333333333333,
+                "rgba(242, 230, 97, 1.000)"
+            ],
+            [
+                0.9372549019607843,
+                "rgba(242, 232, 101, 1.000)"
+            ],
+            [
+                0.9411764705882353,
+                "rgba(242, 234, 105, 1.000)"
+            ],
+            [
+                0.9450980392156862,
+                "rgba(241, 236, 109, 1.000)"
+            ],
+            [
+                0.9490196078431372,
+                "rgba(241, 237, 113, 1.000)"
+            ],
+            [
+                0.9529411764705882,
+                "rgba(241, 239, 117, 1.000)"
+            ],
+            [
+                0.9568627450980393,
+                "rgba(241, 241, 121, 1.000)"
+            ],
+            [
+                0.9607843137254902,
+                "rgba(242, 242, 125, 1.000)"
+            ],
+            [
+                0.9647058823529412,
+                "rgba(242, 244, 130, 1.000)"
+            ],
+            [
+                0.9686274509803922,
+                "rgba(243, 245, 134, 1.000)"
+            ],
+            [
+                0.9725490196078431,
+                "rgba(243, 246, 138, 1.000)"
+            ],
+            [
+                0.9764705882352941,
+                "rgba(244, 248, 142, 1.000)"
+            ],
+            [
+                0.9803921568627451,
+                "rgba(245, 249, 146, 1.000)"
+            ],
+            [
+                0.984313725490196,
+                "rgba(246, 250, 150, 1.000)"
+            ],
+            [
+                0.9882352941176471,
+                "rgba(248, 251, 154, 1.000)"
+            ],
+            [
+                0.9921568627450981,
+                "rgba(249, 252, 157, 1.000)"
+            ],
+            [
+                0.996078431372549,
+                "rgba(250, 253, 161, 1.000)"
+            ],
+            [
+                1.0,
+                "rgba(252, 255, 164, 1.000)"
+            ]
+        ],
+        "yaxis": "y",
+        "zaxis": "z",
+        "showscale": true,
+        "x": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40
+        ],
+        "showlegend": false,
+        "name": "y1",
+        "opacity": null,
+        "zmin": 0.0011514968370283096,
+        "z": [
+            [
+                0.0809390232796302,
+                0.8961285087060618,
+                0.5078457838889492,
+                0.4967516040870882,
+                0.6056390019569161,
+                0.3588337794897478,
+                0.3187620685398578,
+                0.24266758544021916,
+                0.6938782829175093,
+                0.46490766902177405,
+                0.43766600310250225,
+                0.464181377322324,
+                0.42473623590078813,
+                0.78467679645068,
+                0.6466229273957309,
+                0.10368948005224621,
+                0.5077718516669764,
+                0.8437178850699258,
+                0.4378086387269079,
+                0.3501430635141801,
+                0.049644440408616486,
+                0.6895925956906712,
+                0.7959978009759213,
+                0.793252961125593,
+                0.9032555697945052,
+                0.8669299353054043,
+                0.529331185472226,
+                0.3412045360811675,
+                0.7447622200705121,
+                0.6865881452724123,
+                0.17844373917658707,
+                0.7872883292510281,
+                0.4782726557865371,
+                0.9844810535893589,
+                0.04421428687702478,
+                0.34243369293618353,
+                0.27228201507189,
+                0.46902269733416235,
+                0.8400410273001878,
+                0.9851169033027484
+            ],
+            [
+                0.14792342909093403,
+                0.3231580591769584,
+                0.7964638515904582,
+                0.43312899898163504,
+                0.26449753775615326,
+                0.44388049239015415,
+                0.8239774380988532,
+                0.5070802016610052,
+                0.8712139800042161,
+                0.5345026850463179,
+                0.49579197783363305,
+                0.7863569361457009,
+                0.05481274215098442,
+                0.22248685151928937,
+                0.78884671454296,
+                0.8071906465817582,
+                0.21380179684045475,
+                0.7864030065771727,
+                0.033554072169525884,
+                0.6405006515346509,
+                0.8350367328661734,
+                0.8543248751276488,
+                0.38086649575754516,
+                0.570991448349413,
+                0.4144638025485412,
+                0.47977989737420457,
+                0.6145308785373165,
+                0.3316278067166025,
+                0.705712864388634,
+                0.9976474955452216,
+                0.894503311526018,
+                0.18101073600400797,
+                0.6749958543101747,
+                0.49366114016941254,
+                0.4849823226799479,
+                0.0035660137689249582,
+                0.48974264205024265,
+                0.45513604951540165,
+                0.9327166664080033,
+                0.4170796682191932
+            ],
+            [
+                0.5745725819187693,
+                0.34188328428109127,
+                0.012244536618158053,
+                0.31348056415067826,
+                0.9285667441799045,
+                0.6518079862773282,
+                0.7775029173635796,
+                0.3974221196276706,
+                0.6315831394091661,
+                0.9113671318095575,
+                0.8551328682467466,
+                0.16490322107397193,
+                0.1996397286663396,
+                0.24339985431112232,
+                0.9395448980580792,
+                0.6486394404260902,
+                0.5616964956429502,
+                0.6027705786164622,
+                0.46069079170589966,
+                0.30680735028561923,
+                0.14147101667742112,
+                0.18917291204907138,
+                0.6088242293323086,
+                0.8178401564381458,
+                0.2888649782241842,
+                0.6603877269899936,
+                0.9753499089512625,
+                0.7082246686614334,
+                0.665143074985899,
+                0.2460050875423465,
+                0.30411353486001524,
+                0.3845215673042991,
+                0.046156601956595766,
+                0.290863568103507,
+                0.19675575610124596,
+                0.09292949670439477,
+                0.3398420463881954,
+                0.5108360985990046,
+                0.5684511713083052,
+                0.7450032156103663
+            ],
+            [
+                0.36828921452644414,
+                0.5224330910273298,
+                0.7564595307494599,
+                0.1928086100028441,
+                0.8022307656322002,
+                0.2607177090301903,
+                0.8265850394702805,
+                0.17461779016520096,
+                0.3218678327296749,
+                0.05886695861790325,
+                0.14182396954044374,
+                0.7881768644408983,
+                0.07054185657507994,
+                0.786590596486405,
+                0.0873305026178125,
+                0.2567454588507223,
+                0.8840337827768283,
+                0.1600528953018614,
+                0.09789221269668524,
+                0.4459000214840164,
+                0.04570878181215321,
+                0.6474469442792785,
+                0.26909259174494826,
+                0.6020798495637215,
+                0.2596320511892706,
+                0.9250483795256007,
+                0.34944214106656135,
+                0.8537240156697233,
+                0.07660943212980498,
+                0.9501080625307969,
+                0.5383747373360903,
+                0.7297380173122142,
+                0.7944723702032856,
+                0.8870543903913762,
+                0.26752567169533903,
+                0.258909898300837,
+                0.08490247140670537,
+                0.33647818656065176,
+                0.4542591999953858,
+                0.9686585646951724
+            ],
+            [
+                0.6131957771936373,
+                0.893730569346564,
+                0.7026204319047561,
+                0.5480693284255335,
+                0.8625357966878802,
+                0.13873475463309026,
+                0.18790964843617974,
+                0.10651939782953357,
+                0.20810086277255457,
+                0.06229558986901862,
+                0.46881050996184914,
+                0.8959231707271716,
+                0.7296461553752381,
+                0.6614913660463608,
+                0.3238924632520763,
+                0.39244387817346593,
+                0.16798491482305278,
+                0.9894775896233414,
+                0.588583394765452,
+                0.28455953182582405,
+                0.8666106013295434,
+                0.6817099064557306,
+                0.33108063879701044,
+                0.3740266873171243,
+                0.47395768373174874,
+                0.5148532725362444,
+                0.9103969660824783,
+                0.7328427119510608,
+                0.29042333463629477,
+                0.627555638639343,
+                0.2296517989465161,
+                0.450637133310442,
+                0.5042044956109109,
+                0.19998368791830212,
+                0.36231123774305485,
+                0.9303692869531744,
+                0.6499679501346026,
+                0.8003719150012804,
+                0.3015796874610497,
+                0.8369759576176805
+            ],
+            [
+                0.3416366808279321,
+                0.9613869151492471,
+                0.18194786716336508,
+                0.47246755788883965,
+                0.8222127048667655,
+                0.23576016370151698,
+                0.7047228814381792,
+                0.6086768206622118,
+                0.560108674697695,
+                0.6344211131534996,
+                0.38544542170039486,
+                0.5405504025050226,
+                0.5577056040032052,
+                0.08426069241297895,
+                0.9888684013932956,
+                0.24303592824082088,
+                0.5418244463826024,
+                0.4267344123725866,
+                0.1809364987394898,
+                0.8351271333037731,
+                0.9007512558793797,
+                0.45484581815257497,
+                0.027514756017189113,
+                0.07204148747367056,
+                0.4361299886670883,
+                0.43874484268826575,
+                0.9782359111971712,
+                0.13559999958576507,
+                0.6570194602848182,
+                0.1804625878785504,
+                0.7217576789063064,
+                0.7020074992333556,
+                0.36293619329285387,
+                0.28947130819930245,
+                0.3351283520780799,
+                0.6772267713147974,
+                0.22153612470734474,
+                0.06547177845229102,
+                0.14167320040341358,
+                0.14973267262172396
+            ],
+            [
+                0.9000542035476532,
+                0.7547135505941219,
+                0.7200652538025129,
+                0.15396036910762334,
+                0.8902242642671535,
+                0.4588824722199514,
+                0.12019168650634704,
+                0.40049785101604696,
+                0.19612198534898806,
+                0.2052778242313762,
+                0.6282484305551059,
+                0.027993224411008377,
+                0.6728019456771479,
+                0.14692509804880205,
+                0.6623292269378251,
+                0.7829335974003597,
+                0.23725852841020878,
+                0.27989305080020277,
+                0.24363689488407492,
+                0.2727370150004491,
+                0.18079028529347896,
+                0.8101561522715467,
+                0.5662158073119865,
+                0.2375702226244233,
+                0.9065042248562187,
+                0.9966879348660318,
+                0.5026452230330999,
+                0.334786439409425,
+                0.45355597319141616,
+                0.8902071816119653,
+                0.823889052793511,
+                0.569180906328143,
+                0.01398403929201264,
+                0.4876141267673012,
+                0.7534999311041695,
+                0.9844097362949811,
+                0.7128231813012131,
+                0.17501151811874527,
+                0.8554370568327009,
+                0.58247693938741
+            ],
+            [
+                0.43346424201430656,
+                0.5474275784024758,
+                0.34354714148005816,
+                0.22413036088686755,
+                0.3711698398822395,
+                0.805635368938557,
+                0.683919695498596,
+                0.7209668793282951,
+                0.3016055137827308,
+                0.7188164447424775,
+                0.6140692212738292,
+                0.625417201252817,
+                0.24473420554088865,
+                0.3545245516032608,
+                0.027620350168983232,
+                0.1210729543842115,
+                0.09361105541444714,
+                0.9406945902272194,
+                0.6577967627856033,
+                0.6726363049876186,
+                0.9698718585377524,
+                0.6852912014794744,
+                0.9149769706493216,
+                0.7929681425312989,
+                0.7835572856904544,
+                0.18966343852115097,
+                0.696380655077776,
+                0.795651960037913,
+                0.5911416527518981,
+                0.23818872442455352,
+                0.35383576248177917,
+                0.25950576110366375,
+                0.9278419355751337,
+                0.2641831811936416,
+                0.2580841239585031,
+                0.7522314308981907,
+                0.13450706278376023,
+                0.25401440960584243,
+                0.8830724584563556,
+                0.040634173164978415
+            ],
+            [
+                0.22613865196086091,
+                0.7965890054448966,
+                0.47872635574670974,
+                0.8209726820496551,
+                0.050465976022298964,
+                0.3156563232924219,
+                0.2776695100946771,
+                0.0405948130943119,
+                0.8609417325670289,
+                0.47290642855130993,
+                0.8118570536369396,
+                0.7555954477366053,
+                0.17944006276458313,
+                0.618308988923565,
+                0.3052074071224531,
+                0.21192128107055408,
+                0.9694013865205591,
+                0.09168804896779437,
+                0.4257955395156291,
+                0.31093027034114273,
+                0.18990812447790906,
+                0.3384329992908077,
+                0.9921161162622568,
+                0.84331701163754,
+                0.149752219999437,
+                0.12255911261139651,
+                0.4375627060934977,
+                0.5877402711929612,
+                0.20894631413344733,
+                0.3762709410622447,
+                0.9918019750784185,
+                0.9597517589073795,
+                0.8617893538424504,
+                0.22612757907946612,
+                0.6683895500635035,
+                0.20999044555521895,
+                0.25385030353859284,
+                0.5858360487201667,
+                0.00955171837879476,
+                0.27600568310791984
+            ],
+            [
+                0.9315444422460177,
+                0.7884045817261319,
+                0.3070167675451799,
+                0.4732687421625642,
+                0.7891677057341249,
+                0.9042396370904233,
+                0.2868173614892193,
+                0.5481932696532656,
+                0.1635047857880041,
+                0.2516692540915657,
+                0.6400789666098377,
+                0.6319071992259531,
+                0.5677411243675299,
+                0.06909111168169924,
+                0.6588639692531052,
+                0.30590657142698485,
+                0.11281279808699118,
+                0.3042942234847561,
+                0.5677815998819407,
+                0.8217132568336343,
+                0.9645905593263175,
+                0.7829830307584142,
+                0.00474900176053672,
+                0.7698970317906929,
+                0.05319477488566182,
+                0.6933215180987738,
+                0.5708924240665688,
+                0.2288476179428247,
+                0.43956381026360414,
+                0.9140324657784233,
+                0.32441000966427114,
+                0.13780447709876942,
+                0.632844607214039,
+                0.006511710321147501,
+                0.48898885497180167,
+                0.19309353564082143,
+                0.4174126876920379,
+                0.6803014678094036,
+                0.21475497047766456,
+                0.3079588835769115
+            ],
+            [
+                0.9022102773616364,
+                0.3706027567826241,
+                0.690601023508632,
+                0.120791838112415,
+                0.08786028729743212,
+                0.017880399842605033,
+                0.3680902623563175,
+                0.43962417943677246,
+                0.13739236999364135,
+                0.9598654400071712,
+                0.740081995512146,
+                0.8470495643159242,
+                0.7545152058438137,
+                0.9965841534797888,
+                0.5523685990793247,
+                0.4550001195221248,
+                0.0931799092308907,
+                0.6772818548120101,
+                0.75720373003686,
+                0.3681986389219044,
+                0.6912851808095012,
+                0.6523814414858149,
+                0.8328117925022394,
+                0.9784704173357024,
+                0.11209153333381472,
+                0.025722679720148744,
+                0.46038116461720513,
+                0.5650120617705482,
+                0.4747848702588976,
+                0.9986035342928977,
+                0.8266769845537836,
+                0.6429894456580598,
+                0.9301380297003387,
+                0.5638765715901314,
+                0.1440894027070363,
+                0.2322709869845686,
+                0.7475334032844777,
+                0.6929795471109133,
+                0.8742612398259206,
+                0.9940522824983651
+            ],
+            [
+                0.007098029026801678,
+                0.23138738831396677,
+                0.6540543276250667,
+                0.5257532134722958,
+                0.9046503460654255,
+                0.5898741821423339,
+                0.4443095447963289,
+                0.8374732680296322,
+                0.6984768980516116,
+                0.22294651816267796,
+                0.29000507200168846,
+                0.6306617129902984,
+                0.16546639021092857,
+                0.7445862021807972,
+                0.6084883730889383,
+                0.09187284123517703,
+                0.725670487725099,
+                0.3861647596623946,
+                0.027580124253566374,
+                0.33728444958173864,
+                0.21841841178645616,
+                0.012811106288860397,
+                0.26349745682063797,
+                0.1865071627556697,
+                0.33995478005271595,
+                0.08549894779044342,
+                0.3391376701691122,
+                0.7456815662142355,
+                0.6536395294451965,
+                0.7061225902757403,
+                0.5672248118499268,
+                0.5285898574993388,
+                0.1875859190365441,
+                0.6873984769671231,
+                0.2512889137307569,
+                0.16546074554166634,
+                0.8808028669492501,
+                0.6853749406514397,
+                0.1278205162214453,
+                0.1516568645297658
+            ],
+            [
+                0.09498553372800744,
+                0.4795902780086132,
+                0.42336812138344726,
+                0.7348260842086853,
+                0.7893550374034375,
+                0.516006699025654,
+                0.8679343558079142,
+                0.8658604222010848,
+                0.6541673661800738,
+                0.056946626498954656,
+                0.3383932053508196,
+                0.20887322625211524,
+                0.504230459029799,
+                0.13201342692321016,
+                0.4177153779860924,
+                0.47823825183163204,
+                0.6785876270482053,
+                0.3149464825423258,
+                0.08355345239334877,
+                0.659310464923522,
+                0.4827842366094819,
+                0.43745562147113903,
+                0.37453801356789473,
+                0.23506003915837625,
+                0.5085222038174209,
+                0.06390941267076078,
+                0.6323977932138057,
+                0.34184492833194113,
+                0.813163611283727,
+                0.2069057250053098,
+                0.47219793139226107,
+                0.15415160639630765,
+                0.36812341842291096,
+                0.31026380318277424,
+                0.35958178929186235,
+                0.6507380451406789,
+                0.29034069489827896,
+                0.6038523849431948,
+                0.0011514968370283096,
+                0.33284689037331305
+            ],
+            [
+                0.3441333190600362,
+                0.2061236290809486,
+                0.7272325005431693,
+                0.8464291342988329,
+                0.5993238851356179,
+                0.4545798687231499,
+                0.0434570840459938,
+                0.5636574764771618,
+                0.915878756242346,
+                0.4295844778250981,
+                0.9775912158085307,
+                0.8195400870423152,
+                0.23738251610392458,
+                0.8520015202888147,
+                0.06397715761923106,
+                0.7817265349071892,
+                0.2735372485387405,
+                0.7879398981406834,
+                0.6250274035321383,
+                0.4325098604444886,
+                0.5351756642462686,
+                0.5667561586160231,
+                0.9265607692543183,
+                0.9730743986038859,
+                0.9266336579547261,
+                0.781502496258658,
+                0.9693843076609912,
+                0.1904203861833128,
+                0.8986525116215024,
+                0.8040711069879124,
+                0.492800338043506,
+                0.7574947152413966,
+                0.9723362681345572,
+                0.8610707162503599,
+                0.3672156139942715,
+                0.3477063764442778,
+                0.9684837445496548,
+                0.5798065692589949,
+                0.591755663695933,
+                0.691874585143791
+            ],
+            [
+                0.7058276838601787,
+                0.4564401754469981,
+                0.7343052808960344,
+                0.12075418648125102,
+                0.8263051210362016,
+                0.7772529705086325,
+                0.19651877438343723,
+                0.0732236861707598,
+                0.8455062245828964,
+                0.37677778210313484,
+                0.9933716473450322,
+                0.6491504571500495,
+                0.31471817209210196,
+                0.3543385340896541,
+                0.9596256694207241,
+                0.7435719621809206,
+                0.20937167095971276,
+                0.7007397405975707,
+                0.8336104907140228,
+                0.7857672578568821,
+                0.7029169606103198,
+                0.3606596320214821,
+                0.2747683330613754,
+                0.8486241273017657,
+                0.7917892349785558,
+                0.07165220103464398,
+                0.2529945438384944,
+                0.6315789162433523,
+                0.18296105968418164,
+                0.08054864334345702,
+                0.6173030609797358,
+                0.6448745464189313,
+                0.7318635909447647,
+                0.8362353409644862,
+                0.9801610403767501,
+                0.30427599472551203,
+                0.40594971092148846,
+                0.01808976641600979,
+                0.15525748138764717,
+                0.8067880561154889
+            ],
+            [
+                0.7309570591121624,
+                0.414163123546757,
+                0.7987923833075502,
+                0.6763220620536571,
+                0.19380210203162118,
+                0.7697879773881908,
+                0.7588487590049404,
+                0.7194201742171833,
+                0.23497884044683737,
+                0.6443403804296243,
+                0.6483334276585887,
+                0.5945365115833994,
+                0.6947311046286401,
+                0.9965977647678459,
+                0.3906568460052665,
+                0.8914727964308928,
+                0.5830736722185523,
+                0.1881201751649194,
+                0.37829601861844664,
+                0.48515000369463523,
+                0.4999641724699413,
+                0.3631933699614205,
+                0.14699311939458437,
+                0.3582931817472407,
+                0.3178516249486528,
+                0.59158198248568,
+                0.26634238768123364,
+                0.6010257077978504,
+                0.8203902429134585,
+                0.8199406569577811,
+                0.03352690197428343,
+                0.8674834838724318,
+                0.731165719187869,
+                0.04783202255761654,
+                0.8522631522158366,
+                0.2798627467830159,
+                0.8349565097647417,
+                0.008030368256584541,
+                0.2938019944796021,
+                0.5548067786474964
+            ],
+            [
+                0.24867368027771264,
+                0.9850241346223396,
+                0.02794222135206048,
+                0.1706825241998844,
+                0.009780908381497921,
+                0.010796961114533321,
+                0.8882227033829623,
+                0.4585116444329109,
+                0.9112013557636407,
+                0.08775352750660825,
+                0.5613397526159559,
+                0.7639538135352524,
+                0.5436313268954526,
+                0.5095915892592626,
+                0.38592863083411755,
+                0.5879356627174736,
+                0.581402467276964,
+                0.12976040035896763,
+                0.3249344115461813,
+                0.8039525287365191,
+                0.26155546325364865,
+                0.8772009683136844,
+                0.7259906535365769,
+                0.39730334260573985,
+                0.816853878179258,
+                0.5342502638504845,
+                0.052607726037184444,
+                0.7400138550134974,
+                0.07283560172243031,
+                0.24400923608831582,
+                0.6287747044620627,
+                0.9731981697923098,
+                0.6594282629389859,
+                0.3121145044595247,
+                0.3793349439873248,
+                0.4305624096552392,
+                0.35303004624513534,
+                0.48166529167169503,
+                0.10281916515418099,
+                0.20949507138117807
+            ],
+            [
+                0.6680598258075723,
+                0.15814115628936742,
+                0.5913061238972592,
+                0.9521515724787557,
+                0.5214147850146703,
+                0.1996940916854969,
+                0.18448895799497889,
+                0.3000052421430356,
+                0.25404422006546246,
+                0.05981675847906476,
+                0.286305708747422,
+                0.5135728853057713,
+                0.9961018174537191,
+                0.9505060041227825,
+                0.14861427134629357,
+                0.30329664480425356,
+                0.3781451546171113,
+                0.7535559931347675,
+                0.010171167290845773,
+                0.9839374741352394,
+                0.20611233602684953,
+                0.25648648945897135,
+                0.7562062216861346,
+                0.09067029996030518,
+                0.5131159936249512,
+                0.9540996349930605,
+                0.587359020520513,
+                0.11746668944573357,
+                0.018600142730855196,
+                0.5949860112281327,
+                0.011845754568450495,
+                0.21947620922372646,
+                0.04569751153776802,
+                0.19773630968254285,
+                0.6241070996644283,
+                0.08288113065774583,
+                0.008262150749351327,
+                0.9757545992960744,
+                0.6790166977878144,
+                0.8860098123781871
+            ],
+            [
+                0.9240258107593136,
+                0.8075740865264619,
+                0.07778832755849407,
+                0.5501808906948574,
+                0.5536920015298151,
+                0.7722889105571581,
+                0.2326052160618598,
+                0.985466742686388,
+                0.10769278329884413,
+                0.3521553261864133,
+                0.5766868417065573,
+                0.25814086145959025,
+                0.9746821028250737,
+                0.4540784620156396,
+                0.5135908964363007,
+                0.1337410709879776,
+                0.36243996730320394,
+                0.5053212478659299,
+                0.4858627052545078,
+                0.010729458816973625,
+                0.6537071841612114,
+                0.0545786187201216,
+                0.1926619666301077,
+                0.34745461409659195,
+                0.8803485884315418,
+                0.6192483055047184,
+                0.014152006517837434,
+                0.16417793822615134,
+                0.4160318213589931,
+                0.5909344754276601,
+                0.12442961021934396,
+                0.32326531420467264,
+                0.41169029128413337,
+                0.9316634919200316,
+                0.6477155899017978,
+                0.9360652661568075,
+                0.10647786969232587,
+                0.3338021293241016,
+                0.9217601399917263,
+                0.28574615080412247
+            ],
+            [
+                0.008974876760777795,
+                0.7961419185321446,
+                0.06984039672356812,
+                0.008480096194853792,
+                0.34100222051670426,
+                0.33383444545382657,
+                0.4349471124567721,
+                0.19421716066176142,
+                0.07971342889758537,
+                0.3847730098177202,
+                0.11491461329311581,
+                0.8622831941003883,
+                0.364734389227241,
+                0.059754672768670414,
+                0.22058481194868573,
+                0.37864819484567347,
+                0.40367298913620686,
+                0.6327068663643791,
+                0.0944909293418037,
+                0.31004026388347405,
+                0.36312249305795397,
+                0.37298547107027535,
+                0.3121816912396811,
+                0.74129449933924,
+                0.19044541624628109,
+                0.7929672847149988,
+                0.5000887527511104,
+                0.6206561484090861,
+                0.002290695788519481,
+                0.31172657193678976,
+                0.7657313075512313,
+                0.23982676844623696,
+                0.8200885594832703,
+                0.5455982059847305,
+                0.5039296780103901,
+                0.5436350879922845,
+                0.6102540510951865,
+                0.5697280336800522,
+                0.7537045814576637,
+                0.2563688242929404
+            ],
+            [
+                0.6088503539252034,
+                0.5624088224201512,
+                0.8284869131521249,
+                0.20530562248693518,
+                0.4682267951262985,
+                0.3937958048859578,
+                0.2465871243999741,
+                0.334005715718502,
+                0.45992231398547523,
+                0.5969345878771666,
+                0.5295469289815181,
+                0.13364802035819134,
+                0.15444704965552858,
+                0.5397989614432319,
+                0.6660960091172503,
+                0.630840053039889,
+                0.1508733609302182,
+                0.4233502297172208,
+                0.5183327900266053,
+                0.053130205153398724,
+                0.48555369028835893,
+                0.4689516766819899,
+                0.00942912630843007,
+                0.7650598926900793,
+                0.5695204683020262,
+                0.0822608503670813,
+                0.08444722861139076,
+                0.05823658786086816,
+                0.7965189738305338,
+                0.3158393821712765,
+                0.7347800868583676,
+                0.43408542632460734,
+                0.9061729831518817,
+                0.11028875649110703,
+                0.63992233749657,
+                0.6829545332827134,
+                0.7010375343337015,
+                0.3724108635268203,
+                0.9981260950990115,
+                0.21596164747422286
+            ],
+            [
+                0.2999154342153114,
+                0.841246953552177,
+                0.06515382122140223,
+                0.8109173218335622,
+                0.2554085303158896,
+                0.2513908480589435,
+                0.7784616773924786,
+                0.37840300899459467,
+                0.8553922857382461,
+                0.6832051237300846,
+                0.79352162646609,
+                0.7517843905212184,
+                0.11856582144689998,
+                0.06967817691919365,
+                0.4542794789858139,
+                0.3501048846515791,
+                0.39390178543576193,
+                0.5300510607414219,
+                0.7626831548697752,
+                0.2675154492052124,
+                0.6489461845938842,
+                0.3745493784593752,
+                0.45194336607650587,
+                0.6362250650558927,
+                0.4808454702310965,
+                0.0335660140496975,
+                0.9035825078438907,
+                0.7277952341387962,
+                0.3589723649601997,
+                0.8544039234588113,
+                0.44765330565089256,
+                0.20294145796602225,
+                0.3449419949826753,
+                0.9202854323307961,
+                0.8628535816532098,
+                0.5305801934315062,
+                0.8229726147938844,
+                0.030017682728507356,
+                0.09900698140557451,
+                0.45889212023429526
+            ],
+            [
+                0.818656680338177,
+                0.30966991864029003,
+                0.9500590394116606,
+                0.0035260010310916856,
+                0.509581338090652,
+                0.10668532076815718,
+                0.3766279324821378,
+                0.6158665564994131,
+                0.7390484559217175,
+                0.5782847197208482,
+                0.5972410099122758,
+                0.9471693337425681,
+                0.7811267138756923,
+                0.7916542108562465,
+                0.5179412457527987,
+                0.6265077234113874,
+                0.6805580820777916,
+                0.9837753410859847,
+                0.24693107095569533,
+                0.01813460578052395,
+                0.43528125422367225,
+                0.6937270462707242,
+                0.11216324723636228,
+                0.8379773001630098,
+                0.01346340804306645,
+                0.6999530299789295,
+                0.1483730024124057,
+                0.0846360649281751,
+                0.19670057313526124,
+                0.05288575335402934,
+                0.978018315754667,
+                0.8619054142937626,
+                0.39610236677047705,
+                0.7630771908317048,
+                0.19482399860906496,
+                0.06120803086343751,
+                0.23453988446487095,
+                0.8508757067021033,
+                0.20214099146113884,
+                0.7021150195920229
+            ],
+            [
+                0.4891879543327079,
+                0.5738220363502043,
+                0.853441077141526,
+                0.11928875404794115,
+                0.3017677214782005,
+                0.9931359181037914,
+                0.4631846592506441,
+                0.7470604769788828,
+                0.07936456028836303,
+                0.8884652839545726,
+                0.28070469218155014,
+                0.8298166540946927,
+                0.4125357558247127,
+                0.13331742511129951,
+                0.9762952161628544,
+                0.8206301134901594,
+                0.74934238265189,
+                0.46001274551609406,
+                0.5911108665448318,
+                0.8520340471844174,
+                0.4461957231907778,
+                0.3067326949523417,
+                0.300012067434277,
+                0.3562734595109339,
+                0.5478311340845706,
+                0.24445056961222678,
+                0.956786935748036,
+                0.5535579769946445,
+                0.6896401647027083,
+                0.9919409568428842,
+                0.07039246115831244,
+                0.3844086384567329,
+                0.6001073548418886,
+                0.9637699134349157,
+                0.30055494261509885,
+                0.6163762956441163,
+                0.250077556206575,
+                0.7708824048053987,
+                0.002451444453242413,
+                0.3563349357139233
+            ],
+            [
+                0.5909185786184302,
+                0.9847624267993814,
+                0.4703006969070628,
+                0.7924465597575302,
+                0.6495945749843739,
+                0.8393494336060167,
+                0.5324745004420934,
+                0.378046448170295,
+                0.012755005704780942,
+                0.8403277413596631,
+                0.8542586009542643,
+                0.13717896669215235,
+                0.9080765666478369,
+                0.2150748455210637,
+                0.7542623051862974,
+                0.8956711706047522,
+                0.30882947349311163,
+                0.2744526904136646,
+                0.7138098592555375,
+                0.9150936450939772,
+                0.19441975521765342,
+                0.6437173742775409,
+                0.51913157340447,
+                0.5966645873956741,
+                0.06474104001554049,
+                0.1751857556980484,
+                0.05862570176427706,
+                0.11854272923063558,
+                0.05554147628438677,
+                0.6069623363550412,
+                0.1860139552871367,
+                0.6942796341228089,
+                0.5076557331155804,
+                0.621404598907353,
+                0.5981422860231246,
+                0.4188391156153408,
+                0.5624986226180282,
+                0.03474543343248171,
+                0.2341515050579337,
+                0.6641944465543099
+            ],
+            [
+                0.4344632583228236,
+                0.978478416495244,
+                0.9026794228598101,
+                0.6130927791068583,
+                0.5923854828456296,
+                0.8369410412621177,
+                0.7382843246353752,
+                0.1544954841229067,
+                0.8004851797430432,
+                0.08456386569221397,
+                0.16781422327775863,
+                0.15767390229846923,
+                0.3107599077354213,
+                0.9507601561630339,
+                0.6967859232649396,
+                0.1198669580580205,
+                0.09422795945556839,
+                0.7215439359569485,
+                0.06170801906966872,
+                0.8179410365464279,
+                0.46347534042334404,
+                0.9367426793963417,
+                0.01299401403794398,
+                0.5652492505411922,
+                0.23027713270536632,
+                0.5302128678874924,
+                0.9527180993698342,
+                0.4248736822651247,
+                0.07256612408472451,
+                0.231221254549147,
+                0.9606832504558236,
+                0.6845805406469289,
+                0.49145749972544883,
+                0.2976231637395884,
+                0.9864143212521471,
+                0.6515813665586551,
+                0.36318021534812994,
+                0.48289596009834057,
+                0.9118436816184007,
+                0.5111961554341881
+            ],
+            [
+                0.9713531105758129,
+                0.5877335538373509,
+                0.11021044209082453,
+                0.10818994808550297,
+                0.21732169051342098,
+                0.40054625486648054,
+                0.32353787638836407,
+                0.13342896060664222,
+                0.7553998396452795,
+                0.3405838218731644,
+                0.16254120122968296,
+                0.7093888125285746,
+                0.04183633827725619,
+                0.9491820973195662,
+                0.42636150315214216,
+                0.21850370762869153,
+                0.6028001678494386,
+                0.6260664092083852,
+                0.8539447625150755,
+                0.8182505174497886,
+                0.3029878578779317,
+                0.4459897577119365,
+                0.6196144815383113,
+                0.25575708869945035,
+                0.01944409197825503,
+                0.4538982681384287,
+                0.8141951637656911,
+                0.7278923581231016,
+                0.35705393386473294,
+                0.9434064704743892,
+                0.6506869742410708,
+                0.6912955661526127,
+                0.5389851526360296,
+                0.7141117794369939,
+                0.17344878149097498,
+                0.33343282787888606,
+                0.15212776044430398,
+                0.04377772437157512,
+                0.5403670036716395,
+                0.8980271932319334
+            ],
+            [
+                0.1724796558164562,
+                0.1608748847461784,
+                0.6998889011263258,
+                0.8163166344029579,
+                0.7998649328871722,
+                0.15184222969966044,
+                0.458881622819452,
+                0.49816468221091126,
+                0.5148860499811069,
+                0.9892743821188834,
+                0.90848979449323,
+                0.9130610576044778,
+                0.4602800625934029,
+                0.22044457234412862,
+                0.48586683880566783,
+                0.8453802540975311,
+                0.5545049679602113,
+                0.3460556315756922,
+                0.8709716901555228,
+                0.7110274587497997,
+                0.7391166238340341,
+                0.17427502291927088,
+                0.2733011072776167,
+                0.5451416857626249,
+                0.7815717663940855,
+                0.782370069860276,
+                0.723224547303342,
+                0.7258465346237788,
+                0.9482400602693757,
+                0.9981946011262081,
+                0.8498365301451583,
+                0.7939252982957405,
+                0.5628822324625562,
+                0.31064746669049725,
+                0.3394754914138126,
+                0.6727279287345119,
+                0.9392960763062195,
+                0.317761912842754,
+                0.669756918719025,
+                0.06938558924990978
+            ],
+            [
+                0.08410172474285149,
+                0.5446775703465835,
+                0.6797415433147005,
+                0.2137343767313259,
+                0.7817024161431382,
+                0.15029034968418775,
+                0.6122973481076089,
+                0.6526720592774936,
+                0.5856977915759626,
+                0.7057920452700934,
+                0.03826393711170972,
+                0.7471296401664522,
+                0.4342800266716802,
+                0.7784755019746412,
+                0.8780576315854629,
+                0.6721830151390195,
+                0.8896975983962634,
+                0.7227479701578495,
+                0.7312293138081504,
+                0.414034986877315,
+                0.3291048903016396,
+                0.8815335299984658,
+                0.048536237598409526,
+                0.15335190734389326,
+                0.49466537404351474,
+                0.7022668278811622,
+                0.26198989540939965,
+                0.22540821357831387,
+                0.03717556590155657,
+                0.33441495556633094,
+                0.3130622755436445,
+                0.3114365291500627,
+                0.3231999347086886,
+                0.9888528537559487,
+                0.17902081155842398,
+                0.2779809136407342,
+                0.36444231480859846,
+                0.8231886601097234,
+                0.5545123549317615,
+                0.250948137330008
+            ],
+            [
+                0.17484336021887015,
+                0.9853703426145535,
+                0.6397337924543451,
+                0.6777856693111406,
+                0.21593843749458175,
+                0.24667541269008608,
+                0.30297720228059455,
+                0.43142252870630615,
+                0.12236466100618948,
+                0.6246766564624129,
+                0.6069721442108968,
+                0.8105252958174817,
+                0.6526187937257869,
+                0.8936972326818863,
+                0.1719542807169241,
+                0.07054616262443514,
+                0.10676251114211788,
+                0.8297397838723182,
+                0.9792186719798421,
+                0.15835665659809872,
+                0.8446281677781191,
+                0.18852877950759694,
+                0.7983867635323117,
+                0.8168868044971497,
+                0.5755972190553669,
+                0.04536512049514052,
+                0.7244536532195095,
+                0.895615494639591,
+                0.8821837127488398,
+                0.9876354500287352,
+                0.85254825687748,
+                0.6862203432143337,
+                0.24463679262797489,
+                0.5382205612318031,
+                0.30216595158331194,
+                0.9926989216007821,
+                0.14498701480975107,
+                0.22642319707391811,
+                0.48605604889601983,
+                0.14104487834658475
+            ],
+            [
+                0.3670644320999873,
+                0.36760281409349405,
+                0.19651131020987544,
+                0.9684644994282103,
+                0.9828783394820985,
+                0.8739572642754432,
+                0.9986483091105012,
+                0.24786420571482592,
+                0.29999356171176295,
+                0.2413503388688346,
+                0.9366927384462476,
+                0.037248632319683006,
+                0.8365045369897919,
+                0.9089663344569332,
+                0.6421637110757648,
+                0.6285115544031928,
+                0.8634642548842415,
+                0.4810025419291888,
+                0.3231576240836034,
+                0.14321339610336803,
+                0.6369739863825523,
+                0.8200226685414694,
+                0.6392076011476852,
+                0.23822470353462777,
+                0.16826647396725114,
+                0.7965986374529338,
+                0.7282147110942127,
+                0.9733139376299547,
+                0.10858145761430538,
+                0.853175158342127,
+                0.9670005236203721,
+                0.9871374832399166,
+                0.8000357905496768,
+                0.6382923999806778,
+                0.1295685172232649,
+                0.20195445629152975,
+                0.14776247220175376,
+                0.9832329973318393,
+                0.2713753771178862,
+                0.7940034183261215
+            ],
+            [
+                0.9272061322412931,
+                0.05157247071579352,
+                0.18530650299926943,
+                0.5056664833681221,
+                0.3730113998942467,
+                0.624407190858329,
+                0.485864127850717,
+                0.8196146468706029,
+                0.8112710649269047,
+                0.2904325872536825,
+                0.5775107483249705,
+                0.8009567794849783,
+                0.80371488458436,
+                0.4670361164367103,
+                0.35827986040399795,
+                0.2715872737043573,
+                0.4012700875362635,
+                0.25653087530610597,
+                0.9105321382979836,
+                0.2687830623826528,
+                0.14472340626001312,
+                0.3231658678323387,
+                0.8114895888972223,
+                0.6688019353691269,
+                0.8625128892099325,
+                0.16704379901329103,
+                0.6049827219872423,
+                0.5325066997612835,
+                0.3902982504432624,
+                0.7924702985254996,
+                0.037224454752637914,
+                0.35300702065393386,
+                0.15936899931772353,
+                0.42996024809415856,
+                0.7170307212566414,
+                0.2035718059269942,
+                0.05662449509816314,
+                0.8805536741044132,
+                0.6521033355296313,
+                0.16087014907402541
+            ],
+            [
+                0.7817889380012845,
+                0.7612263259739428,
+                0.7223360699334347,
+                0.5203152601520628,
+                0.5298773278098732,
+                0.7719720699622216,
+                0.9700030271401932,
+                0.47455759267932396,
+                0.36478739400841664,
+                0.03536818931187713,
+                0.5323833377636653,
+                0.8344553161295349,
+                0.20684676944548386,
+                0.41278690436828025,
+                0.37536542979807075,
+                0.19895559811874197,
+                0.928685134608436,
+                0.7915368320404965,
+                0.27775966700798893,
+                0.7499922576349498,
+                0.2188721008562926,
+                0.48955683416575557,
+                0.947220838265383,
+                0.5821609699310435,
+                0.5177652333942778,
+                0.03773318281096494,
+                0.030696976310395585,
+                0.538762095843031,
+                0.8243224661869775,
+                0.365322409356854,
+                0.06378308990895631,
+                0.14507858829159292,
+                0.18355736984115045,
+                0.025737650251698607,
+                0.643956986429601,
+                0.6560542645963751,
+                0.34328769982090546,
+                0.3652618093603205,
+                0.7399014361674393,
+                0.5180318996441018
+            ],
+            [
+                0.3852779172893751,
+                0.38285052329552505,
+                0.32021300127284213,
+                0.3621254984561252,
+                0.8666033579986002,
+                0.032801794416960406,
+                0.4290442607610172,
+                0.2706440459408933,
+                0.3019967216212174,
+                0.3310334435556188,
+                0.4583920442786177,
+                0.6561779222210863,
+                0.8691210745955684,
+                0.5810634614920857,
+                0.9488299345162157,
+                0.0866142316326809,
+                0.2090196393057654,
+                0.6097924624745849,
+                0.2827884982076603,
+                0.3308593029543334,
+                0.3069304339134379,
+                0.4523752754323054,
+                0.5894868135841408,
+                0.48036641810723035,
+                0.022937779007934256,
+                0.03640244774248469,
+                0.20561055240297355,
+                0.6648302497787347,
+                0.15030900736487585,
+                0.03372020821677202,
+                0.3182144502167026,
+                0.0416049325687472,
+                0.455758059070811,
+                0.1717694115563343,
+                0.14765308464287918,
+                0.83100902484063,
+                0.874285188529305,
+                0.9334371491100831,
+                0.033368440377129716,
+                0.3406601418411056
+            ],
+            [
+                0.7929503648852821,
+                0.7085825636503563,
+                0.8268090244068711,
+                0.7000100402133789,
+                0.7095921112388403,
+                0.994606193351572,
+                0.9722145430678995,
+                0.8638789228945236,
+                0.6786637521563658,
+                0.5808173609577701,
+                0.6371988974259667,
+                0.06851868794636373,
+                0.6606903577747983,
+                0.23870361827693676,
+                0.2897105832067932,
+                0.30731677012980263,
+                0.7347444807156869,
+                0.26579308078792674,
+                0.8798420188440557,
+                0.7281649007254192,
+                0.11253593900526682,
+                0.737740781140621,
+                0.8371615778748968,
+                0.9070965184722315,
+                0.25710109208040577,
+                0.25303915301717084,
+                0.4311403458190396,
+                0.5680453902323898,
+                0.6791182186351962,
+                0.24987719634434236,
+                0.7625077977242263,
+                0.034513225362310496,
+                0.8047117207321368,
+                0.5909058598913696,
+                0.2957688408190555,
+                0.7097760640141648,
+                0.11799377776581033,
+                0.12637400773934793,
+                0.2754770666105666,
+                0.5359583408317922
+            ],
+            [
+                0.3389183681270217,
+                0.3229980037477743,
+                0.5421560721453013,
+                0.6918105893325204,
+                0.7908912614532976,
+                0.750354082783717,
+                0.087545708305801,
+                0.6760498755610531,
+                0.1926435101830294,
+                0.9573420725673023,
+                0.9800886047988291,
+                0.13929979843684592,
+                0.004154676694893444,
+                0.8977357702995141,
+                0.12622900458603437,
+                0.3117876681450493,
+                0.5651304234120388,
+                0.7207322360703873,
+                0.2434512673307433,
+                0.9196951426497725,
+                0.35025994069520683,
+                0.5617970085428782,
+                0.6840497263312153,
+                0.8555257022478981,
+                0.5729667977790251,
+                0.43370134393991877,
+                0.8970891900380998,
+                0.1737555046899104,
+                0.24201104486860703,
+                0.9825526016341255,
+                0.06168245849284615,
+                0.3545895797364881,
+                0.20230419017196088,
+                0.6673577390152967,
+                0.01583119754492024,
+                0.25817621391420353,
+                0.056840239478353594,
+                0.12478967930097262,
+                0.4594564990691895,
+                0.21527257618872642
+            ],
+            [
+                0.16764524166012706,
+                0.3293800166641494,
+                0.48392204316688503,
+                0.031106775472466208,
+                0.16858367383571105,
+                0.8754117944673575,
+                0.9512520223541625,
+                0.19490896128588753,
+                0.3926490513109303,
+                0.730315402729379,
+                0.5930902590050923,
+                0.2868795549539155,
+                0.38715524019392533,
+                0.7582241298574922,
+                0.8369373774363156,
+                0.23889690695804844,
+                0.4686341512912774,
+                0.21356143162875074,
+                0.7182020728636422,
+                0.5467673858817332,
+                0.6031921980721519,
+                0.5505905994938104,
+                0.8401056658914376,
+                0.3082623459661017,
+                0.6539221166628569,
+                0.40111299745713913,
+                0.5620172568042158,
+                0.8246188275014674,
+                0.2979948288100588,
+                0.117933032067567,
+                0.6481652090343156,
+                0.3589116948977523,
+                0.8764204929985703,
+                0.6982903886152635,
+                0.599928177649948,
+                0.2919434637742917,
+                0.7223670284004544,
+                0.18825914432466506,
+                0.19991223378106027,
+                0.022686269416120286
+            ],
+            [
+                0.7547199072978805,
+                0.8574015299300712,
+                0.8947807604318848,
+                0.4151258330312487,
+                0.4349165134683525,
+                0.5433520119726729,
+                0.08015169539834699,
+                0.4707217497764107,
+                0.6751499943423882,
+                0.03424737319117643,
+                0.88997077250606,
+                0.048327587264252014,
+                0.33287740376039887,
+                0.5722364027058718,
+                0.8027777031931972,
+                0.5309469933468196,
+                0.773852872926547,
+                0.4707398671356917,
+                0.9779392779983037,
+                0.5591192500330977,
+                0.8421311371491292,
+                0.20094370328355637,
+                0.8473734353227966,
+                0.533218007678259,
+                0.03424682468953011,
+                0.8329193110256302,
+                0.33532384914336943,
+                0.9971106851289446,
+                0.015481384478755356,
+                0.9509354970924567,
+                0.42042720013460944,
+                0.2778800524524181,
+                0.6310608798951471,
+                0.7789109693783949,
+                0.1687868652232527,
+                0.4133919017897705,
+                0.6763610446169777,
+                0.20709824275287303,
+                0.8199077027652771,
+                0.8192144168006861
+            ],
+            [
+                0.6056781458002484,
+                0.6056422564504875,
+                0.1536486440484005,
+                0.4428514949313701,
+                0.6585926048367041,
+                0.7774838060939787,
+                0.662780563481014,
+                0.541609072496422,
+                0.6595556280290034,
+                0.9490132668359172,
+                0.36180361925670357,
+                0.3041805000339429,
+                0.1757451598487163,
+                0.5970428196297695,
+                0.5233320067298729,
+                0.9997124938360782,
+                0.9292718324582279,
+                0.2235337330221091,
+                0.6153349761632102,
+                0.6757009546354433,
+                0.9057292112824986,
+                0.04931379324401053,
+                0.25201289050700804,
+                0.8879984289863018,
+                0.4148351952904009,
+                0.2238353546761176,
+                0.9869404175166069,
+                0.7426784319083006,
+                0.6811445584492734,
+                0.0038241506606758735,
+                0.7126462422775237,
+                0.21702041578291964,
+                0.4115041016362012,
+                0.424326755037153,
+                0.14801132806733042,
+                0.6292543532937185,
+                0.4152041443079495,
+                0.16951652893086955,
+                0.6180577434737694,
+                0.024709632223665845
+            ],
+            [
+                0.8559794925286194,
+                0.7609775557033241,
+                0.43098113830175333,
+                0.734622532809036,
+                0.9841258268586028,
+                0.5629284378062854,
+                0.5869134477921201,
+                0.1768060035922886,
+                0.27966732948200457,
+                0.6371607474929809,
+                0.3938328723167718,
+                0.47493844308625666,
+                0.3910058081885728,
+                0.7474043773166973,
+                0.055011576543852025,
+                0.5383158167498829,
+                0.5005599591711013,
+                0.256009969742959,
+                0.026379975442141212,
+                0.8417407624030541,
+                0.7491845895661615,
+                0.7521906913726653,
+                0.4028041140815741,
+                0.34249046880714973,
+                0.5495546230673208,
+                0.7249722204830504,
+                0.450506736106401,
+                0.158838820779299,
+                0.7572540953080411,
+                0.8513044094838662,
+                0.6293691371545317,
+                0.4293455226235502,
+                0.060662292089636916,
+                0.25523874408831115,
+                0.5600831269823984,
+                0.9446888234318417,
+                0.4866288881997719,
+                0.9841351016926793,
+                0.7306254807596262,
+                0.21027338366478687
+            ]
+        ],
+        "zmax": 0.9997124938360782,
+        "y": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40
+        ],
+        "type": "surface",
+        "scene": "scene"
+    }
+]
+, {
+    "showlegend": true,
+    "paper_bgcolor": "rgba(255, 255, 255, 1.000)",
+    "annotations": [],
+    "height": 400,
+    "margin": {
+        "l": 0,
+        "b": 20,
+        "r": 0,
+        "t": 20
+    },
+    "plot_bgcolor": "rgba(255, 255, 255, 1.000)",
+    "scene": {
+        "camera": {
+            "eye": {
+                "y": -1.9499999999999997,
+                "z": 1.3,
+                "x": 1.12583302491977
+            }
+        },
+        "xaxis": {
+            "tickangle": 0,
+            "showline": true,
+            "gridcolor": "rgba(0, 0, 0, 0.100)",
+            "showticklabels": true,
+            "gridwidth": 0.5,
+            "titlefont": {
+                "color": "rgba(0, 0, 0, 1.000)",
+                "family": "sans-serif",
+                "size": 15
+            },
+            "visible": true,
+            "ticks": "inside",
+            "range": [
+                1.0,
+                40.0
+            ],
+            "tickmode": "array",
+            "tickvals": [
+                10.0,
+                20.0,
+                30.0,
+                40.0
+            ],
+            "tickcolor": "rgb(0, 0, 0)",
+            "ticktext": [
+                "10",
+                "20",
+                "30",
+                "40"
+            ],
+            "linecolor": "rgba(0, 0, 0, 1.000)",
+            "showgrid": true,
+            "zeroline": false,
+            "type": "-",
+            "tickfont": {
+                "color": "rgba(0, 0, 0, 1.000)",
+                "family": "sans-serif",
+                "size": 11
+            },
+            "title": "",
+            "zerolinecolor": "rgba(0, 0, 0, 1.000)",
+            "mirror": false
+        },
+        "domain": {
+            "y": [
+                0.03762029746281716,
+                0.9901574803149606
+            ],
+            "x": [
+                0.03619130941965587,
+                0.9934383202099738
+            ]
+        },
+        "yaxis": {
+            "tickangle": 0,
+            "showline": true,
+            "gridcolor": "rgba(0, 0, 0, 0.100)",
+            "showticklabels": true,
+            "gridwidth": 0.5,
+            "titlefont": {
+                "color": "rgba(0, 0, 0, 1.000)",
+                "family": "sans-serif",
+                "size": 15
+            },
+            "visible": true,
+            "ticks": "inside",
+            "range": [
+                1.0,
+                40.0
+            ],
+            "tickmode": "array",
+            "tickvals": [
+                10.0,
+                20.0,
+                30.0,
+                40.0
+            ],
+            "tickcolor": "rgb(0, 0, 0)",
+            "ticktext": [
+                "10",
+                "20",
+                "30",
+                "40"
+            ],
+            "linecolor": "rgba(0, 0, 0, 1.000)",
+            "showgrid": true,
+            "zeroline": false,
+            "type": "-",
+            "tickfont": {
+                "color": "rgba(0, 0, 0, 1.000)",
+                "family": "sans-serif",
+                "size": 11
+            },
+            "title": "",
+            "zerolinecolor": "rgba(0, 0, 0, 1.000)",
+            "mirror": false
+        },
+        "zaxis": {
+            "tickangle": 0,
+            "showline": true,
+            "gridcolor": "rgba(0, 0, 0, 0.100)",
+            "showticklabels": true,
+            "gridwidth": 0.5,
+            "titlefont": {
+                "color": "rgba(0, 0, 0, 1.000)",
+                "family": "sans-serif",
+                "size": 15
+            },
+            "visible": true,
+            "ticks": "inside",
+            "range": [
+                0.0011514968370283096,
+                0.9997124938360782
+            ],
+            "tickmode": "array",
+            "tickvals": [
+                0.2,
+                0.4,
+                0.6000000000000001,
+                0.8
+            ],
+            "tickcolor": "rgb(0, 0, 0)",
+            "ticktext": [
+                "0.2",
+                "0.4",
+                "0.6",
+                "0.8"
+            ],
+            "linecolor": "rgba(0, 0, 0, 1.000)",
+            "showgrid": true,
+            "zeroline": false,
+            "type": "-",
+            "tickfont": {
+                "color": "rgba(0, 0, 0, 1.000)",
+                "family": "sans-serif",
+                "size": 11
+            },
+            "title": "",
+            "zerolinecolor": "rgba(0, 0, 0, 1.000)",
+            "mirror": false
+        }
+    },
+    "legend_position": {
+        "yanchor": "auto",
+        "xanchor": "auto",
+        "bordercolor": "rgba(0, 0, 0, 1.000)",
+        "bgcolor": "rgba(255, 255, 255, 1.000)",
+        "borderwidth": 1,
+        "tracegroupgap": 0,
+        "y": 1.0,
+        "font": {
+            "color": "rgba(0, 0, 0, 1.000)",
+            "family": "sans-serif",
+            "size": 11
+        },
+        "title": {
+            "font": {
+                "color": "rgba(0, 0, 0, 1.000)",
+                "family": "sans-serif",
+                "size": 15
+            },
+            "text": ""
+        },
+        "traceorder": "normal",
+        "x": 1.0
+    },
+    "width": 600
+}
+);
+
+    });
+    </script>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">gui</span><span class="p">()</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div
+    class="webio-mountpoint"
+    data-webio-mountpoint="6452710545983155174"
+>
+    <script>
+    (function(){
+    // Some integrations (namely, IJulia/Jupyter) use an alternate render pathway than
+    // just putting the html on the page. If WebIO isn't defined, then it's pretty likely
+    // that we're in one of those situations and the integration just isn't installed
+    // correctly.
+    if (typeof window.WebIO === "undefined") {
+        document
+            .querySelector('[data-webio-mountpoint="6452710545983155174"]')
+            .innerHTML = (
+                '<div style="padding: 1em; background-color: #f8d6da; border: 1px solid #f5c6cb; font-weight: bold;">' +
+                '<p><strong>WebIO not detected.</strong></p>' +
+                '<p>Please read ' +
+                '<a href="https://juliagizmos.github.io/WebIO.jl/latest/troubleshooting/not-detected/" target="_blank">the troubleshooting guide</a> ' +
+                'for more information on how to resolve this issue.</p>' +
+                '<p><a href="https://juliagizmos.github.io/WebIO.jl/latest/troubleshooting/not-detected/" target="_blank">https://juliagizmos.github.io/WebIO.jl/latest/troubleshooting/not-detected/</a></p>' +
+                '</div>'
+            );
+        return;
+    }
+    WebIO.mount(
+        document.querySelector('[data-webio-mountpoint="6452710545983155174"]'),
+        {"props":{},"nodeType":"Scope","type":"node","instanceArgs":{"imports":{"data":[{"name":"Plotly","type":"js","url":"\/assetserver\/ae556744cf1cbec687d19001dcf2c152dd31b7f9-plotly.min.js"},{"name":null,"type":"js","url":"\/assetserver\/147cba4e4726aff580003d6426600165787f6fb3-plotly_webio.bundle.js"}],"type":"async_block"},"id":"13337141591413869027","handlers":{"_toImage":["(function (options){return this.Plotly.toImage(this.plotElem,options).then((function (data){return WebIO.setval({\"name\":\"image\",\"scope\":\"13337141591413869027\",\"id\":\"15093549836376807223\",\"type\":\"observable\"},data)}))})"],"__get_gd_contents":["(function (prop){prop==\"data\" ? (WebIO.setval({\"name\":\"__gd_contents\",\"scope\":\"13337141591413869027\",\"id\":\"16339434006015222917\",\"type\":\"observable\"},this.plotElem.data)) : undefined; return prop==\"layout\" ? (WebIO.setval({\"name\":\"__gd_contents\",\"scope\":\"13337141591413869027\",\"id\":\"16339434006015222917\",\"type\":\"observable\"},this.plotElem.layout)) : undefined})"],"_downloadImage":["(function (options){return this.Plotly.downloadImage(this.plotElem,options)})"],"_commands":["(function (args){var fn=args.shift(); var elem=this.plotElem; var Plotly=this.Plotly; args.unshift(elem); return Plotly[fn].apply(this,args)})"]},"systemjs_options":null,"mount_callbacks":["function () {\n    var handler = ((function (Plotly,PlotlyWebIO){PlotlyWebIO.init(WebIO); var gd=this.dom.querySelector(\"#plot-abf81a99-e643-4ed2-9f61-4a2f3a6f5538\"); this.plotElem=gd; this.Plotly=Plotly; (window.Blink!==undefined) ? (gd.style.width=\"100%\", gd.style.height=\"100vh\", gd.style.marginLeft=\"0%\", gd.style.marginTop=\"0vh\") : undefined; window.onresize=(function (){return Plotly.Plots.resize(gd)}); Plotly.newPlot(gd,[],{\"template\":{\"layout\":{\"coloraxis\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}},\"xaxis\":{\"gridcolor\":\"white\",\"zerolinewidth\":2,\"title\":{\"standoff\":15},\"ticks\":\"\",\"zerolinecolor\":\"white\",\"automargin\":true,\"linecolor\":\"white\"},\"hovermode\":\"closest\",\"paper_bgcolor\":\"white\",\"geo\":{\"showlakes\":true,\"showland\":true,\"landcolor\":\"#E5ECF6\",\"bgcolor\":\"white\",\"subunitcolor\":\"white\",\"lakecolor\":\"white\"},\"colorscale\":{\"sequential\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"diverging\":[[0,\"#8e0152\"],[0.1,\"#c51b7d\"],[0.2,\"#de77ae\"],[0.3,\"#f1b6da\"],[0.4,\"#fde0ef\"],[0.5,\"#f7f7f7\"],[0.6,\"#e6f5d0\"],[0.7,\"#b8e186\"],[0.8,\"#7fbc41\"],[0.9,\"#4d9221\"],[1,\"#276419\"]],\"sequentialminus\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]},\"yaxis\":{\"gridcolor\":\"white\",\"zerolinewidth\":2,\"title\":{\"standoff\":15},\"ticks\":\"\",\"zerolinecolor\":\"white\",\"automargin\":true,\"linecolor\":\"white\"},\"shapedefaults\":{\"line\":{\"color\":\"#2a3f5f\"}},\"hoverlabel\":{\"align\":\"left\"},\"mapbox\":{\"style\":\"light\"},\"polar\":{\"angularaxis\":{\"gridcolor\":\"white\",\"ticks\":\"\",\"linecolor\":\"white\"},\"bgcolor\":\"#E5ECF6\",\"radialaxis\":{\"gridcolor\":\"white\",\"ticks\":\"\",\"linecolor\":\"white\"}},\"autotypenumbers\":\"strict\",\"font\":{\"color\":\"#2a3f5f\"},\"ternary\":{\"baxis\":{\"gridcolor\":\"white\",\"ticks\":\"\",\"linecolor\":\"white\"},\"bgcolor\":\"#E5ECF6\",\"caxis\":{\"gridcolor\":\"white\",\"ticks\":\"\",\"linecolor\":\"white\"},\"aaxis\":{\"gridcolor\":\"white\",\"ticks\":\"\",\"linecolor\":\"white\"}},\"annotationdefaults\":{\"arrowhead\":0,\"arrowwidth\":1,\"arrowcolor\":\"#2a3f5f\"},\"plot_bgcolor\":\"#E5ECF6\",\"title\":{\"x\":0.05},\"scene\":{\"xaxis\":{\"gridcolor\":\"white\",\"gridwidth\":2,\"backgroundcolor\":\"#E5ECF6\",\"ticks\":\"\",\"showbackground\":true,\"zerolinecolor\":\"white\",\"linecolor\":\"white\"},\"zaxis\":{\"gridcolor\":\"white\",\"gridwidth\":2,\"backgroundcolor\":\"#E5ECF6\",\"ticks\":\"\",\"showbackground\":true,\"zerolinecolor\":\"white\",\"linecolor\":\"white\"},\"yaxis\":{\"gridcolor\":\"white\",\"gridwidth\":2,\"backgroundcolor\":\"#E5ECF6\",\"ticks\":\"\",\"showbackground\":true,\"zerolinecolor\":\"white\",\"linecolor\":\"white\"}},\"colorway\":[\"#636efa\",\"#EF553B\",\"#00cc96\",\"#ab63fa\",\"#FFA15A\",\"#19d3f3\",\"#FF6692\",\"#B6E880\",\"#FF97FF\",\"#FECB52\"]},\"data\":{\"barpolar\":[{\"type\":\"barpolar\",\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5}}}],\"carpet\":[{\"aaxis\":{\"gridcolor\":\"white\",\"endlinecolor\":\"#2a3f5f\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\",\"linecolor\":\"white\"},\"type\":\"carpet\",\"baxis\":{\"gridcolor\":\"white\",\"endlinecolor\":\"#2a3f5f\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\",\"linecolor\":\"white\"}}],\"scatterpolar\":[{\"type\":\"scatterpolar\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"parcoords\":[{\"line\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}},\"type\":\"parcoords\"}],\"scatter\":[{\"type\":\"scatter\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"histogram2dcontour\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"histogram2dcontour\",\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"contour\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"contour\",\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"scattercarpet\":[{\"type\":\"scattercarpet\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"mesh3d\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"mesh3d\"}],\"surface\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"surface\",\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"scattermapbox\":[{\"type\":\"scattermapbox\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"scattergeo\":[{\"type\":\"scattergeo\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"histogram\":[{\"type\":\"histogram\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"pie\":[{\"type\":\"pie\",\"automargin\":true}],\"choropleth\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"choropleth\"}],\"heatmapgl\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"heatmapgl\",\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"bar\":[{\"type\":\"bar\",\"error_y\":{\"color\":\"#2a3f5f\"},\"error_x\":{\"color\":\"#2a3f5f\"},\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5}}}],\"heatmap\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"heatmap\",\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"contourcarpet\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"contourcarpet\"}],\"table\":[{\"type\":\"table\",\"header\":{\"line\":{\"color\":\"white\"},\"fill\":{\"color\":\"#C8D4E3\"}},\"cells\":{\"line\":{\"color\":\"white\"},\"fill\":{\"color\":\"#EBF0F8\"}}}],\"scatter3d\":[{\"line\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}},\"type\":\"scatter3d\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"scattergl\":[{\"type\":\"scattergl\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"histogram2d\":[{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0},\"type\":\"histogram2d\",\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"scatterternary\":[{\"type\":\"scatterternary\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}],\"scatterpolargl\":[{\"type\":\"scatterpolargl\",\"marker\":{\"colorbar\":{\"ticks\":\"\",\"outlinewidth\":0}}}]}},\"margin\":{\"l\":50,\"b\":50,\"r\":50,\"t\":60}},{\"showLink\":false,\"editable\":false,\"responsive\":true,\"staticPlot\":false,\"scrollZoom\":true}); gd.on(\"plotly_hover\",(function (data){var filtered_data=WebIO.PlotlyCommands.filterEventData(gd,data,\"hover\"); return !(filtered_data.isnil) ? (WebIO.setval({\"name\":\"hover\",\"scope\":\"13337141591413869027\",\"id\":\"4349369867593195298\",\"type\":\"observable\"},filtered_data.out)) : undefined})); gd.on(\"plotly_unhover\",(function (){return WebIO.setval({\"name\":\"hover\",\"scope\":\"13337141591413869027\",\"id\":\"4349369867593195298\",\"type\":\"observable\"},{})})); gd.on(\"plotly_selected\",(function (data){var filtered_data=WebIO.PlotlyCommands.filterEventData(gd,data,\"selected\"); return !(filtered_data.isnil) ? (WebIO.setval({\"name\":\"selected\",\"scope\":\"13337141591413869027\",\"id\":\"15211457088970227250\",\"type\":\"observable\"},filtered_data.out)) : undefined})); gd.on(\"plotly_deselect\",(function (){return WebIO.setval({\"name\":\"selected\",\"scope\":\"13337141591413869027\",\"id\":\"15211457088970227250\",\"type\":\"observable\"},{})})); gd.on(\"plotly_relayout\",(function (data){var filtered_data=WebIO.PlotlyCommands.filterEventData(gd,data,\"relayout\"); return !(filtered_data.isnil) ? (WebIO.setval({\"name\":\"relayout\",\"scope\":\"13337141591413869027\",\"id\":\"14095985527559094335\",\"type\":\"observable\"},filtered_data.out)) : undefined})); return gd.on(\"plotly_click\",(function (data){var filtered_data=WebIO.PlotlyCommands.filterEventData(gd,data,\"click\"); return !(filtered_data.isnil) ? (WebIO.setval({\"name\":\"click\",\"scope\":\"13337141591413869027\",\"id\":\"4034670911372332137\",\"type\":\"observable\"},filtered_data.out)) : undefined}))}));\n    (WebIO.importBlock({\"data\":[{\"name\":\"Plotly\",\"type\":\"js\",\"url\":\"\/assetserver\/ae556744cf1cbec687d19001dcf2c152dd31b7f9-plotly.min.js\"},{\"name\":null,\"type\":\"js\",\"url\":\"\/assetserver\/147cba4e4726aff580003d6426600165787f6fb3-plotly_webio.bundle.js\"}],\"type\":\"async_block\"})).then((imports) => handler.apply(this, imports));\n}\n"],"observables":{"_toImage":{"sync":true,"id":"15827099148860961816","value":{}},"hover":{"sync":false,"id":"4349369867593195298","value":{}},"selected":{"sync":false,"id":"15211457088970227250","value":{}},"__gd_contents":{"sync":false,"id":"16339434006015222917","value":{}},"click":{"sync":false,"id":"4034670911372332137","value":{}},"image":{"sync":true,"id":"15093549836376807223","value":""},"__get_gd_contents":{"sync":true,"id":"3878219550640466335","value":""},"_downloadImage":{"sync":true,"id":"10628427665721565330","value":{}},"relayout":{"sync":false,"id":"14095985527559094335","value":{}},"_commands":{"sync":true,"id":"12822771364303452361","value":["update",{},{"paper_bgcolor":"rgba(255, 255, 255, 1.000)","template":{"data":{"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"carpet":[{"baxis":{"gridcolor":"white","endlinecolor":"#2a3f5f","minorgridcolor":"white","startlinecolor":"#2a3f5f","linecolor":"white"},"type":"carpet","aaxis":{"gridcolor":"white","endlinecolor":"#2a3f5f","minorgridcolor":"white","startlinecolor":"#2a3f5f","linecolor":"white"}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"parcoords":[{"line":{"colorbar":{"ticks":"","outlinewidth":0}},"type":"parcoords"}],"scatter":[{"type":"scatter","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"histogram2dcontour":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"histogram2dcontour","colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contour":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"contour","colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"mesh3d":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"mesh3d"}],"surface":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"surface","colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"histogram":[{"type":"histogram","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"pie":[{"type":"pie","automargin":true}],"choropleth":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"choropleth"}],"heatmapgl":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"heatmapgl","colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"bar":[{"type":"bar","error_y":{"color":"#2a3f5f"},"error_x":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5}}}],"heatmap":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"heatmap","colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"contourcarpet"}],"table":[{"type":"table","header":{"line":{"color":"white"},"fill":{"color":"#C8D4E3"}},"cells":{"line":{"color":"white"},"fill":{"color":"#EBF0F8"}}}],"scatter3d":[{"line":{"colorbar":{"ticks":"","outlinewidth":0}},"type":"scatter3d","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"histogram2d":[{"colorbar":{"ticks":"","outlinewidth":0},"type":"histogram2d","colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"ticks":"","outlinewidth":0}}}],"barpolar":[{"type":"barpolar","marker":{"line":{"color":"#E5ECF6","width":0.5}}}]},"layout":{"xaxis":{"gridcolor":"white","zerolinewidth":2,"title":{"standoff":15},"ticks":"","zerolinecolor":"white","automargin":true,"linecolor":"white"},"hovermode":"closest","paper_bgcolor":"white","geo":{"showlakes":true,"showland":true,"landcolor":"#E5ECF6","bgcolor":"white","subunitcolor":"white","lakecolor":"white"},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"yaxis":{"gridcolor":"white","zerolinewidth":2,"title":{"standoff":15},"ticks":"","zerolinecolor":"white","automargin":true,"linecolor":"white"},"shapedefaults":{"line":{"color":"#2a3f5f"}},"font":{"color":"#2a3f5f"},"annotationdefaults":{"arrowhead":0,"arrowwidth":1,"arrowcolor":"#2a3f5f"},"plot_bgcolor":"#E5ECF6","title":{"x":0.05},"coloraxis":{"colorbar":{"ticks":"","outlinewidth":0}},"hoverlabel":{"align":"left"},"mapbox":{"style":"light"},"polar":{"angularaxis":{"gridcolor":"white","ticks":"","linecolor":"white"},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","ticks":"","linecolor":"white"}},"autotypenumbers":"strict","ternary":{"aaxis":{"gridcolor":"white","ticks":"","linecolor":"white"},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","ticks":"","linecolor":"white"},"baxis":{"gridcolor":"white","ticks":"","linecolor":"white"}},"scene":{"xaxis":{"gridcolor":"white","gridwidth":2,"backgroundcolor":"#E5ECF6","ticks":"","showbackground":true,"zerolinecolor":"white","linecolor":"white"},"zaxis":{"gridcolor":"white","gridwidth":2,"backgroundcolor":"#E5ECF6","ticks":"","showbackground":true,"zerolinecolor":"white","linecolor":"white"},"yaxis":{"gridcolor":"white","gridwidth":2,"backgroundcolor":"#E5ECF6","ticks":"","showbackground":true,"zerolinecolor":"white","linecolor":"white"}},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"]}},"height":400,"legend_position":{"yanchor":"auto","xanchor":"auto","bordercolor":"rgba(0, 0, 0, 1.000)","bgcolor":"rgba(255, 255, 255, 1.000)","borderwidth":1,"tracegroupgap":0,"y":1.0,"font":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":11},"title":{"font":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":15},"text":""},"traceorder":"normal","x":1.0},"annotations":[],"plot_bgcolor":"rgba(255, 255, 255, 1.000)","showlegend":true,"legend":{"position":{"borderwidth":1,"tracegroupgap":0,"font":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":11},"title":{"font":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":15},"text":""},"traceorder":"normal","x":1.0,"yanchor":"auto","xanchor":"auto","bordercolor":"rgba(0, 0, 0, 1.000)","bgcolor":"rgba(255, 255, 255, 1.000)","y":1.0}},"scene":{"camera":{"eye":{"y":-1.9499999999999997,"z":1.3,"x":1.12583302491977}},"xaxis":{"tickangle":0,"showline":true,"gridcolor":"rgba(0, 0, 0, 0.100)","showticklabels":true,"gridwidth":0.5,"titlefont":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":15},"visible":true,"ticks":"inside","range":[1.0,40.0],"tickmode":"array","tickvals":[10.0,20.0,30.0,40.0],"tickcolor":"rgb(0, 0, 0)","ticktext":["10","20","30","40"],"linecolor":"rgba(0, 0, 0, 1.000)","showgrid":true,"zeroline":false,"type":"-","tickfont":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":11},"title":"","zerolinecolor":"rgba(0, 0, 0, 1.000)","mirror":false},"domain":{"y":[0.03762029746281716,0.9901574803149606],"x":[0.03619130941965587,0.9934383202099738]},"yaxis":{"tickangle":0,"showline":true,"gridcolor":"rgba(0, 0, 0, 0.100)","showticklabels":true,"gridwidth":0.5,"titlefont":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":15},"visible":true,"ticks":"inside","range":[1.0,40.0],"tickmode":"array","tickvals":[10.0,20.0,30.0,40.0],"tickcolor":"rgb(0, 0, 0)","ticktext":["10","20","30","40"],"linecolor":"rgba(0, 0, 0, 1.000)","showgrid":true,"zeroline":false,"type":"-","tickfont":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":11},"title":"","zerolinecolor":"rgba(0, 0, 0, 1.000)","mirror":false},"zaxis":{"tickangle":0,"showline":true,"gridcolor":"rgba(0, 0, 0, 0.100)","showticklabels":true,"gridwidth":0.5,"titlefont":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":15},"visible":true,"ticks":"inside","range":[0.0011514968370283096,0.9997124938360782],"tickmode":"array","tickvals":[0.2,0.4,0.6000000000000001,0.8],"tickcolor":"rgb(0, 0, 0)","ticktext":["0.2","0.4","0.6","0.8"],"linecolor":"rgba(0, 0, 0, 1.000)","showgrid":true,"zeroline":false,"type":"-","tickfont":{"color":"rgba(0, 0, 0, 1.000)","family":"sans-serif","size":11},"title":"","zerolinecolor":"rgba(0, 0, 0, 1.000)","mirror":false}},"margin":{"l":50,"b":50,"r":50,"t":60},"width":600}]}}},"children":[{"props":{"id":"plot-abf81a99-e643-4ed2-9f61-4a2f3a6f5538"},"nodeType":"DOM","type":"node","instanceArgs":{"namespace":"html","tag":"div"},"children":[]}]},
+        window,
+    );
+    })()
+    </script>
+</div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="n">Pkg</span><span class="p">;</span><span class="w"> </span><span class="n">Pkg</span><span class="o">.</span><span class="n">status</span><span class="p">()</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Green">Status</span> `~/Dropbox/class/817/notes/Project.toml`
+  [6e4b80f9] BenchmarkTools v1.3.1
+  [ad839575] Blink v0.12.5
+  [8e7c35d0] BlockArrays v0.16.20
+  [7a1cc6ca] FFTW v1.5.0
+  [7073ff75] IJulia v1.23.3
+  [ba0b0d4f] Krylov v0.8.3
+  [7a12625a] LinearMaps v3.8.0
+  [2774e3e8] NLsolve v4.5.1
+  [1dea7af3] OrdinaryDiffEq v6.25.0
+  [f0f68f2c] PlotlyJS v0.18.8
+  [91a5bcdd] Plots v1.31.7
+<span class=" -Color -Color-Green">⌃</span> [c3e4b0f8] Pluto v0.19.9
+  [08abe8d2] PrettyTables v1.3.1
+  [5f89f4a4] PyFormattedStrings v0.1.10
+  [0f1e0344] WebIO v0.8.18
+  [37e2e46d] LinearAlgebra
+<span class=" -Color -Color-Bold -Color-Bold-Cyan">Info</span> Packages marked with <span class=" -Color -Color-Green">⌃</span> have new versions available
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Pkg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;Blink&quot;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Green">    Updating</span> registry at `~/.julia/registries/General.toml`
+<span class=" -Color -Color-Bold -Color-Bold-Green">   Resolving</span> package versions...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Green">  No Changes</span> to `~/Dropbox/class/817/notes/Project.toml`
+<span class=" -Color -Color-Bold -Color-Bold-Green">  No Changes</span> to `~/Dropbox/class/817/notes/Manifest.toml`
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Finite differences and spectral methods for PDEs</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="finite-diffs/overview.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Finite differences</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

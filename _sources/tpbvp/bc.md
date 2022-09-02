@@ -23,13 +23,22 @@ G_{11}u(a) + G_{12}u'(a)  &= \alpha, \\
 G_{21}u(b) + G_{22}u'(b)  &= \beta,
 $$
 
-and now ask what happens when the boundary conditions are not of Dirichlet type. Of particular interest is the **Neumann** case in which $G_{11}=G_{21}=0$. Recall that the discretization of the ODE leads to the linear system
+and now ask what happens when the boundary conditions are not of Dirichlet type. Of particular interest is the **Neumann** case in which $G_{11}=G_{21}=0$. 
+
+Recall that the discretization of the ODE leads to the initial linear system
 
 $$
 \bfA \bfu = \bff, \qquad \bfA = \bfD_{xx} + \bfP \bfD_{x} + \bfQ.
 $$
 
-There are two common approaches used. One is to copy what we did for the Dirichlet case and replace the first and last rows with discrete forms of the boundary conditions. Here, we'll look at the method of **fictitious points** or **ghost points**.
+In the previous chapter, we used two different approaches to incorporate BCs: 
+
+1. Replace the boundary collocation rows with (discretized) equations for the BCs.
+2. Use the BCs to remove two of the unknowns from the system, as well as the collocated equations on the boundary.
+
+Option 1 is fairly straightforward, though care should be taken to ensure that all the rows of the final matrix have roughly the same scale (as a function of step size). Option 2 is easy for Dirichlet conditions, and it's more convenient for some theoretical analyses. Here we will look at a third variation, the method of **fictitious points** or **ghost points**.
+
+## Fictitious points
 
 Note that we could discretize the ODE all the way to the boundary if we had access to the values $u_{-1}$ and $u_{n+1}$, e.g.,
 
@@ -90,22 +99,26 @@ v = [⍺;v;β]
 A
 ```
 
-Now we do a trick known as the **Schur complement**. Suppose the system is partitioned into blocks:
+This is not so different from Option 1 above, except that we get to use centered formulas everywhere. It would be easy to solve the linear system for all the values, including the fictitious ones, but we will go through the linear algebra of removing them, since it's a recurring practice in computing.
+
+## Schur complement
+
+Suppose the system is partitioned into logical blocks (they need not be contiguous in the matrices):
 
 $$
 \begin{bmatrix}
   \bfA_{11} & \bfA_{12} \\ \bfA_{21} & \bfA_{22} 
 \end{bmatrix}
 \begin{bmatrix}
-  \bfu_1 & \bfu_2
+  \bfu_1 \\ \bfu_2
 \end{bmatrix}
 = 
 \begin{bmatrix}
-  \bfv_1 & \bfv_2
+  \bfv_1 \\ \bfv_2
 \end{bmatrix}.
 $$
 
-Here, the groups represent normal/fictitious unknowns. (The blocks need not be contiguous within the matrix.) Then
+Here, the groups represent actual/fictitious function values. Note that 
 
 $$
 \bfu_2 = \mathbf{A}_{22}^{-1} (\bfv_2 - \bfA_{21}\bfu_1), 
@@ -114,10 +127,10 @@ $$
 and the first block-row of the system becomes
 
 $$
-\bfA_{11} \bfu_1 + \mathbf{S}(\bfv_2 - \bfA_{21}\bfu_1) = \bfv_1, \quad \mathbf{S} = \bfA_{12}*\mathbf{A}_{22}^{-1}. 
+\bfA_{11} \bfu_1 + \mathbf{S}(\bfv_2 - \bfA_{21}\bfu_1) = \bfv_1, \quad \mathbf{S} = \bfA_{12}\,\mathbf{A}_{22}^{-1}. 
 $$
 
-This is easily rearranged into a system $\tilde{\bfA} \bfu_1 = \tilde{bfv}$ for the regular unknowns only.
+This is easily rearranged into a system $\tilde{\bfA} \bfu_1 = \tilde{\bfv}$ for the regular unknowns only.
 
 ```{code-cell}
 i1,i2 = 2:n+2,[1,n+3]
@@ -153,7 +166,7 @@ using Plots
 plot(x,u,aspect_ratio=1)
 ```
 
-The left end does look like a homogeneous Neumann condition is satisfied. We can check the right end numerically using an $O(h)$ discretization.
+The left end does look like a homogeneous Neumann condition is satisfied. We can check the right end casually using a first-order discretization:
 
 ```{code-cell}
 Gb[1]*u[n+1] + Gb[2]*(u[n+1]-u[n])/h - β

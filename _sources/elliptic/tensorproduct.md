@@ -35,7 +35,7 @@ There is potential for confusion because the first dimension of a matrix varies 
 Let the interval $[0,2]$ be divided into $m=4$ equally sized pieces, and let $[1,3]$ be discretized in $n=2$ equal pieces. Then the grid in the rectangle $[0,2]\times[1,3]$ is given by all points $(i/2,1+j)$ for all choices $i=0,1,2,3,4$ and $j=0,1,2$. If $f(x,y)=\sin(\pi xy)$, then
 
 $$
-  \mtx(f) =
+  \text{mtx}(f) =
     \begin{bmatrix}
     \sin(\pi\cdot 0\cdot 1) & \sin(\pi\cdot0\cdot 2) & \sin(\pi\cdot0\cdot 3) \\[1mm]
     \sin\left(\pi\cdot\tfrac{1}{2} \cdot 1 \right) & \sin\left(\pi\cdot\tfrac{1}{2} \cdot 2 \right) & \sin\left(\pi\cdot\tfrac{1}{2} \cdot 3 \right) \\[1mm]
@@ -63,11 +63,10 @@ f = (x,y) -> cos(π*x*y-y)
 F = [ f(x,y) for x in x, y in y ]
 ```
 
-The plots of this section look better using a different graphics engine on the back end:
+<!-- The plots of this section look better using a different graphics engine on the back end: -->
 
 ```{code-cell}
 using Plots
-plotlyjs();  # use better 3D renderer
 ```
 
 We can make a nice plot of the function by first choosing a much finer grid. However, the contour and surface plotting functions expect the *transpose* of mtx($f$).
@@ -76,7 +75,7 @@ To emphasize departures from a zero level, use a colormap such as `bluesreds`, a
 
 ```{code-cell}
 m = 60;   x = range(0,2,m+1);
-n = 50;   y = range(1,3,n+1);
+n = 48;   y = range(1,3,n+1);
 F = [ f(x,y) for x in x, y in y ];
 
 plot(x,y,F',levels=10,fill=true,aspect_ratio=1,

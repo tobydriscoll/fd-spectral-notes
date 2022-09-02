@@ -27,9 +27,7 @@ subject to $u(-1)=1$, $u(1)=-1$.
 include("diffmats.jl")
 function advdiff(λ,n)
     a,b = -1,1
-    h = (b-a)/n
-    x = [a+i*h for i in 0:n]
-    Dx,Dxx = diffmats(x)
+    x,Dx,Dxx = diffmats(a,b,n)
     Ã = Dx - λ*Dxx
     A = diagm(ones(n+1))
     A[2:n,:] .= Ã[2:n,:]
@@ -73,6 +71,7 @@ Here's how we adapt this shape to our needs:
 The value of $M$ controls how steep the curve is at the left end, and in turn the amount of compression in the nodes on the right end.
 
 ```{code-cell}
+Plots.default(label="")
 M = 30
 γ = atan(M)
 ξ(s) = 1 + 2/M*tan(γ*(s-1)/2)
@@ -95,12 +94,10 @@ These require just diagonal matrices left-multiplying the usual DMs $D_s$, $D_{s
 ```{code-cell}
 function advdiff(λ,M,n)
     a,b = -1,1
-    h = (b-a)/n
-    s = [a+i*h for i in 0:n]
+    s,Ds,Dss = diffmats(a,b,n)
     γ = atan(M)
     s₁ = @. γ*(s-1)/2
     x = @. 1 + 2/M*tan(s₁)
-    Ds,Dss = diffmats(s)
     ξ₁ = @. (γ/M)*sec(s₁)^2
     ξ₂ = @. (γ^2/M)*sec(s₁)^2*tan(s₁)
     Dx = diagm(@. 1/ξ₁)*Ds 

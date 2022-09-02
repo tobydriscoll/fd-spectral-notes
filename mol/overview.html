@@ -51,7 +51,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -464,13 +464,13 @@ title="Print to PDF"
 <p>For example, here is a solution of the scalar problem <span class="math notranslate nohighlight">\(\dot{u}=t+u\)</span>, <span class="math notranslate nohighlight">\(u(0)=1\)</span>, using a well-known RK4 method.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">OrdinaryDiffEq</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">OrdinaryDiffEq</span><span class="w"></span>
 
-<span class="n">f</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">u</span>
-<span class="n">tspan</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">)</span>
-<span class="n">ivp</span> <span class="o">=</span> <span class="n">ODEProblem</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="n">tspan</span><span class="p">)</span>
-<span class="n">sol</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">ivp</span><span class="p">,</span><span class="n">RK4</span><span class="p">())</span>
-<span class="p">[</span><span class="n">sol</span><span class="o">.</span><span class="n">t</span> <span class="n">sol</span><span class="o">.</span><span class="n">u</span><span class="p">]</span>
+<span class="n">f</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">u</span><span class="w"></span>
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">)</span><span class="w"></span>
+<span class="n">ivp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="n">tspan</span><span class="p">)</span><span class="w"></span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">ivp</span><span class="p">,</span><span class="n">RK4</span><span class="p">())</span><span class="w"></span>
+<span class="p">[</span><span class="n">sol</span><span class="o">.</span><span class="n">t</span><span class="w"> </span><span class="n">sol</span><span class="o">.</span><span class="n">u</span><span class="p">]</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -499,9 +499,9 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
-<span class="n">default</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">300</span><span class="p">))</span>
-<span class="n">scatter</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">t</span><span class="p">,</span><span class="n">sol</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">default</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">300</span><span class="p">))</span><span class="w"></span>
+<span class="n">scatter</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">t</span><span class="p">,</span><span class="n">sol</span><span class="o">.</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -511,7 +511,7 @@ title="Print to PDF"
 <p>Even though the solution is computed only at selected values of <span class="math notranslate nohighlight">\(t\)</span>, most modern solvers provide interpolation methods that allow you to evaluate the solution anywhere you’d like.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span><span class="n">sol</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span><span class="n">sol</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -523,7 +523,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -534,18 +534,18 @@ title="Print to PDF"
 <p>Here is the famous Lotka-Volterra system.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">predprey</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
-    <span class="n">rabbits</span><span class="p">,</span><span class="n">foxes</span> <span class="o">=</span> <span class="n">u</span> 
-    <span class="n">⍺</span><span class="p">,</span><span class="n">β</span><span class="p">,</span><span class="n">γ</span><span class="p">,</span><span class="n">δ</span> <span class="o">=</span> <span class="n">params</span>
-    <span class="n">∂ₜrabbits</span> <span class="o">=</span> <span class="n">⍺</span><span class="o">*</span><span class="n">rabbits</span> <span class="o">-</span> <span class="n">β</span><span class="o">*</span><span class="n">rabbits</span><span class="o">*</span><span class="n">foxes</span>
-    <span class="n">∂ₜfoxes</span> <span class="o">=</span> <span class="n">γ</span><span class="o">*</span><span class="n">rabbits</span><span class="o">*</span><span class="n">foxes</span> <span class="o">-</span> <span class="n">δ</span><span class="o">*</span><span class="n">foxes</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">∂ₜrabbits</span><span class="p">,</span><span class="n">∂ₜfoxes</span><span class="p">]</span>
-<span class="k">end</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">predprey</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">t</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">rabbits</span><span class="p">,</span><span class="n">foxes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span>
+<span class="w">    </span><span class="n">⍺</span><span class="p">,</span><span class="n">β</span><span class="p">,</span><span class="n">γ</span><span class="p">,</span><span class="n">δ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">params</span><span class="w"></span>
+<span class="w">    </span><span class="n">∂ₜrabbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">⍺</span><span class="o">*</span><span class="n">rabbits</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="o">*</span><span class="n">rabbits</span><span class="o">*</span><span class="n">foxes</span><span class="w"></span>
+<span class="w">    </span><span class="n">∂ₜfoxes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">γ</span><span class="o">*</span><span class="n">rabbits</span><span class="o">*</span><span class="n">foxes</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">δ</span><span class="o">*</span><span class="n">foxes</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="n">∂ₜrabbits</span><span class="p">,</span><span class="n">∂ₜfoxes</span><span class="p">]</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
 
-<span class="n">u₀</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">tspan</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">150.0</span><span class="p">)</span>
-<span class="n">ivp</span> <span class="o">=</span> <span class="n">ODEProblem</span><span class="p">(</span><span class="n">predprey</span><span class="p">,</span><span class="n">u₀</span><span class="p">,</span><span class="n">tspan</span><span class="p">,(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.3</span><span class="p">))</span>
-<span class="n">sol</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">ivp</span><span class="p">,</span><span class="n">BS5</span><span class="p">())</span>
+<span class="n">u₀</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">40</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="w"></span>
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">150.0</span><span class="p">)</span><span class="w"></span>
+<span class="n">ivp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">predprey</span><span class="p">,</span><span class="n">u₀</span><span class="p">,</span><span class="n">tspan</span><span class="p">,(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.3</span><span class="p">))</span><span class="w"></span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">ivp</span><span class="p">,</span><span class="n">BS5</span><span class="p">())</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -612,7 +612,7 @@ u: 65-element Vector{Vector{Float64}}:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;rabbit&quot;</span> <span class="s">&quot;fox&quot;</span><span class="p">])</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;rabbit&quot;</span><span class="w"> </span><span class="s">&quot;fox&quot;</span><span class="p">])</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -622,19 +622,19 @@ u: 65-element Vector{Vector{Float64}}:
 <p>For larger problems, it’s more efficient to write the time-derivative function in a <em>mutating</em> manner. It’s not really any harder for us to do:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="n">predprey!</span><span class="p">(</span><span class="n">dudt</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
-    <span class="n">rabbits</span><span class="p">,</span><span class="n">foxes</span> <span class="o">=</span> <span class="n">u</span> 
-    <span class="n">⍺</span><span class="p">,</span><span class="n">β</span><span class="p">,</span><span class="n">γ</span><span class="p">,</span><span class="n">δ</span> <span class="o">=</span> <span class="n">params</span>
-    <span class="n">dudt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">⍺</span><span class="o">*</span><span class="n">rabbits</span> <span class="o">-</span> <span class="n">β</span><span class="o">*</span><span class="n">rabbits</span><span class="o">*</span><span class="n">foxes</span>
-    <span class="n">dudt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">γ</span><span class="o">*</span><span class="n">rabbits</span><span class="o">*</span><span class="n">foxes</span> <span class="o">-</span> <span class="n">δ</span><span class="o">*</span><span class="n">foxes</span>
-    <span class="k">return</span> <span class="nb">nothing</span>
-<span class="k">end</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">predprey!</span><span class="p">(</span><span class="n">dudt</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">t</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">rabbits</span><span class="p">,</span><span class="n">foxes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span>
+<span class="w">    </span><span class="n">⍺</span><span class="p">,</span><span class="n">β</span><span class="p">,</span><span class="n">γ</span><span class="p">,</span><span class="n">δ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">params</span><span class="w"></span>
+<span class="w">    </span><span class="n">dudt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">⍺</span><span class="o">*</span><span class="n">rabbits</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="o">*</span><span class="n">rabbits</span><span class="o">*</span><span class="n">foxes</span><span class="w"></span>
+<span class="w">    </span><span class="n">dudt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">γ</span><span class="o">*</span><span class="n">rabbits</span><span class="o">*</span><span class="n">foxes</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">δ</span><span class="o">*</span><span class="n">foxes</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">nothing</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
 
-<span class="n">u₀</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">tspan</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">150.0</span><span class="p">)</span>
-<span class="n">ivp</span> <span class="o">=</span> <span class="n">ODEProblem</span><span class="p">(</span><span class="n">predprey!</span><span class="p">,</span><span class="n">u₀</span><span class="p">,</span><span class="n">tspan</span><span class="p">,(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span>
-<span class="n">sol</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">ivp</span><span class="p">,</span><span class="n">BS5</span><span class="p">());</span>
-<span class="n">sol</span><span class="o">.</span><span class="p">(</span><span class="mi">50</span><span class="o">:</span><span class="mi">54</span><span class="p">)</span>
+<span class="n">u₀</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">40</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="w"></span>
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">150.0</span><span class="p">)</span><span class="w"></span>
+<span class="n">ivp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">predprey!</span><span class="p">,</span><span class="n">u₀</span><span class="p">,</span><span class="n">tspan</span><span class="p">,(</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span><span class="w"></span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">ivp</span><span class="p">,</span><span class="n">BS5</span><span class="p">());</span><span class="w"></span>
+<span class="n">sol</span><span class="o">.</span><span class="p">(</span><span class="mi">50</span><span class="o">:</span><span class="mi">54</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>

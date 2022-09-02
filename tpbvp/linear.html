@@ -51,7 +51,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -457,13 +457,13 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#consistency">
-   Consistency
+  <a class="reference internal nav-link" href="#convergence">
+   Convergence
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#convergence">
-   Convergence
+  <a class="reference internal nav-link" href="#consistency-and-stability">
+   Consistency and stability
   </a>
  </li>
 </ul>
@@ -491,13 +491,13 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#consistency">
-   Consistency
+  <a class="reference internal nav-link" href="#convergence">
+   Convergence
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#convergence">
-   Convergence
+  <a class="reference internal nav-link" href="#consistency-and-stability">
+   Consistency and stability
   </a>
  </li>
 </ul>
@@ -587,11 +587,35 @@ $$ -->
 <p>The easy way to impose these linear conditions is to delete the first and rows of the system and replace them with the boundary conditions:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{bmatrix} 1 &amp; 0 &amp; \dots &amp; 0 \\ \bfC \bfA  \\ 0 &amp; \cdots &amp; 0 &amp; 1 \end{bmatrix} 
+\begin{bmatrix} h^{-2} &amp; 0 &amp; \dots &amp; 0 \\ \bfC \bfA  \\ 0 &amp; \cdots &amp; 0 &amp; h^{-2} \end{bmatrix} 
 \begin{bmatrix} u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_{n} \end{bmatrix} 
-= \begin{bmatrix} \alpha \\ f(x_1) \\ \vdots \\ f(x_{n-1}) &amp; \beta \end{bmatrix},
+= \begin{bmatrix} \alpha/h^2 \\ f(x_1) \\ \vdots \\ f(x_{n-1}) &amp; \beta/h^2 \end{bmatrix},
 \end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\bfC\)</span> is the <span class="math notranslate nohighlight">\((n+1)\times(n+1)\)</span> identity with first and last rows deleted. We’re now going to rechristen the terms in this equation as <span class="math notranslate nohighlight">\(\bfA \bfu = \bff\)</span> for simplicity.</p>
+<p>where <span class="math notranslate nohighlight">\(\bfC\)</span> is the <span class="math notranslate nohighlight">\((n+1)\times(n+1)\)</span> identity with first and last rows deleted. Notice that the boundary conditions were scaled by <span class="math notranslate nohighlight">\(h^{-2}\)</span> so that all the rows of the linear system have roughly the same magnitude, which improves the condition number of the linear system:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
+<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">I</span><span class="w"></span>
+<span class="n">A</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
+<span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="n">println</span><span class="p">(</span><span class="s">&quot;cond = </span><span class="si">$</span><span class="p">(</span><span class="n">cond</span><span class="p">(</span><span class="n">A</span><span class="p">))</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="o">^</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="o">^</span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="n">println</span><span class="p">(</span><span class="s">&quot;cond = </span><span class="si">$</span><span class="p">(</span><span class="n">cond</span><span class="p">(</span><span class="n">A</span><span class="p">))</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cond = 4.827603951489492e6
+cond = 40587.27524232815
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’re now going to rechristen the terms in this equation as <span class="math notranslate nohighlight">\(\bfA \bfu = \bff\)</span> for simplicity.</p>
 <section id="advection-diffusion">
 <h2>Advection-diffusion<a class="headerlink" href="#advection-diffusion" title="Permalink to this headline">#</a></h2>
 <p>The linear <strong>advection-diffusion equation</strong> in 1D is</p>
@@ -612,17 +636,14 @@ $$ -->
 <p>subject to <span class="math notranslate nohighlight">\(u(-1)=1\)</span>, <span class="math notranslate nohighlight">\(u(1)=-1\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span>
-<span class="k">function</span> <span class="n">advdiff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">λ</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
-  <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
-  <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
-  <span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-  <span class="n">Ã</span> <span class="o">=</span> <span class="n">Dx</span> <span class="o">-</span> <span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span>
-  <span class="n">A</span> <span class="o">=</span> <span class="n">diagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-  <span class="n">A</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="n">Ã</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="o">:</span><span class="p">]</span>
-  <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span> <span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-  <span class="k">return</span> <span class="n">x</span><span class="p">,</span><span class="n">A</span><span class="o">\</span><span class="n">f</span> 
-<span class="k">end</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">advdiff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">λ</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dx</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span><span class="w"></span>
+<span class="w">    </span><span class="n">A</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="o">^</span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">n</span><span class="o">^</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="o">^</span><span class="mi">2</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="n">A</span><span class="o">\</span><span class="n">f</span><span class="w"> </span>
+<span class="k">end</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -634,53 +655,95 @@ $$ -->
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
-<span class="n">plt</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="ss">:bottomleft</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">λ</span> <span class="k">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]</span>
-    <span class="n">x</span><span class="p">,</span><span class="n">u</span> <span class="o">=</span> <span class="n">advdiff</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">λ</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span>
-    <span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=</span><span class="si">$λ</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="k">end</span>
-<span class="n">plt</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="ss">:bottomleft</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">λ</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">advdiff</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">λ</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=</span><span class="si">$λ</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">plt</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/linear_2_0.svg" src="../_images/linear_2_0.svg" /></div>
+<img alt="../_images/linear_4_0.svg" src="../_images/linear_4_0.svg" /></div>
 </div>
-</section>
-<section id="consistency">
-<h2>Consistency<a class="headerlink" href="#consistency" title="Permalink to this headline">#</a></h2>
-<p>In the general problem, we define the <strong>local truncation error</strong> as the vector</p>
-<div class="math notranslate nohighlight">
-\[
-\bftau = \bfA \hat{\bfu} - \bff. 
-\]</div>
-<p>Recall that <span class="math notranslate nohighlight">\(\hat{\bfu}\)</span> is the exact solution evaluated at the nodes. The first and last entries of <span class="math notranslate nohighlight">\(\bftau\)</span> are zero, and the others all have size <span class="math notranslate nohighlight">\(O(h^2)\)</span> thanks to our series work on FD formulas. In particular,</p>
-<div class="math notranslate nohighlight">
-\[
-\lim_{h\to 0} \norm{\bftau} = 0
-\]</div>
-<p>in any vector norm, a property known as <strong>consistency</strong>. This is a basic requirement of the numerical method: faithful reproduction of the problem.</p>
 </section>
 <section id="convergence">
 <h2>Convergence<a class="headerlink" href="#convergence" title="Permalink to this headline">#</a></h2>
-<p>Now consider the <strong>error</strong> <span class="math notranslate nohighlight">\(\bfe = \hat{\bfu} - \bfu\)</span>. We calculate</p>
+<p>Measuring convergence in the absence of an exact analytical solution (as is the usual case) can require some finesse. It’s standard to obtain a high-accuracy numerical solution by running the method on a large grid, or by using an alternative method. But the FD method produces function point values, not functions, so they are not instantly comparable when solved on different node sets.</p>
+<p>One option is to define a function by interpolating the data values. This may be possible with reasonable accuracy in one dimension, but is much harder in higher dimensions. Below we use an alternative, which is to solve repeatedly on nested or <em>dyadic</em> grids. The solutions can then be compared directly on a set of nodes that they have in common. You can use the infinity-norm or the 2-norm. In the case of the vector 2-norm, you should scale by <span class="math notranslate nohighlight">\(\sqrt{h}\)</span> or by the exact solution to avoid penalizing larger discretizations for no reason.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">λ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="o">*</span><span class="mi">2</span><span class="o">^</span><span class="n">m</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">8</span><span class="p">]</span><span class="w"></span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">advdiff</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">λ</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sol</span><span class="p">[</span><span class="k">end</span><span class="p">]</span><span class="w"></span>
+<span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">u</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">pairs</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="n">norm</span><span class="p">(</span><span class="n">û</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="o">^</span><span class="p">(</span><span class="mi">8</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="o">:</span><span class="k">end</span><span class="p">]</span><span class="o">-</span><span class="n">u</span><span class="p">)</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">PrettyTables</span><span class="w"></span>
+<span class="n">pretty_table</span><span class="p">((</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">error</span><span class="o">=</span><span class="n">err</span><span class="p">,</span><span class="n">ratio</span><span class="o">=</span><span class="p">[</span><span class="nb">NaN</span><span class="p">;</span><span class="n">err</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="k">end</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">./</span><span class="n">err</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="k">end</span><span class="p">]]))</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>┌───────┬─────────────┬─────────┐
+│<span class=" -Color -Color-Bold">     n </span>│<span class=" -Color -Color-Bold">       error </span>│<span class=" -Color -Color-Bold">   ratio </span>│
+│ Int64 │         Any │ Float64 │
+├───────┼─────────────┼─────────┤
+│    20 │ 0.000377216 │     NaN │
+│    40 │  9.70311e-5 │ 3.88758 │
+│    80 │  2.46009e-5 │ 3.94421 │
+│   160 │  6.17833e-6 │  3.9818 │
+│   320 │  1.53218e-6 │ 4.03237 │
+│   640 │  3.65498e-7 │ 4.19205 │
+│  1280 │  7.31691e-8 │ 4.99524 │
+│  2560 │         0.0 │     Inf │
+└───────┴─────────────┴─────────┘
+</pre></div>
+</div>
+</div>
+</div>
+<p>The above table indicates roughly 2nd-order accuracy.</p>
+</section>
+<section id="consistency-and-stability">
+<h2>Consistency and stability<a class="headerlink" href="#consistency-and-stability" title="Permalink to this headline">#</a></h2>
+<div class="proof definition admonition" id="definition-0">
+<p class="admonition-title"><span class="caption-number">Definition 2.1.1 </span> (Truncation error for a BVP)</p>
+<section class="definition-content" id="proof-content">
+<p>The <strong>local truncation error</strong> for the discretized TPBVP <span class="math notranslate nohighlight">\(\bfA\bfu = \bff\)</span> is the vector</p>
 <div class="math notranslate nohighlight">
 \[
-\bfA \bfe = \bfA \hat{\bfu} - \bfA \bfu = \bftau + \bff - \bff = \bftau,
+\mathbf{t} = \bfA \hat{\bfu} - \bff,
 \]</div>
-<p>so that</p>
+<p>where <span class="math notranslate nohighlight">\(\hat{\bfu}\)</span> is the exact solution of the TPBVP evaluated on the nodes. The method is <strong>consistent</strong> if <span class="math notranslate nohighlight">\(\| \mathbf{t} \| \to 0\)</span> as <span class="math notranslate nohighlight">\(h\to 0\)</span>.</p>
+</section>
+</div><p>Consistency means a faithful reproduction of the problem. The truncation error is determined directly by our choice of FD formulas. On the other hand, what we really want to understand or control is the actual (or global) error, <span class="math notranslate nohighlight">\(\bfe = \hat{\bfu} - \bfu\)</span>. Observe that</p>
 <div class="math notranslate nohighlight">
 \[
-\bfe = \bfA^{-1} \bftau. 
+\mathbf{t} = \bfA (\bfe + \bfu) - \bff = \bfA \bfe + (\bfA\bfu-\bff) =  \bfA \bfe. 
 \]</div>
-<p>This leads us to another requirement of the numerical method:</p>
-<div class="math notranslate nohighlight">
-\[
-\norm{\bfA^{-1}} = O(1),
-\]</div>
-<p>i.e., it remains bounded as <span class="math notranslate nohighlight">\(h\to 0\)</span>. This property is called <strong>stability</strong>. With it, we can conclude that <span class="math notranslate nohighlight">\(\norm{\bfe} = O(h^2)\)</span>, that is, second-order convergence to the solution.</p>
-<p>Consider what a lack of stability would imply. If we perturb <span class="math notranslate nohighlight">\(\bff\)</span> by <em>any</em> small vector <span class="math notranslate nohighlight">\(\bfv\)</span>, then the solution is perturbed by <span class="math notranslate nohighlight">\(\bfA^{-1} \bfv\)</span>, which could grow unboundedly as <span class="math notranslate nohighlight">\(h\to 0\)</span>. Truncation error is one such perturbation, but so are roundoff and physical measurement error. Without stability, the computed solution is way too sensitive to such errors.</p>
+<p>That is, the global error is the solution of the linear system <span class="math notranslate nohighlight">\(\bfA\bfe = \mathbf{t}\)</span>. We now know another property our method needs.</p>
+<div class="proof definition admonition" id="definition-1">
+<p class="admonition-title"><span class="caption-number">Definition 2.1.2 </span></p>
+<section class="definition-content" id="proof-content">
+<p>The FD method producing <span class="math notranslate nohighlight">\(\bfA \bfu = \bff\)</span> for the TPBVP is <strong>stable</strong> if <span class="math notranslate nohighlight">\(\| \bfA ^{-1} \|\)</span> is bounded above as <span class="math notranslate nohighlight">\(h\to 0\)</span>.</p>
+</section>
+</div><p>We have pretty much defined our way to the climax.</p>
+<div class="proof theorem admonition" id="theorem-2">
+<p class="admonition-title"><span class="caption-number">Theorem 2.1.1 </span></p>
+<section class="theorem-content" id="proof-content">
+<p>An FD method is convergent if it is consistent and stable. Moreover, the global error converges at the same order as the truncation error.</p>
+</section>
+</div><p>Consider what a lack of stability would imply. If we perturb <span class="math notranslate nohighlight">\(\bff\)</span> by <em>any</em> small vector <span class="math notranslate nohighlight">\(\bfv\)</span>, then the solution is perturbed by <span class="math notranslate nohighlight">\(\bfA^{-1} \bfv\)</span>, which could grow unboundedly as <span class="math notranslate nohighlight">\(h\to 0\)</span>. Truncation error is one such perturbation, but so are roundoff and physical measurement error. Without stability, the computed solution is unboundedly sensitive to such errors.</p>
 <p>It is possible to prove stability of our discretization with some conditions on the coefficient functions <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(q\)</span>. LeVeque points out that in the particular case <span class="math notranslate nohighlight">\(p=q=0\)</span>, the matrix is symmetric and its eigenvalues (indeed, its inverse) can be found in closed form.</p>
 </section>
 </section>

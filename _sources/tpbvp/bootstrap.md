@@ -15,7 +15,7 @@ kernelspec:
 
 # Bootstrapping methods
 
-*I made this term up. Nobody else uses it.*
+*I made this term up for this context. Nobody else uses it.*
 
 There are many interesting and useful ways to merge analytical understanding of numerical solutions with numerical practice in order to boost accuracy without using a fundamentally new discretization method. Here are introductions to two of them.
 
@@ -43,30 +43,30 @@ $$
 
 That is, we can construct a 4th-order solution out of two 2nd-order solutions. If a third solution is available, then two 4th-order solutions can be combined to get 6th-order, etc. This is the method of **extrapolation**.
 
-It's an appealing idea, but not always easy to pull off in practice. Boundary conditions can easily interfere with the neat error expansion, especially on the solution side (as opposed to the differencing side). 
+It's an appealing idea, but not always easy to pull off in practice. Boundary conditions can interfere with the neat error expansion, and extrapolation is sensitive to perturbations if carried out to a large extent. 
 
 ## Deferred correction
 
 Consider a discretized linear problem $\bfA \bfu = \bff$. Recall that we define local truncation error as 
 
 $$
-\bftau = \bfA [ \hat{u}(x_j) ] - \bff, 
+\mathbf{t} = \bfA \bigl[ \hat{u}(x_j) \bigr]_j - \bff, 
 $$
 
 using the exact solution $\hat{u}$. Defining $\bfe = [ \hat{u}(x_j) ] - \bfu$ as the error vector, it follows that 
 
 $$
-\bfA \bfe = \bfA [ \hat{u}(x_j) ] - \bfA \bfu = \bftau. 
+\bfA \bfe = \bfA \bigl[ \hat{u}(x_j) \bigr]_j - \bfA \bfu = \mathbf{t}. 
 $$
 
-Therefore, if we can estimate $\bftau$ to sufficient accuracy, we can solve another linear system to get a correction to the solution. This is the method of **deferred correction** (though that term is applied to a wide variety of methods and problem types).
+Therefore, if we can estimate $\mathbf{t}$ to sufficient accuracy, we can solve another linear system to get a correction to the solution. This is the method of **deferred correction** (although that term is applied to a wide variety of methods and problem types).
 
-For example, consider the **Airy equation** $u''-xu=0$ discretized by 2nd-order differences. Away from the boundaries, 
+For example, consider the *Airy equation* $u''-xu=0$ discretized by 2nd-order differences. Away from the boundaries, 
 
 $$
-tau_j &= \hat{u}''(x_j) + \frac{h^2}{12} \hat{u}''''(x_j) + O(h^4)  - x_j \hat{u}(x_j) \\ 
-&= \frac{h^2}{12} \left.[\hat{u}'']''\right_{x_j} + O(h^4)  \\ 
-&= frac{h^2}{12} \left.[xu(x)]''\right_{x_j} + O(h^4). 
+t_j &= \hat{u}''(x_j) + \frac{h^2}{12} \hat{u}''''(x_j) + O(h^4)  - x_j \hat{u}(x_j)  \\
+&= \frac{h^2}{12}  \left[ (\hat{u}(x))''\right]''_{x_j} + O(h^4)  \\ 
+&= \frac{h^2}{12} \left[x u(x)\right]''_{x_j} + O(h^4). 
 $$
 
 We can approximate the bracketed term over the grid as 
@@ -75,5 +75,5 @@ $$
 \bfD_{xx} (\diag{\bfx} \hat{\bfu} ) = \bfD_{xx} (\diag{\bfx} \bfu ) + O(h^2). 
 $$
 
-Thus, the leading term of $\bftau$ is computable, and we can find an approximate correction to $\bfu$.
+Thus, the leading term of $\mathbf{t}$ is computable, and we can find an approximate correction to $\bfu$.
 

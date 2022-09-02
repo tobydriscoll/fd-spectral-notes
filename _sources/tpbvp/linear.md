@@ -6,7 +6,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.0
 kernelspec:
   display_name: Julia 1.8.0
   language: julia
@@ -99,12 +99,28 @@ $$ -->
 The easy way to impose these linear conditions is to delete the first and rows of the system and replace them with the boundary conditions: 
 
 $$
-\begin{bmatrix} 1 & 0 & \dots & 0 \\ \bfC \bfA  \\ 0 & \cdots & 0 & 1 \end{bmatrix} 
+\begin{bmatrix} h^{-2} & 0 & \dots & 0 \\ \bfC \bfA  \\ 0 & \cdots & 0 & h^{-2} \end{bmatrix} 
 \begin{bmatrix} u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_{n} \end{bmatrix} 
-= \begin{bmatrix} \alpha \\ f(x_1) \\ \vdots \\ f(x_{n-1}) & \beta \end{bmatrix},
+= \begin{bmatrix} \alpha/h^2 \\ f(x_1) \\ \vdots \\ f(x_{n-1}) & \beta/h^2 \end{bmatrix},
 $$ 
 
-where $\bfC$ is the $(n+1)\times(n+1)$ identity with first and last rows deleted. We're now going to rechristen the terms in this equation as $\bfA \bfu = \bff$ for simplicity.
+where $\bfC$ is the $(n+1)\times(n+1)$ identity with first and last rows deleted. Notice that the boundary conditions were scaled by $h^{-2}$ so that all the rows of the linear system have roughly the same magnitude, which improves the condition number of the linear system:
+
+```{code-cell}
+include("diffmats.jl")
+n = 300
+x,Dx,Dxx = diffmats(0,1,n)
+A = Dxx + I
+A[[1,n+1],:] .= 0
+
+A[1,1] = 1; A[n+1,n+1] = 1;
+println("cond = $(cond(A))")
+
+A[1,1] = n^2; A[n+1,n+1] = n^2;
+println("cond = $(cond(A))")
+```
+
+We're now going to rechristen the terms in this equation as $\bfA \bfu = \bff$ for simplicity.
 
 ## Advection-diffusion
 
@@ -129,16 +145,13 @@ $$
 subject to $u(-1)=1$, $u(1)=-1$.
 
 ```{code-cell}
-include("diffmats.jl")
 function advdiff(a,b,λ,n)
-  h = (b-a)/n
-  x = [a+i*h for i in 0:n]
-  Dx,Dxx = diffmats(x)
-  Ã = Dx - λ*Dxx
-  A = diagm(ones(n+1))
-  A[2:n,:] .= Ã[2:n,:]
-  f = [1; zeros(n-1); -1]
-  return x,A\f 
+    x,Dx,Dxx = diffmats(a,b,n)
+    A = Dx - λ*Dxx
+    A[[1,n+1],:] .= 0
+    A[1,1] = A[n+1,n+1] = n^2
+    f = [n^2; zeros(n-1); -n^2]
+    return x,A\f 
 end
 ```
 
@@ -152,44 +165,65 @@ end
 plt
 ```
 
-## Consistency
-
-In the general problem, we define the **local truncation error** as the vector
-
-$$
-\bftau = \bfA \hat{\bfu} - \bff. 
-$$
-
-Recall that $\hat{\bfu}$ is the exact solution evaluated at the nodes. The first and last entries of $\bftau$ are zero, and the others all have size $O(h^2)$ thanks to our series work on FD formulas. In particular,
-
-$$
-\lim_{h\to 0} \norm{\bftau} = 0
-$$
-
-in any vector norm, a property known as **consistency**. This is a basic requirement of the numerical method: faithful reproduction of the problem.
 
 ## Convergence
 
-Now consider the **error** $\bfe = \hat{\bfu} - \bfu$. We calculate 
+Measuring convergence in the absence of an exact analytical solution (as is the usual case) can require some finesse. It's standard to obtain a high-accuracy numerical solution by running the method on a large grid, or by using an alternative method. But the FD method produces function point values, not functions, so they are not instantly comparable when solved on different node sets. 
+
+One option is to define a function by interpolating the data values. This may be possible with reasonable accuracy in one dimension, but is much harder in higher dimensions. Below we use an alternative, which is to solve repeatedly on nested or *dyadic* grids. The solutions can then be compared directly on a set of nodes that they have in common. You can use the infinity-norm or the 2-norm. In the case of the vector 2-norm, you should scale by $\sqrt{h}$ or by the exact solution to avoid penalizing larger discretizations for no reason.
+
+```{code-cell}
+λ = 1
+n = [10*2^m for m in 1:8]
+sol = []
+for n in n
+    x,u = advdiff(-1,1,λ,n)
+    push!(sol,u)
+end
+
+û = sol[end]
+err = []
+for (i,u) in pairs(sol)
+    push!(err,norm(û[1:2^(8-i):end]-u)/norm(u))
+end
+
+using PrettyTables
+pretty_table((n=n,error=err,ratio=[NaN;err[1:end-1]./err[2:end]]))
+```
+
+The above table indicates roughly 2nd-order accuracy.
+
+
+## Consistency and stability
+
+::::{prf:definition} Truncation error for a BVP
+The **local truncation error** for the discretized TPBVP $\bfA\bfu = \bff$ is the vector
 
 $$
-\bfA \bfe = \bfA \hat{\bfu} - \bfA \bfu = \bftau + \bff - \bff = \bftau,
+\mathbf{t} = \bfA \hat{\bfu} - \bff,
 $$
 
-so that 
+where $\hat{\bfu}$ is the exact solution of the TPBVP evaluated on the nodes. The method is **consistent** if $\| \mathbf{t} \| \to 0$ as $h\to 0$. 
+::::
+
+Consistency means a faithful reproduction of the problem. The truncation error is determined directly by our choice of FD formulas. On the other hand, what we really want to understand or control is the actual (or global) error, $\bfe = \hat{\bfu} - \bfu$. Observe that
 
 $$
-\bfe = \bfA^{-1} \bftau. 
+\mathbf{t} = \bfA (\bfe + \bfu) - \bff = \bfA \bfe + (\bfA\bfu-\bff) =  \bfA \bfe. 
 $$
 
-This leads us to another requirement of the numerical method:
+That is, the global error is the solution of the linear system $\bfA\bfe = \mathbf{t}$. We now know another property our method needs.
 
-$$
-\norm{\bfA^{-1}} = O(1),
-$$
+::::{prf:definition}
+  The FD method producing $\bfA \bfu = \bff$ for the TPBVP is **stable** if $\| \bfA ^{-1} \|$ is bounded above as $h\to 0$.
+::::
 
-i.e., it remains bounded as $h\to 0$. This property is called **stability**. With it, we can conclude that $\norm{\bfe} = O(h^2)$, that is, second-order convergence to the solution.
+We have pretty much defined our way to the climax.
 
-Consider what a lack of stability would imply. If we perturb $\bff$ by *any* small vector $\bfv$, then the solution is perturbed by $\bfA^{-1} \bfv$, which could grow unboundedly as $h\to 0$. Truncation error is one such perturbation, but so are roundoff and physical measurement error. Without stability, the computed solution is way too sensitive to such errors.
+::::{prf:theorem}
+  An FD method is convergent if it is consistent and stable. Moreover, the global error converges at the same order as the truncation error.
+::::
+
+Consider what a lack of stability would imply. If we perturb $\bff$ by *any* small vector $\bfv$, then the solution is perturbed by $\bfA^{-1} \bfv$, which could grow unboundedly as $h\to 0$. Truncation error is one such perturbation, but so are roundoff and physical measurement error. Without stability, the computed solution is unboundedly sensitive to such errors.
 
 It is possible to prove stability of our discretization with some conditions on the coefficient functions $p$ and $q$. LeVeque points out that in the particular case $p=q=0$, the matrix is symmetric and its eigenvalues (indeed, its inverse) can be found in closed form.

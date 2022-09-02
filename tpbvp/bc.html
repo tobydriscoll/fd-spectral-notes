@@ -51,7 +51,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -429,12 +429,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fictitious-points">
+   Fictitious points
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#schur-complement">
+   Schur complement
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -446,6 +475,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fictitious-points">
+   Fictitious points
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#schur-complement">
+   Schur complement
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -462,12 +509,20 @@ u''(x) + p(x)u'(x) + q(x)u(x) &amp;= f(x), \quad a &lt; x &lt; b, \\
 G_{11}u(a) + G_{12}u'(a)  &amp;= \alpha, \\ 
 G_{21}u(b) + G_{22}u'(b)  &amp;= \beta,
 \end{split}\]</div>
-<p>and now ask what happens when the boundary conditions are not of Dirichlet type. Of particular interest is the <strong>Neumann</strong> case in which <span class="math notranslate nohighlight">\(G_{11}=G_{21}=0\)</span>. Recall that the discretization of the ODE leads to the linear system</p>
+<p>and now ask what happens when the boundary conditions are not of Dirichlet type. Of particular interest is the <strong>Neumann</strong> case in which <span class="math notranslate nohighlight">\(G_{11}=G_{21}=0\)</span>.</p>
+<p>Recall that the discretization of the ODE leads to the initial linear system</p>
 <div class="math notranslate nohighlight">
 \[
 \bfA \bfu = \bff, \qquad \bfA = \bfD_{xx} + \bfP \bfD_{x} + \bfQ.
 \]</div>
-<p>There are two common approaches used. One is to copy what we did for the Dirichlet case and replace the first and last rows with discrete forms of the boundary conditions. Here, we’ll look at the method of <strong>fictitious points</strong> or <strong>ghost points</strong>.</p>
+<p>In the previous chapter, we used two different approaches to incorporate BCs:</p>
+<ol class="simple">
+<li><p>Replace the boundary collocation rows with (discretized) equations for the BCs.</p></li>
+<li><p>Use the BCs to remove two of the unknowns from the system, as well as the collocated equations on the boundary.</p></li>
+</ol>
+<p>Option 1 is fairly straightforward, though care should be taken to ensure that all the rows of the final matrix have roughly the same scale (as a function of step size). Option 2 is easy for Dirichlet conditions, and it’s more convenient for some theoretical analyses. Here we will look at a third variation, the method of <strong>fictitious points</strong> or <strong>ghost points</strong>.</p>
+<section id="fictitious-points">
+<h2>Fictitious points<a class="headerlink" href="#fictitious-points" title="Permalink to this headline">#</a></h2>
 <p>Note that we could discretize the ODE all the way to the boundary if we had access to the values <span class="math notranslate nohighlight">\(u_{-1}\)</span> and <span class="math notranslate nohighlight">\(u_{n+1}\)</span>, e.g.,</p>
 <div class="math notranslate nohighlight">
 \[
@@ -486,14 +541,14 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 <p>which can be solved for the fictitious <span class="math notranslate nohighlight">\(u_{-1}\)</span> in terms of <span class="math notranslate nohighlight">\(u_0\)</span> and <span class="math notranslate nohighlight">\(u_1\)</span>. Hence, the discretization of the ODE becomes dependent just on those two unknowns, eliminating the explicit presence of the fictitious value.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">LinearAlgebra</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">+</span><span class="mi">2</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="mi">1</span>
-<span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
-<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">];</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span><span class="w"></span>
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="w"></span>
+<span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="w"></span>
+<span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="w"></span>
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="w"></span>
+<span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="o">*</span><span class="n">h</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">];</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -501,7 +556,7 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 <p>We’re going to use rectangular matrices here to reflect the fact that we depend (for now) on <span class="math notranslate nohighlight">\(n+3\)</span> unknowns but have only <span class="math notranslate nohighlight">\(n+1\)</span> collocated ODE equations.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Dxx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">h</span><span class="o">^</span><span class="mi">2</span> <span class="o">*</span> <span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="o">=&gt;-</span><span class="mi">2</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="n">h</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="o">=&gt;-</span><span class="mi">2</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -520,7 +575,7 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Dx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span> <span class="o">*</span> <span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="o">=&gt;-</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="o">=&gt;-</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -539,9 +594,9 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">Dxx</span> <span class="o">+</span> <span class="n">diagm</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="n">Dx</span> <span class="o">+</span> <span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">q</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">v</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">A</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="n">Dx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">q</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="n">A</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -561,13 +616,13 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 <p>It would be easy to do the algebra that expresses the fictitious values in terms of the regular unknowns. It’s even easier to let the computer do the linear algebra for us, though. So we will add new rows to express the discrete forms of the boundary conditions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Ga</span><span class="p">,</span><span class="n">Gb</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">⍺</span><span class="p">,</span><span class="n">β</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
-<span class="n">r₋</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">Ga</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span> <span class="n">Ga</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">Ga</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span> <span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)]</span>
-<span class="n">r₊</span> <span class="o">=</span> <span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span><span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span> <span class="n">Gb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="p">]</span>
-<span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="n">r₋</span><span class="p">;</span><span class="n">A</span><span class="p">;</span><span class="n">r₊</span><span class="p">]</span>
-<span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">⍺</span><span class="p">;</span><span class="n">v</span><span class="p">;</span><span class="n">β</span><span class="p">]</span>
-<span class="n">A</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Ga</span><span class="p">,</span><span class="n">Gb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
+<span class="n">⍺</span><span class="p">,</span><span class="n">β</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="w"></span>
+<span class="n">r₋</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="o">-</span><span class="n">Ga</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="w"> </span><span class="n">Ga</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="n">Ga</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)]</span><span class="w"></span>
+<span class="n">r₊</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="w"> </span><span class="n">Gb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="p">]</span><span class="w"></span>
+<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">r₋</span><span class="p">;</span><span class="n">A</span><span class="p">;</span><span class="n">r₊</span><span class="p">]</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">⍺</span><span class="p">;</span><span class="n">v</span><span class="p">;</span><span class="n">β</span><span class="p">]</span><span class="w"></span>
+<span class="n">A</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -586,21 +641,25 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 </div>
 </div>
 </div>
-<p>Now we do a trick known as the <strong>Schur complement</strong>. Suppose the system is partitioned into blocks:</p>
+<p>This is not so different from Option 1 above, except that we get to use centered formulas everywhere. It would be easy to solve the linear system for all the values, including the fictitious ones, but we will go through the linear algebra of removing them, since it’s a recurring practice in computing.</p>
+</section>
+<section id="schur-complement">
+<h2>Schur complement<a class="headerlink" href="#schur-complement" title="Permalink to this headline">#</a></h2>
+<p>Suppose the system is partitioned into logical blocks (they need not be contiguous in the matrices):</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{bmatrix}
   \bfA_{11} &amp; \bfA_{12} \\ \bfA_{21} &amp; \bfA_{22} 
 \end{bmatrix}
 \begin{bmatrix}
-  \bfu_1 &amp; \bfu_2
+  \bfu_1 \\ \bfu_2
 \end{bmatrix}
 = 
 \begin{bmatrix}
-  \bfv_1 &amp; \bfv_2
+  \bfv_1 \\ \bfv_2
 \end{bmatrix}.
 \end{split}\]</div>
-<p>Here, the groups represent normal/fictitious unknowns. (The blocks need not be contiguous within the matrix.) Then</p>
+<p>Here, the groups represent actual/fictitious function values. Note that</p>
 <div class="math notranslate nohighlight">
 \[
 \bfu_2 = \mathbf{A}_{22}^{-1} (\bfv_2 - \bfA_{21}\bfu_1), 
@@ -608,16 +667,16 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 <p>and the first block-row of the system becomes</p>
 <div class="math notranslate nohighlight">
 \[
-\bfA_{11} \bfu_1 + \mathbf{S}(\bfv_2 - \bfA_{21}\bfu_1) = \bfv_1, \quad \mathbf{S} = \bfA_{12}*\mathbf{A}_{22}^{-1}. 
+\bfA_{11} \bfu_1 + \mathbf{S}(\bfv_2 - \bfA_{21}\bfu_1) = \bfv_1, \quad \mathbf{S} = \bfA_{12}\,\mathbf{A}_{22}^{-1}. 
 \]</div>
-<p>This is easily rearranged into a system <span class="math notranslate nohighlight">\(\tilde{\bfA} \bfu_1 = \tilde{bfv}\)</span> for the regular unknowns only.</p>
+<p>This is easily rearranged into a system <span class="math notranslate nohighlight">\(\tilde{\bfA} \bfu_1 = \tilde{\bfv}\)</span> for the regular unknowns only.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
-<span class="n">S</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">]</span><span class="o">/</span><span class="n">A</span><span class="p">[</span><span class="n">i2</span><span class="p">,</span><span class="n">i2</span><span class="p">]</span>
-<span class="n">ṽ</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i1</span><span class="p">]</span> <span class="o">-</span> <span class="n">S</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="n">i2</span><span class="p">]</span>
-<span class="n">Ã</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span> <span class="o">-</span> <span class="n">S</span><span class="o">*</span><span class="n">A</span><span class="p">[</span><span class="n">i2</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span>
-<span class="n">Ã</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="w"></span>
+<span class="n">S</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">]</span><span class="o">/</span><span class="n">A</span><span class="p">[</span><span class="n">i2</span><span class="p">,</span><span class="n">i2</span><span class="p">]</span><span class="w"></span>
+<span class="n">ṽ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="n">i1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">S</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="n">i2</span><span class="p">]</span><span class="w"></span>
+<span class="n">Ã</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">S</span><span class="o">*</span><span class="n">A</span><span class="p">[</span><span class="n">i2</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span><span class="w"></span>
+<span class="n">Ã</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -636,7 +695,7 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">Ã</span><span class="o">\</span><span class="n">ṽ</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ã</span><span class="o">\</span><span class="n">ṽ</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -655,35 +714,35 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
-<span class="n">Dxx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">h</span><span class="o">^</span><span class="mi">2</span> <span class="o">*</span> <span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="o">=&gt;-</span><span class="mi">2</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">Dx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span> <span class="o">*</span> <span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="o">=&gt;-</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">A</span> <span class="o">=</span> <span class="n">Dxx</span> <span class="o">+</span> <span class="n">diagm</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="n">Dx</span> <span class="o">+</span> <span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">q</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">v</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">ra</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">Ga</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span> <span class="n">Ga</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">Ga</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span> <span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)]</span>
-<span class="n">rb</span> <span class="o">=</span> <span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span><span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span> <span class="n">Gb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="p">]</span>
-<span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="n">ra</span><span class="p">;</span> <span class="n">A</span><span class="p">;</span> <span class="n">rb</span><span class="p">]</span>
-<span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">⍺</span><span class="p">;</span> <span class="n">v</span><span class="p">;</span> <span class="n">β</span><span class="p">]</span>
-<span class="n">i1</span><span class="p">,</span><span class="n">i2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
-<span class="n">S</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">]</span><span class="o">/</span><span class="n">A</span><span class="p">[</span><span class="n">i2</span><span class="p">,</span><span class="n">i2</span><span class="p">]</span>
-<span class="n">ṽ</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i1</span><span class="p">]</span> <span class="o">-</span> <span class="n">S</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="n">i2</span><span class="p">]</span>
-<span class="n">Ã</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span> <span class="o">-</span> <span class="n">S</span><span class="o">*</span><span class="n">A</span><span class="p">[</span><span class="n">i2</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span>
-<span class="n">u</span> <span class="o">=</span> <span class="n">Ã</span><span class="o">\</span><span class="n">ṽ</span><span class="p">;</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="o">*</span><span class="n">h</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"></span>
+<span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="n">h</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="o">=&gt;-</span><span class="mi">2</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="n">Dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="o">=&gt;-</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="n">Dx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="o">=&gt;</span><span class="n">q</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="n">ra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="o">-</span><span class="n">Ga</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="w"> </span><span class="n">Ga</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="n">Ga</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)]</span><span class="w"></span>
+<span class="n">rb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="w"> </span><span class="n">Gb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="p">]</span><span class="w"></span>
+<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">ra</span><span class="p">;</span><span class="w"> </span><span class="n">A</span><span class="p">;</span><span class="w"> </span><span class="n">rb</span><span class="p">]</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">⍺</span><span class="p">;</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w"> </span><span class="n">β</span><span class="p">]</span><span class="w"></span>
+<span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="w"></span>
+<span class="n">S</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">]</span><span class="o">/</span><span class="n">A</span><span class="p">[</span><span class="n">i2</span><span class="p">,</span><span class="n">i2</span><span class="p">]</span><span class="w"></span>
+<span class="n">ṽ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="n">i1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">S</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="n">i2</span><span class="p">]</span><span class="w"></span>
+<span class="n">Ã</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="n">i1</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">S</span><span class="o">*</span><span class="n">A</span><span class="p">[</span><span class="n">i2</span><span class="p">,</span><span class="n">i1</span><span class="p">]</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ã</span><span class="o">\</span><span class="n">ṽ</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">using</span> <span class="n">Plots</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/bc_11_0.svg" src="../_images/bc_11_0.svg" /></div>
 </div>
-<p>The left end does look like a homogeneous Neumann condition is satisfied. We can check the right end numerically using an <span class="math notranslate nohighlight">\(O(h)\)</span> discretization.</p>
+<p>The left end does look like a homogeneous Neumann condition is satisfied. We can check the right end casually using a first-order discretization:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Gb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">/</span><span class="n">h</span> <span class="o">-</span> <span class="n">β</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Gb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Gb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">/</span><span class="n">h</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -693,6 +752,7 @@ G_{11}u_0 + G_{12}\frac{u_{1}-u_{-1}}{2h}  = \alpha,
 </div>
 </div>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">

@@ -51,7 +51,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -548,43 +548,36 @@ g_b(u(b),u'(b))  &amp;= 0.
 \[
 \bff(\bfu) = \bfzero.
 \]</div>
-<p>Using a black-box nonlinear equation solver, it’s rather easy to get solutions. For example, here is a solution of</p>
+<p>Using a black-box nonlinear equation solver, it’s rather easy to get solutions to many problems. For example, here is a solution of</p>
 <div class="math notranslate nohighlight">
 \[
 \lambda u'' + u(u'-1) = -x, \quad u(0)=-1, \quad u(1)=1. 
 \]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span>
-<span class="k">using</span> <span class="n">NLsolve</span>
-<span class="k">function</span> <span class="n">bvp</span><span class="p">(</span><span class="n">λ</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
-  <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
-  <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
-  <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
-  <span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-  <span class="n">ode</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">u</span><span class="o">.*</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">u</span> <span class="o">.-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span>
-  <span class="n">residual</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">ode</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">];</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-  <span class="n">u</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-  <span class="k">return</span> <span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="o">.</span><span class="n">zero</span>
-<span class="k">end</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>bvp (generic function with 1 method)
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">NLsolve</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">bvp</span><span class="p">(</span><span class="n">λ</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">ode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">u</span><span class="o">.*</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">u</span><span class="w"> </span><span class="o">.-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="w"></span>
+<span class="w">  </span><span class="n">residual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="n">ode</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">];</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
+<span class="w">  </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="o">.</span><span class="n">zero</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
-<span class="n">plt</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="ss">:topleft</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">λ</span> <span class="k">in</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.01</span><span class="p">]</span>
-    <span class="n">x</span><span class="p">,</span><span class="n">u</span> <span class="o">=</span> <span class="n">bvp</span><span class="p">(</span><span class="n">λ</span><span class="p">,</span><span class="mi">300</span><span class="p">);</span>
-    <span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=</span><span class="si">$λ</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="k">end</span>
-<span class="n">plt</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="ss">:topleft</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">λ</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.01</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bvp</span><span class="p">(</span><span class="n">λ</span><span class="p">,</span><span class="mi">300</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=</span><span class="si">$λ</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">plt</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -607,7 +600,7 @@ g_b(u(b),u'(b))  &amp;= 0.
 <p>Good performance in the nonlinear solver boils down mainly to two factors: an efficient and sufficiently accurate way to produce/apply <span class="math notranslate nohighlight">\(\bfA_k\)</span>, and selection of the initial estimate <span class="math notranslate nohighlight">\(\bfu_0\)</span>.</p>
 <section id="jacobian-matrix">
 <h2>Jacobian matrix<a class="headerlink" href="#jacobian-matrix" title="Permalink to this headline">#</a></h2>
-<p>There are essentially three possibilities worth pursuing when the system size is <span class="math notranslate nohighlight">\(\approx O(1000)\)</span> or less.</p>
+<p>There are essentially three possibilities worth pursuing for the Jacobian when the system size is <span class="math notranslate nohighlight">\(\approx O(1000)\)</span> or less. (We’ll discuss the large case when dealing with more space dimensions.)</p>
 <section id="exact-jacobian">
 <h3>Exact Jacobian<a class="headerlink" href="#exact-jacobian" title="Permalink to this headline">#</a></h3>
 <p>Using the exact Jacobian matrix ensures the fastest possible convergence of the solver iterations. However, it can take significant human effort to put this into practice.</p>
@@ -638,29 +631,26 @@ u'' + u u' - 1 = 0,
 If we use fictitious points, the Schur complement trick can be applied to <span class="math notranslate nohighlight">\(\bfJ\)</span>, although it may be simpler to simply leave the fictitious points in the discrete system.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">LinearAlgebra</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="n">n</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
 
-<span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
-<span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">function</span><span class="w"> </span><span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"> </span>
+<span class="w">    </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">0</span><span class="o">*</span><span class="n">u</span><span class="o">.*</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">u</span><span class="p">)</span><span class="w"> </span><span class="o">.-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mf">0.5</span><span class="n">u</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">/</span><span class="n">h</span><span class="w"></span>
+<span class="w">    </span><span class="n">r</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">function</span> <span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> 
-    <span class="n">r</span> <span class="o">=</span> <span class="n">Dxx</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="mi">0</span><span class="o">*</span><span class="n">u</span><span class="o">.*</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">u</span><span class="p">)</span> <span class="o">.-</span> <span class="mi">1</span>
-    <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mf">0.5</span><span class="n">u</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">/</span><span class="n">h</span>
-    <span class="n">r</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">2</span>
-    <span class="k">return</span> <span class="n">r</span>
-<span class="k">end</span><span class="p">;</span>
-
-<span class="k">function</span> <span class="n">jac</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-    <span class="n">ux</span><span class="p">,</span><span class="n">uxx</span> <span class="o">=</span> <span class="n">Dx</span><span class="o">*</span><span class="n">u</span><span class="p">,</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span>
-    <span class="n">J</span> <span class="o">=</span> <span class="n">Dxx</span> <span class="o">+</span> <span class="mi">0</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="n">ux</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">*</span><span class="n">Dx</span>
-    <span class="c"># Neumann on left, Dirichlet on right </span>
-    <span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.5</span><span class="o">/</span><span class="n">h</span><span class="p">;</span><span class="mi">2</span><span class="o">/</span><span class="n">h</span><span class="p">;</span><span class="o">-</span><span class="mf">0.5</span><span class="o">/</span><span class="n">h</span><span class="p">;</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)]</span>
-    <span class="n">J</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">);</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">J</span>
-<span class="k">end</span><span class="p">;</span>
+<span class="k">function</span><span class="w"> </span><span class="n">jac</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ux</span><span class="p">,</span><span class="n">uxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dx</span><span class="o">*</span><span class="n">u</span><span class="p">,</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span><span class="w"></span>
+<span class="w">    </span><span class="n">J</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">0</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="n">ux</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">0</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">*</span><span class="n">Dx</span><span class="w"></span>
+<span class="w">    </span><span class="c"># Neumann on left, Dirichlet on right </span><span class="w"></span>
+<span class="w">    </span><span class="n">J</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="p">[</span><span class="o">-</span><span class="mf">1.5</span><span class="o">/</span><span class="n">h</span><span class="p">;</span><span class="mi">2</span><span class="o">/</span><span class="n">h</span><span class="p">;</span><span class="o">-</span><span class="mf">0.5</span><span class="o">/</span><span class="n">h</span><span class="p">;</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)]</span><span class="w"></span>
+<span class="w">    </span><span class="n">J</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">);</span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">J</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -668,12 +658,12 @@ If we use fictitious points, the Schur complement trick can be applied to <span 
 <p>It’s advisable to check your Jacobian to see if it does the correct thing on at least one generic input. Remember as you set up the data that <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span> are expected to obey certain boundary conditions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">x</span><span class="o">.^</span><span class="mi">2</span> <span class="o">.+</span> <span class="mi">1</span>
-<span class="n">v</span> <span class="o">=</span> <span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="nb">π</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ϵ</span> <span class="o">=</span> <span class="mf">1e-5</span>
-<span class="n">du</span> <span class="o">=</span> <span class="p">(</span><span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="o">+</span><span class="n">ϵ</span><span class="o">*</span><span class="n">v</span><span class="p">)</span> <span class="o">-</span> <span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">))</span><span class="o">/</span><span class="n">ϵ</span>
-<span class="n">Jv</span> <span class="o">=</span> <span class="n">jac</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">*</span><span class="n">v</span>
-<span class="n">norm</span><span class="p">(</span><span class="n">du</span><span class="o">-</span><span class="n">Jv</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">.^</span><span class="mi">2</span><span class="w"> </span><span class="o">.+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="nb">π</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">ϵ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-5</span><span class="w"></span>
+<span class="n">du</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="o">+</span><span class="n">ϵ</span><span class="o">*</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">))</span><span class="o">/</span><span class="n">ϵ</span><span class="w"></span>
+<span class="n">Jv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jac</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">*</span><span class="n">v</span><span class="w"></span>
+<span class="n">norm</span><span class="p">(</span><span class="n">du</span><span class="o">-</span><span class="n">Jv</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -686,10 +676,9 @@ If we use fictitious points, the Schur complement trick can be applied to <span 
 <p>We don’t have to make sure that the initial guess satisfies the boundary conditions, because a single Newton iteration will take care of that for us.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">NLsolve</span>
-<span class="n">sol</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">jac</span><span class="p">,</span><span class="mi">0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
-<span class="k">using</span> <span class="n">Plots</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;residual norm = </span><span class="si">$</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">)</span><span class="s">&quot;</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">jac</span><span class="p">,</span><span class="mi">0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;residual norm = </span><span class="si">$</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">)</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -725,15 +714,14 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 </section>
 <section id="finite-differences">
 <h3>Finite differences<a class="headerlink" href="#finite-differences" title="Permalink to this headline">#</a></h3>
-<p><em>Yo dawg, I gave you some finite differences with your finite differences.</em></p>
+<p><img alt="dawg" src="../_images/yo-dawg-fd.jpg" /></p>
 <p>The difference</p>
 <div class="math notranslate nohighlight">
 \[
 \frac{\bff(\bfu + \epsilon \bfv) - \bff(\bfu)}{\epsilon}
 \]</div>
-<p>approximates the directional derivative <span class="math notranslate nohighlight">\(\bfJ(\bfu)\bfv\)</span>. The full Jacobian matrix can be recovered by applying this difference repeatedly in each of the coordinate axes directions. When there are <span class="math notranslate nohighlight">\(N\)</span> unknowns, this process requires at least <span class="math notranslate nohighlight">\(O(N^2)\)</span> work, but in principle that should be insignificant next to the <span class="math notranslate nohighlight">\(O(N^3)\)</span> work needed to solve the linear system with <span class="math notranslate nohighlight">\(\bfJ\)</span>.</p>
-<p>The advantage of an FD Jacobian is that is requires only that <span class="math notranslate nohighlight">\(\bff\)</span> be available, which is necessary for the entire problem. Because of this, it’s usually the default choice.</p>
-<p>However, it can be slow in practice, and it can be affected by roundoff error; we can expect an optimal accuracy that is only <span class="math notranslate nohighlight">\(O(\sqrt{\epsilon_\text{mach}})\)</span>. That could be improved by using a central difference for the directional derivative, but doing so requires twice as many evaluations of <span class="math notranslate nohighlight">\(\bff\)</span>, which is usually considered prohibitive. The drawbacks are mitigated somewhat in a quasi-Newton algorithm that tries to update the Jacobian at each nonlinear iteration, rather than computing it from scratch each time.</p>
+<p>is a first-order approximation to the directional derivative <span class="math notranslate nohighlight">\(\bfJ(\bfu)\bfv\)</span>. The full Jacobian matrix can be recovered by applying this difference repeatedly in each of the coordinate axes directions. When there are <span class="math notranslate nohighlight">\(N\)</span> unknowns, this process requires at least <span class="math notranslate nohighlight">\(O(N^2)\)</span> work, but that should be compared to the <span class="math notranslate nohighlight">\(O(N^3)\)</span> work needed to solve the linear system with <span class="math notranslate nohighlight">\(\bfJ\)</span>.</p>
+<p>The primary advantage of an FD Jacobian is that is requires only that <span class="math notranslate nohighlight">\(\bff\)</span> be available, which is necessary for the entire problem. Because of this, it’s usually the default choice. However, it can be slow in practice, and it can be affected by roundoff error; we can expect an optimal accuracy that is only <span class="math notranslate nohighlight">\(O(\sqrt{\epsilon_\text{mach}})\)</span>. That could be improved by using a central difference for the directional derivative, but doing so requires twice as many evaluations of <span class="math notranslate nohighlight">\(\bff\)</span>. The drawbacks are mitigated somewhat in a quasi-Newton algorithm that tries to update the Jacobian at each nonlinear iteration, rather than computing it from scratch each time.</p>
 </section>
 </section>
 <section id="continuation">
@@ -746,28 +734,25 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 <p>At <span class="math notranslate nohighlight">\(\lambda=0.08\)</span>, this equation gives us no trouble.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
-<span class="n">λ</span> <span class="o">=</span> <span class="mf">0.08</span>
-
-<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
-<span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">ode</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-&gt;</span> <span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">u</span> <span class="o">-</span> <span class="n">u</span><span class="o">.^</span><span class="mi">3</span> <span class="o">+</span> <span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">)</span>
-<span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">=</span><span class="p">[</span><span class="n">ode</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">];</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="nd">@elapsed</span> <span class="n">sol1</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="w"></span>
+<span class="n">λ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.08</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
+<span class="n">ode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">λ</span><span class="o">*</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">u</span><span class="o">.^</span><span class="mi">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="p">[</span><span class="n">ode</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">];</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">u</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
+<span class="nd">@elapsed</span><span class="w"> </span><span class="n">sol1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.300625167
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.268820917
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol1</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=0.08&quot;</span><span class="p">,</span><span class="n">leg</span><span class="o">=</span><span class="ss">:bottomright</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol1</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=0.08&quot;</span><span class="p">,</span><span class="n">leg</span><span class="o">=</span><span class="ss">:bottomright</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -777,20 +762,20 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 <p>However, when we decrease <span class="math notranslate nohighlight">\(\lambda\)</span> just a bit, the solution takes <em>much</em> longer and looks very different.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">λ</span> <span class="o">=</span> <span class="mf">0.07</span>
-<span class="nd">@elapsed</span> <span class="n">sol2</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">λ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.07</span><span class="w"></span>
+<span class="nd">@elapsed</span><span class="w"> </span><span class="n">sol2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.030836167
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.278816291
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol2</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=0.07?!&quot;</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol2</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=0.07?!&quot;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -800,7 +785,7 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 <p>A closer look at the nonlinear solver results shows that the iteration did not converge in the second case:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">sol1</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">,</span><span class="n">sol2</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">sol1</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">,</span><span class="n">sol2</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -813,19 +798,19 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 <p>A simple way to fight back is <strong>continuation</strong>, in which we use the solution at a more tractable version of the problem as the initial estimate for the tougher problem.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@elapsed</span> <span class="n">sol2</span> <span class="o">=</span> <span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">sol1</span><span class="o">.</span><span class="n">zero</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@elapsed</span><span class="w"> </span><span class="n">sol2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">sol1</span><span class="o">.</span><span class="n">zero</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.037668291
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.030733042
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol2</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=0.07&quot;</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol2</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;λ=0.07&quot;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
