@@ -64,6 +64,7 @@ sphinx:
           "bfF" : "\\mathbf{F}"
           "bfP" : "\\mathbf{P}"
           "bfQ" : "\\mathbf{Q}"
+          "bfS" : "\\mathbf{S}"
           "bfW" : "\\mathbf{W}"
           "bfU" : "\\mathbf{U}"
           "bfW" : "\\mathbf{W}"

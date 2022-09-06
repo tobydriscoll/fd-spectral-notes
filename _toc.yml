@@ -23,6 +23,7 @@ chapters:
     - file: elliptic/tensorproduct
     - file: elliptic/poisson
     - file: elliptic/iterative
+    - file: elliptic/disk
     - file: elliptic/decomp
   - file: mol/overview
     sections:
