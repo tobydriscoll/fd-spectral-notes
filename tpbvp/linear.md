@@ -99,12 +99,12 @@ $$ -->
 The easy way to impose these linear conditions is to delete the first and rows of the system and replace them with the boundary conditions: 
 
 $$
-\begin{bmatrix} h^{-2} & 0 & \dots & 0 \\ \bfC \bfA  \\ 0 & \cdots & 0 & h^{-2} \end{bmatrix} 
+\begin{bmatrix} h^{-2} & 0 & \dots & 0 \\ \bfC^T \bfA  \\ 0 & \cdots & 0 & h^{-2} \end{bmatrix} 
 \begin{bmatrix} u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_{n} \end{bmatrix} 
 = \begin{bmatrix} \alpha/h^2 \\ f(x_1) \\ \vdots \\ f(x_{n-1}) & \beta/h^2 \end{bmatrix},
 $$ 
 
-where $\bfC$ is the $(n+1)\times(n+1)$ identity with first and last rows deleted. Notice that the boundary conditions were scaled by $h^{-2}$ so that all the rows of the linear system have roughly the same magnitude, which improves the condition number of the linear system:
+where $\bfC$ is the $(n+1)\times(n+1)$ identity with first and last columns deleted. Notice that the boundary conditions were scaled by $h^{-2}$ so that all the rows of the linear system have roughly the same magnitude, which improves the condition number of the linear system:
 
 ```{code-cell}
 include("diffmats.jl")
@@ -226,4 +226,51 @@ We have pretty much defined our way to the climax.
 
 Consider what a lack of stability would imply. If we perturb $\bff$ by *any* small vector $\bfv$, then the solution is perturbed by $\bfA^{-1} \bfv$, which could grow unboundedly as $h\to 0$. Truncation error is one such perturbation, but so are roundoff and physical measurement error. Without stability, the computed solution is unboundedly sensitive to such errors.
 
-It is possible to prove stability of our discretization with some conditions on the coefficient functions $p$ and $q$. LeVeque points out that in the particular case $p=q=0$, the matrix is symmetric and its eigenvalues (indeed, its inverse) can be found in closed form.
+It is possible to prove stability of our discretization with some conditions on the coefficient functions $p$ and $q$. 
+
+
+::::{prf:example} 
+LeVeque points out that in the particular case $p=q=0$ on the domain $x\in[-1,1]$, the matrix $\bfA = \bfC^T\bfD_{xx}\bfC$ is symmetric and its eigenvalues can be found in closed form:
+
+$$
+\lambda_k = \frac{2}{h^2} \left[ \cos\left(\frac{k\pi h}{2}\right)-1 \right], \quad k=1,\ldots,n-1. 
+$$
+
+Observe that 
+
+$$
+\frac{k\pi h}{2} = \frac{k\pi}{n} \in (0,\pi),
+$$
+
+so that the eigenvalues decrease monotonically with $k$. Moreover,
+
+$$
+\cos\left(\frac{(n-1)\pi}{n}\right) = \cos\left(\pi - \frac{\pi}{n}\right) = -1 + O(n^{-2}) = -1 + O(h^2),
+$$
+
+and
+
+$$
+\cos\left(\frac{\pi}{n}\right) = 1 - \frac{\pi^2}{2n^2} + O(n^{-4}) = 1 - \frac{\pi^2 h^2}{8} + O(h^{4}). 
+$$
+
+Thus, the eigenvalues are negative, real, and lie between
+
+$$
+\frac{-4}{h^2} + O(1)
+$$
+
+and
+
+$$ 
+\frac{\pi^2}{4} + O(h^2). 
+$$
+
+Since the matrix is normal, the singular values are the absolute values of the eigenvalues, and 
+
+$$
+\norm{\bfA^{-1}} = \frac{1}{\pi^2/4} = O(1)
+$$
+
+as $h\to 0$, thereby proving stability.
+::::
