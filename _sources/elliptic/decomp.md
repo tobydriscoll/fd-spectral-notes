@@ -100,7 +100,7 @@ for R in (R₁,R₂)
     x,Dx,Dxx = diffmats(R.nx,R.xspan...)
     y,Dy,Dyy = diffmats(R.ny,R.yspan...)
     N = (nx+1)*(ny+1)
-    Δ = I(ny+1)⊗Dxx + Dyy'⊗I(nx+1)
+    Δ = I(ny+1)⊗Dxx + Dyy⊗I(nx+1)
     grid = vec([[x,y] for x in x, y in y])
     onbdy = isboundary.(grid)
     oniface = isinterface.(grid)
@@ -178,7 +178,7 @@ end
 plt
 ```
 
-We could again use the Schur complementation technique to remove the interface unknowns from the linear system. 
+We could again use the Schur complement technique to remove the interface unknowns from the linear system. 
 
 ## Overlapping
 
@@ -199,8 +199,8 @@ is equivalent to the solution of the subproblems
 
 $$
 \Delta u_i &= 0, \quad \text{in } \Omega_i, \\ 
-B u_i &= 0, \quad \text{on } \Gamma_i,  
-u_i &= P_i u_{3-i}, \quad \text{on } \tilde{Gamma}_i,
+B u_i &= 0, \quad \text{on } \Gamma_i, \\  
+u_i &= P_i u_{3-i}, \quad \text{on } \tilde{\Gamma}_i,
 $$
 
 where $P_i$ represents the projection, say by interpolation, of a function defined in $\Omega_{3-i}$ into one defined on $\tilde{\Gamma}_i$. That is, a subsolution on one subdomain must agree with the other subsolution on the part of its boundary that lies inside the other subdomain. Note that no normal derivative (Neumann condition) is required. This formulation is straightforward to generalize to more than two overlapping subdomains.
@@ -209,11 +209,7 @@ The classical **Schwarz alternating method** (technically, *multiplicative* Schw
 
 While the Schwarz methods make it easy to parallelize the solution process and give some global geometric flexibility, the overlap regions are doubly discretized, which is in some sense wasteful. Furthermore, the convergence rate of the process degrades as the amount of overlap decreases, and when a large number of subdomains is used, there needs to be a coarse global discretization in order to speed up communication between distant parts of the domain. The method is frequently used as a preconditioner in an iterative solution of the global problem.
 
-
-<!--
-
 ```{code-cell}
-using LinearAlgebra
 ⊗ = kron
 include("diffmats.jl")
 
@@ -248,7 +244,7 @@ for i in 1:2
     x,Dx,Dxx = diffmats(R[i].nx,R[i].xspan...)
     y,Dy,Dyy = diffmats(R[i].ny,R[i].yspan...)
     N = (nx+1)*(ny+1)
-    Δ = I(ny+1)⊗Dxx + Dyy'⊗I(nx+1)
+    Δ = I(ny+1)⊗Dxx + Dyy⊗I(nx+1)
     grid = [[x,y] for x in x, y in y]
     interior = falses(nx+1,ny+1)
     interior[2:nx,2:ny] .= true
@@ -277,30 +273,119 @@ fig
 ```
 
 ```{code-cell}
-u = [zeros(region[1].N),zeros(region[2].N)  ]
-A = region[1].Δ
-b = zeros(region[1].N)
+using BlockArrays,Dierckx
 
-for idx in findall(vec(region[1].onbdy))
-    b[idx] = f(region[1].grid[idx])
-    A[idx,:] .= 0
-    A[idx,idx] = 1
+N = [r.N for r in region]
+u = BlockVector(zeros(sum(N)),N)
+
+function schwarz(u)
+    u = BlockVector(zeros(sum(N)),N)
+    for (i,R) in enumerate(region)    
+        A = R.Δ
+        b = zeros(R.N)
+        unew = zeros(R.N)
+
+        # True boundary conditions (Dirichlet)
+        onbdy = vec(R.onbdy)
+        for idx in findall(onbdy)
+            b[idx] = f(R.grid[idx])
+            A[idx,:] .= 0
+            A[idx,idx] = 1
+
+            # unew[idx] = f(R.grid[idx])
+            # b -= unew[idx]*A[:,idx]
+        end
+
+        # Interface conditions
+        other = 3-i
+        uu = reshape(u[Block(other)],region[other].nx+1,region[other].ny+1)
+        s = Spline2D(region[other].x,region[other].y,uu,kx=1,ky=1)
+        oniface = vec(R.oniface)
+        for idx in findall(oniface)
+            b[idx] = s(R.grid[idx]...)
+            A[idx,:] .= 0
+            A[idx,idx] = 1
+
+            # unew[idx] = s(R.grid[idx]...)
+            # b -= unew[idx]*A[:,idx]
+        end
+
+        # inter = vec(R.interior)
+        # unew[inter] = A[inter,inter]\b[inter]
+
+        unew = A\b
+        u[Block(i)] .= unew
+    end
+    return u
 end
-
-for idx in findall(vec(region[1].oniface))
-    b[idx] = u[2]region[1].grid[idx])
-    A[idx,:] .= 0
-    A[idx,idx] = 1
-end
-
-
 ```
 
 ```{code-cell}
-f.(region[1].grid[idx])
+u = schwarz(u)
+plt = plot(label="")
+for (i,R) in enumerate(region)
+    U = reshape(u[Block(i)],R.nx+1,R.ny+1)
+    contour!(R.x,R.y,U',levels=range(-1,3,30))
+end
+plt
 ```
 
 ```{code-cell}
-size(A),size(b)
+i=1;
+R = region[i];
+u = 0*u;
+# X = [x for x in R.x, y in R.y]    
+# Y = [y for x in R.x, y in R.y]
+# U = reshape(u[Block(i)],R.nx+1,R.ny+1)
+        A = R.Δ
+        b = zeros(R.N)
+        unew = zeros(R.N)
+
+       # True boundary conditions (Dirichlet)
+        onbdy = vec(R.onbdy)
+        for idx in findall(onbdy)
+            b[idx] = f(R.grid[idx])
+            A[idx,:] .= 0
+            A[idx,idx] = 1
+            # unew[idx] = f(R.grid[idx])
+            # b -= unew[idx]*A[:,idx]
+
+        end
+       # Interface conditions
+        other = 3-i
+        uu = reshape(0*u[Block(other)],region[other].nx+1,region[other].ny+1)
+        s = Spline2D(region[other].x,region[other].y,uu,kx=1,ky=1)
+        oniface = vec(R.oniface)
+        # for idx in findall(oniface)
+        #     unew[idx] = s(R.grid[idx]...)
+        #     b -= unew[idx]*A[:,idx]
+        # end
+
+        inter = vec(R.interior)
+         unew = A\b
+
+
+norm(R.Δ[inter,:]*unew)
 ```
--->
+
+```{code-cell}
+extrema(u)
+```
+
+```{code-cell}
+pyplot()
+surface(R.x,R.y,U')
+```
+
+```{code-cell}
+gui()
+```
+
+```{code-cell}
+h = R.y[2]-R.y[1];
+U[4,:]-2U[3,:]+U[2,:]
+```
+
+```{code-cell}
+
+```

@@ -100,6 +100,28 @@ $$
 
 As the order increases, we get a larger optimal $h_*$ (and therefore fewer total nodes over a fixed interval), and the result has a fraction $p/(1+p)$ of the original accurate digits. For $p=4$, for example, this implies a tad less than 13 digits.
 
+Here's a computation of the total errors in 1st- and 2nd-order formulas.
+
+```{code-cell}
+f(x) = sin(2.1x)+cos(x)
+exact = 2.1
+h = [1/2^n for n in 1:40]
+FD1err = []
+FD2err = []
+for h in h
+    FD1 = (f(h)-f(0))/h
+    FD2 = (f(h)-f(-h))/2h
+    push!(FD1err,abs(FD1-exact))    
+    push!(FD2err,abs(FD2-exact))
+end
+
+using Plots
+plot(h,[FD1err FD2err],
+    xaxis=:log10,yaxis=:log10,label=["order 1" "order 2"],leg=:topleft)
+```
+
+On the right side of the graph above, you see convergence with slopes 1 and 2. But this is eventually dominated by the effect of roundoff, which shows up as a slope of -1.
+
 ## Instability?
 
 Should we be looking for a different method to compute derivatives? Consider the abstract problem of mapping a function to its derivative at zero: $ u \mapsto u'(0)$. If we perturb $u$ by a function $\delta v(x)$, then the relative error in computing the derivative exactly is 

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>3.4. Domain decomposition &#8212; FD and Spectral methods for PDE</title>
+    <title>3.5. Domain decomposition &#8212; FD and Spectral methods for PDE</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -21,7 +21,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -38,7 +38,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -51,12 +51,12 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="4. Method of lines" href="../mol/overview.html" />
-    <link rel="prev" title="3.3. Iterative linear algebra" href="iterative.html" />
+    <link rel="prev" title="3.4. Discretizing the disk" href="disk.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -216,9 +216,14 @@ const thebe_selector_output = ".output, .cell_output"
      3.3. Iterative linear algebra
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="disk.html">
+     3.4. Discretizing the disk
+    </a>
+   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     3.4. Domain decomposition
+     3.5. Domain decomposition
     </a>
    </li>
   </ul>
@@ -501,7 +506,7 @@ title="Print to PDF"
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="domain-decomposition">
-<h1><span class="section-number">3.4. </span>Domain decomposition<a class="headerlink" href="#domain-decomposition" title="Permalink to this headline">#</a></h1>
+<h1><span class="section-number">3.5. </span>Domain decomposition<a class="headerlink" href="#domain-decomposition" title="Permalink to this headline">#</a></h1>
 <p>Rectangles are great and all, but we might like to go beyond them. One attractive technique that generalizes the geometry somewhat is <strong>domain decomposition</strong>. It can also break a large problem into smaller pieces that are more manageable and perhaps solvable in parallel.</p>
 <p>There are two major types of domain decomposition.</p>
 <section id="nonoverlapping">
@@ -554,70 +559,70 @@ u_1 = u_2, \quad \pp{u_1}{n} = -\pp{u_2}{n}, \qquad \text{on }  \Gamma_{12}.
 \end{split}\]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span><span class="w"></span>
-<span class="o">⊗</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kron</span><span class="w"></span>
-<span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">LinearAlgebra</span>
+<span class="o">⊗</span> <span class="o">=</span> <span class="n">kron</span>
+<span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span>
 
-<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"></span>
-<span class="n">R₁</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">ny</span><span class="o">=</span><span class="mi">2</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
-<span class="n">R₂</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">ny</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span><span class="w"> </span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">R₁</span> <span class="o">=</span> <span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">ny</span><span class="o">=</span><span class="mi">2</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">R₂</span> <span class="o">=</span> <span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">ny</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> 
 
-<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span><span class="w"></span>
+<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span>
 
-<span class="k">function</span><span class="w"> </span><span class="n">isboundary</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xy</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span>
-<span class="w">        </span><span class="p">((</span><span class="n">x</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">y</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
+<span class="k">function</span> <span class="n">isboundary</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">xy</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> 
+        <span class="p">((</span><span class="n">x</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="n">y</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">end</span>
 
-<span class="k">function</span><span class="w"> </span><span class="n">isinterface</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">((</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">&lt;</span><span class="n">xy</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
+<span class="k">function</span> <span class="n">isinterface</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">&lt;</span><span class="n">xy</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">end</span>
 
-<span class="n">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
-<span class="k">for</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="n">R₁</span><span class="p">,</span><span class="n">R₂</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">R</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">ny</span><span class="w"></span>
-<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">xspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">yspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">Δ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">⊗</span><span class="n">Dxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Dyy</span><span class="o">&#39;⊗</span><span class="n">I</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">])</span><span class="w"></span>
-<span class="w">    </span><span class="n">onbdy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">isboundary</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">oniface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">isinterface</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">interior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="o">!</span><span class="n">onbdy</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">oniface</span><span class="w"></span>
-<span class="w">    </span><span class="n">Dnorm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">⊗</span><span class="n">Dx</span><span class="p">)[</span><span class="n">oniface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"></span>
-<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">region</span><span class="p">,(;</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">Δ</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">onbdy</span><span class="p">,</span><span class="n">oniface</span><span class="p">,</span><span class="n">interior</span><span class="p">,</span><span class="n">Dnorm</span><span class="p">))</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
+<span class="n">region</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">R</span> <span class="k">in</span> <span class="p">(</span><span class="n">R₁</span><span class="p">,</span><span class="n">R₂</span><span class="p">)</span>
+    <span class="n">nx</span><span class="p">,</span><span class="n">ny</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">ny</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">xspan</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">yspan</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Δ</span> <span class="o">=</span> <span class="n">I</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">⊗</span><span class="n">Dxx</span> <span class="o">+</span> <span class="n">Dyy⊗I</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">vec</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="k">in</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="k">in</span> <span class="n">y</span><span class="p">])</span>
+    <span class="n">onbdy</span> <span class="o">=</span> <span class="n">isboundary</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+    <span class="n">oniface</span> <span class="o">=</span> <span class="n">isinterface</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+    <span class="n">interior</span> <span class="o">=</span> <span class="nd">@.</span> <span class="o">!</span><span class="n">onbdy</span> <span class="o">&amp;</span> <span class="o">!</span><span class="n">oniface</span>
+    <span class="n">Dnorm</span> <span class="o">=</span> <span class="p">(</span><span class="n">I</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">⊗</span><span class="n">Dx</span><span class="p">)[</span><span class="n">oniface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span>
+    <span class="n">push!</span><span class="p">(</span><span class="n">region</span><span class="p">,(;</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">Δ</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">onbdy</span><span class="p">,</span><span class="n">oniface</span><span class="p">,</span><span class="n">interior</span><span class="p">,</span><span class="n">Dnorm</span><span class="p">))</span>
+<span class="k">end</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">;</span><span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">]</span><span class="w"></span>
-<span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">N</span><span class="p">]</span><span class="w"></span>
-<span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span><span class="n">region</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="o">.+</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">r</span><span class="o">.</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">iface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="o">.+</span><span class="n">findall</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">oniface</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">bdy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="o">.+</span><span class="n">findall</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">onbdy</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">idx</span><span class="p">,(;</span><span class="n">all</span><span class="p">,</span><span class="n">iface</span><span class="p">,</span><span class="n">bdy</span><span class="p">))</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">;</span><span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">]</span>
+<span class="n">offset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="k">in</span> <span class="n">zip</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span><span class="n">region</span><span class="p">)</span>
+    <span class="n">all</span> <span class="o">=</span> <span class="n">k</span><span class="o">.+</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">r</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">iface</span> <span class="o">=</span> <span class="n">k</span><span class="o">.+</span><span class="n">findall</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">oniface</span><span class="p">)</span>
+    <span class="n">bdy</span> <span class="o">=</span> <span class="n">k</span><span class="o">.+</span><span class="n">findall</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">onbdy</span><span class="p">)</span>
+    <span class="n">push!</span><span class="p">(</span><span class="n">idx</span><span class="p">,(;</span><span class="n">all</span><span class="p">,</span><span class="n">iface</span><span class="p">,</span><span class="n">bdy</span><span class="p">))</span>
+<span class="k">end</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
-<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">leg</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span><span class="w"></span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">sym</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">,[</span><span class="ss">:x</span><span class="p">,</span><span class="o">:+</span><span class="p">])</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">interior</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">onbdy</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">oniface</span><span class="p">]</span><span class="w"></span>
-<span class="w">        </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">]],[</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">]]</span><span class="w"></span>
-<span class="w">        </span><span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="n">sym</span><span class="p">,</span><span class="n">msw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">end</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
-<span class="n">fig</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">leg</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">sym</span><span class="p">)</span> <span class="k">in</span> <span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">,[</span><span class="ss">:x</span><span class="p">,</span><span class="o">:+</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="k">in</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">interior</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">onbdy</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">oniface</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="k">in</span> <span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">]],[</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="k">in</span> <span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">]]</span>
+        <span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="n">sym</span><span class="p">,</span><span class="n">msw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="n">fig</span>
 </pre></div>
 </div>
 </div>
@@ -626,23 +631,23 @@ u_1 = u_2, \quad \pp{u_1}{n} = -\pp{u_2}{n}, \qquad \text{on }  \Gamma_{12}.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">N</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">region</span><span class="p">)</span><span class="w"></span>
-<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sparse</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span><span class="w"></span>
-<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">Δ</span><span class="w"></span>
-<span class="w">    </span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">    </span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">)))</span><span class="w"></span>
-<span class="w">    </span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="n">sum</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">N</span> <span class="k">for</span> <span class="n">r</span> <span class="k">in</span> <span class="n">region</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">sparse</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="k">in</span> <span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">)</span>
+    <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">Δ</span>
+    <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
+    <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
+    <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">]</span> <span class="o">.=</span> <span class="n">diagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">)))</span>
+    <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">bdy</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
+<span class="k">end</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">spy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:redsblues</span><span class="p">)</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">spy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:redsblues</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -651,17 +656,17 @@ u_1 = u_2, \quad \pp{u_1}{n} = -\pp{u_2}{n}, \qquad \text{on }  \Gamma_{12}.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Ni</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">)</span><span class="w"></span>
-<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spdiagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">Ni</span><span class="p">))</span><span class="w"></span>
-<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">spdiagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">Ni</span><span class="p">))</span><span class="w"></span>
-<span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Ni</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">)</span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span> <span class="o">=</span> <span class="n">spdiagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">Ni</span><span class="p">))</span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">spdiagm</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">Ni</span><span class="p">))</span>
+<span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
 
-<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">all</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Dnorm</span><span class="w"></span>
-<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">all</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">Dnorm</span><span class="w"></span>
-<span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="n">spy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:redsblues</span><span class="p">)</span><span class="w"></span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">all</span><span class="p">]</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Dnorm</span>
+<span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">,</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">all</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">Dnorm</span>
+<span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">iface</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
+<span class="n">spy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:redsblues</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -670,26 +675,26 @@ u_1 = u_2, \quad \pp{u_1}{n} = -\pp{u_2}{n}, \qquad \text{on }  \Gamma_{12}.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="o">\</span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">b</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">gr</span><span class="p">()</span><span class="w"></span>
-<span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">contour!</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">],</span><span class="n">levels</span><span class="o">=-</span><span class="mf">.25</span><span class="o">:</span><span class="mf">0.01</span><span class="o">:</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
-<span class="n">plt</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">gr</span><span class="p">()</span>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="k">in</span> <span class="n">zip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="n">region</span><span class="p">)</span>
+    <span class="n">contour!</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">],</span><span class="n">levels</span><span class="o">=-</span><span class="mf">.25</span><span class="o">:</span><span class="mf">0.01</span><span class="o">:</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="n">plt</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/decomp_8_0.svg" src="../_images/decomp_8_0.svg" /></div>
 </div>
-<p>We could again use the Schur complementation technique to remove the interface unknowns from the linear system.</p>
+<p>We could again use the Schur complement technique to remove the interface unknowns from the linear system.</p>
 </section>
 <section id="overlapping">
 <h2>Overlapping<a class="headerlink" href="#overlapping" title="Permalink to this headline">#</a></h2>
@@ -708,106 +713,294 @@ Bu &amp;= 0, \quad \text{on } \partial \Omega,
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \Delta u_i &amp;= 0, \quad \text{in } \Omega_i, \\ 
-B u_i &amp;= 0, \quad \text{on } \Gamma_i,  
-u_i &amp;= P_i u_{3-i}, \quad \text{on } \tilde{Gamma}_i,
+B u_i &amp;= 0, \quad \text{on } \Gamma_i, \\  
+u_i &amp;= P_i u_{3-i}, \quad \text{on } \tilde{\Gamma}_i,
 \end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(P_i\)</span> represents the projection, say by interpolation, of a function defined in <span class="math notranslate nohighlight">\(\Omega_{3-i}\)</span> into one defined on <span class="math notranslate nohighlight">\(\tilde{\Gamma}_i\)</span>. That is, a subsolution on one subdomain must agree with the other subsolution on the part of its boundary that lies inside the other subdomain. Note that no normal derivative (Neumann condition) is required. This formulation is straightforward to generalize to more than two overlapping subdomains.</p>
 <p>The classical <strong>Schwarz alternating method</strong> (technically, <em>multiplicative</em> Schwarz) is to seek a fixed point of the new formulation solving alternately on the subdomains, each time pulling its boundary information from the most recent solution(s) on the other subdomain(s). Often we might prefer the <em>additive</em> form, in which the subdomain problems are all solved simultaneously with the “previous generation” of subsolutions. This gives an algorithm of the form parallel solve, communicate via interfaces, parallel solve, etc.</p>
 <p>While the Schwarz methods make it easy to parallelize the solution process and give some global geometric flexibility, the overlap regions are doubly discretized, which is in some sense wasteful. Furthermore, the convergence rate of the process degrades as the amount of overlap decreases, and when a large number of subdomains is used, there needs to be a coarse global discretization in order to speed up communication between distant parts of the domain. The method is frequently used as a preconditioner in an iterative solution of the global problem.</p>
-<!--
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="o">⊗</span> <span class="o">=</span> <span class="n">kron</span>
+<span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span>
 
-```{code-cell}
-using LinearAlgebra
-⊗ = kron
-include("diffmats.jl")
+<span class="n">n</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">R</span> <span class="o">=</span> <span class="p">[</span> 
+    <span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">ny</span><span class="o">=</span><span class="mi">2</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.23</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">ny</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="p">]</span>
 
-n = 8
-R = [ 
-    (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1)),
-    (nx=n,xspan=(-0.23,1),ny=n,yspan=(-1,0))
-    ]
+<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">2</span>
 
-f(x) = x[1]+2
+<span class="k">function</span> <span class="n">isboundary</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">xy</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> 
+        <span class="p">((</span><span class="n">x</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="n">y</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">end</span>
 
-function isboundary(xy)
-    x,y = xy
-    return (x==-1) | (x==1) | (y==-1) | (y==1) | 
-        ((x==0) & (y>=0)) | ((y==0) & (x>=0))
-end
+<span class="k">function</span> <span class="n">isinside</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">xspan</span><span class="p">,</span><span class="n">yspan</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">xy</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">xspan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">xspan</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">yspan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">yspan</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">end</span>
 
-function isinside(xy,xspan,yspan)
-    x,y = xy
-    return (xspan[1] < x < xspan[2]) && (yspan[1] < y < yspan[2])
-end
+<span class="k">function</span> <span class="n">isinterface</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">&lt;</span><span class="n">xy</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>isinterface (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">region</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">2</span>
+    <span class="n">nx</span><span class="p">,</span><span class="n">ny</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ny</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">xspan</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span><span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">yspan</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Δ</span> <span class="o">=</span> <span class="n">I</span><span class="p">(</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">⊗</span><span class="n">Dxx</span> <span class="o">+</span> <span class="n">Dyy⊗I</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="k">in</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="k">in</span> <span class="n">y</span><span class="p">]</span>
+    <span class="n">interior</span> <span class="o">=</span> <span class="n">falses</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">interior</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">nx</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">ny</span><span class="p">]</span> <span class="o">.=</span> <span class="nb">true</span>
+    <span class="n">oniface</span> <span class="o">=</span> <span class="o">.!</span><span class="n">interior</span>
+    <span class="n">otherR</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="mi">3</span><span class="o">-</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="k">in</span> <span class="n">findall</span><span class="p">(</span><span class="n">oniface</span><span class="p">)</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">isinside</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="n">otherR</span><span class="o">.</span><span class="n">xspan</span><span class="p">,</span><span class="n">otherR</span><span class="o">.</span><span class="n">yspan</span><span class="p">)</span>
+            <span class="n">oniface</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="n">onbdy</span> <span class="o">=</span> <span class="n">isboundary</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+    <span class="n">push!</span><span class="p">(</span><span class="n">region</span><span class="p">,(;</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">Δ</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">onbdy</span><span class="p">,</span><span class="n">oniface</span><span class="p">,</span><span class="n">interior</span><span class="p">))</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">leg</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">sym</span><span class="p">)</span> <span class="k">in</span> <span class="n">zip</span><span class="p">(</span><span class="n">region</span><span class="p">,[</span><span class="ss">:x</span><span class="p">,</span><span class="o">:+</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="k">in</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">interior</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">onbdy</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">oniface</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="k">in</span> <span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">]],[</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="k">in</span> <span class="n">r</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">s</span><span class="p">]]</span>
+        <span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="n">sym</span><span class="p">,</span><span class="n">msw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="n">fig</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/decomp_12_0.svg" src="../_images/decomp_12_0.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">BlockArrays</span><span class="p">,</span><span class="n">Dierckx</span>
 
-function isinterface(xy)
-    return ((xy[1]==0) & (-1<xy[2]<0))
-end
-```
+<span class="n">N</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">N</span> <span class="k">for</span> <span class="n">r</span> <span class="k">in</span> <span class="n">region</span><span class="p">]</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">BlockVector</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">N</span><span class="p">)),</span><span class="n">N</span><span class="p">)</span>
 
-```{code-cell}
-region = []
-for i in 1:2
-    nx,ny = R[i].nx,R[i].ny
-    x,Dx,Dxx = diffmats(R[i].nx,R[i].xspan...)
-    y,Dy,Dyy = diffmats(R[i].ny,R[i].yspan...)
-    N = (nx+1)*(ny+1)
-    Δ = I(ny+1)⊗Dxx + Dyy'⊗I(nx+1)
-    grid = [[x,y] for x in x, y in y]
-    interior = falses(nx+1,ny+1)
-    interior[2:nx,2:ny] .= true
-    oniface = .!interior
-    otherR = R[3-i]
-    for idx in findall(oniface)
-        if !isinside(grid[idx],otherR.xspan,otherR.yspan)
-            oniface[idx] = false
-        end
-    end
-    onbdy = isboundary.(grid)
-    push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior))
-end
-```
+<span class="k">function</span> <span class="n">schwarz</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">BlockVector</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">N</span><span class="p">)),</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">R</span><span class="p">)</span> <span class="k">in</span> <span class="n">enumerate</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>    
+        <span class="n">A</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">Δ</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">unew</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
 
-```{code-cell}
-using Plots
-fig = plot(aspect_ratio=1,m=3,leg=false)
-for (r,sym) in zip(region,[:x,:+])
-    for s in [r.interior,r.onbdy,r.oniface]
-        x,y = [p[1] for p in r.grid[s]],[p[2] for p in r.grid[s]]
-        scatter!(x,y,m=sym,msw=2)
-    end
-end
-fig
-```
+        <span class="c"># True boundary conditions (Dirichlet)</span>
+        <span class="n">onbdy</span> <span class="o">=</span> <span class="n">vec</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">onbdy</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="k">in</span> <span class="n">findall</span><span class="p">(</span><span class="n">onbdy</span><span class="p">)</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-```{code-cell}
-u = [zeros(region[1].N),zeros(region[2].N)  ]
-A = region[1].Δ
-b = zeros(region[1].N)
+            <span class="c"># unew[idx] = f(R.grid[idx])</span>
+            <span class="c"># b -= unew[idx]*A[:,idx]</span>
+        <span class="k">end</span>
 
-for idx in findall(vec(region[1].onbdy))
-    b[idx] = f(region[1].grid[idx])
-    A[idx,:] .= 0
-    A[idx,idx] = 1
-end
+        <span class="c"># Interface conditions</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="mi">3</span><span class="o">-</span><span class="n">i</span>
+        <span class="n">uu</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">Block</span><span class="p">(</span><span class="n">other</span><span class="p">)],</span><span class="n">region</span><span class="p">[</span><span class="n">other</span><span class="p">]</span><span class="o">.</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">region</span><span class="p">[</span><span class="n">other</span><span class="p">]</span><span class="o">.</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Spline2D</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="n">other</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">region</span><span class="p">[</span><span class="n">other</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">uu</span><span class="p">,</span><span class="n">kx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">ky</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">oniface</span> <span class="o">=</span> <span class="n">vec</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">oniface</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="k">in</span> <span class="n">findall</span><span class="p">(</span><span class="n">oniface</span><span class="p">)</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">...</span><span class="p">)</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-for idx in findall(vec(region[1].oniface))
-    b[idx] = u[2]region[1].grid[idx])
-    A[idx,:] .= 0
-    A[idx,idx] = 1
-end
+            <span class="c"># unew[idx] = s(R.grid[idx]...)</span>
+            <span class="c"># b -= unew[idx]*A[:,idx]</span>
+        <span class="k">end</span>
+
+        <span class="c"># inter = vec(R.interior)</span>
+        <span class="c"># unew[inter] = A[inter,inter]\b[inter]</span>
+
+        <span class="n">unew</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">b</span>
+        <span class="n">u</span><span class="p">[</span><span class="n">Block</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">.=</span> <span class="n">unew</span>
+    <span class="k">end</span>
+    <span class="k">return</span> <span class="n">u</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>schwarz (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">schwarz</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">R</span><span class="p">)</span> <span class="k">in</span> <span class="n">enumerate</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">Block</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span><span class="n">R</span><span class="o">.</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">contour!</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">U</span><span class="o">&#39;</span><span class="p">,</span><span class="n">levels</span><span class="o">=</span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">30</span><span class="p">))</span>
+<span class="k">end</span>
+<span class="n">plt</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/decomp_14_0.svg" src="../_images/decomp_14_0.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">u</span><span class="p">;</span>
+<span class="c"># X = [x for x in R.x, y in R.y]    </span>
+<span class="c"># Y = [y for x in R.x, y in R.y]</span>
+<span class="c"># U = reshape(u[Block(i)],R.nx+1,R.ny+1)</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">Δ</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">unew</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+
+       <span class="c"># True boundary conditions (Dirichlet)</span>
+        <span class="n">onbdy</span> <span class="o">=</span> <span class="n">vec</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">onbdy</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="k">in</span> <span class="n">findall</span><span class="p">(</span><span class="n">onbdy</span><span class="p">)</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="o">:</span><span class="p">]</span> <span class="o">.=</span> <span class="mi">0</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="c"># unew[idx] = f(R.grid[idx])</span>
+            <span class="c"># b -= unew[idx]*A[:,idx]</span>
+
+        <span class="k">end</span>
+       <span class="c"># Interface conditions</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="mi">3</span><span class="o">-</span><span class="n">i</span>
+        <span class="n">uu</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="mi">0</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="n">Block</span><span class="p">(</span><span class="n">other</span><span class="p">)],</span><span class="n">region</span><span class="p">[</span><span class="n">other</span><span class="p">]</span><span class="o">.</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">region</span><span class="p">[</span><span class="n">other</span><span class="p">]</span><span class="o">.</span><span class="n">ny</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Spline2D</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="n">other</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">region</span><span class="p">[</span><span class="n">other</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">uu</span><span class="p">,</span><span class="n">kx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">ky</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">oniface</span> <span class="o">=</span> <span class="n">vec</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">oniface</span><span class="p">)</span>
+        <span class="c"># for idx in findall(oniface)</span>
+        <span class="c">#     unew[idx] = s(R.grid[idx]...)</span>
+        <span class="c">#     b -= unew[idx]*A[:,idx]</span>
+        <span class="c"># end</span>
+
+        <span class="n">inter</span> <span class="o">=</span> <span class="n">vec</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">interior</span><span class="p">)</span>
+         <span class="n">unew</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">b</span>
 
 
-```
+<span class="n">norm</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">Δ</span><span class="p">[</span><span class="n">inter</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="o">*</span><span class="n">unew</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.9794116859324757e-13
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">extrema</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.0, 0.0)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">pyplot</span><span class="p">()</span>
+<span class="n">surface</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">R</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">U</span><span class="o">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>ArgumentError: Package PyPlot [d330b81b-6aea-500a-939a-2ce795aea3ee] is required but does not seem to be installed:
+ - Run `Pkg.instantiate()` to install all recorded dependencies.
 
-```{code-cell}
-f.(region[1].grid[idx])
-```
 
-```{code-cell}
-size(A),size(b)
-```
---></section>
+Stacktrace:
+  [1] _require(pkg::Base.PkgId)
+    @ Base ./loading.jl:1306
+  [2] _require_prelocked(uuidkey::Base.PkgId)
+    @ Base ./loading.jl:1200
+  [3] macro expansion
+    @ ./loading.jl:1180 [inlined]
+  [4] macro expansion
+    @ ./lock.jl:223 [inlined]
+  [5] require(into::Module, mod::Symbol)
+    @ Base ./loading.jl:1144
+  [6] top-level scope
+    @ ~/.julia/packages/Plots/lW9ll/src/backends.jl:681
+  [7] eval
+    @ ./boot.jl:368 [inlined]
+  [8] _initialize_backend(#unused#::Plots.PyPlotBackend)
+    @ Plots ~/.julia/packages/Plots/lW9ll/src/backends.jl:680
+  [9] backend(pkg::Plots.PyPlotBackend)
+    @ Plots ~/.julia/packages/Plots/lW9ll/src/backends.jl:176
+ [10] #pyplot#260
+    @ ~/.julia/packages/Plots/lW9ll/src/backends.jl:31 [inlined]
+ [11] pyplot()
+    @ Plots ~/.julia/packages/Plots/lW9ll/src/backends.jl:31
+ [12] top-level scope
+    @ In[16]:1
+ [13] eval
+    @ ./boot.jl:368 [inlined]
+ [14] include_string(mapexpr::typeof(REPL.softscope), mod::Module, code::String, filename::String)
+    @ Base ./loading.jl:1428
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">gui</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">R</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">U</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="o">-</span><span class="mi">2</span><span class="n">U</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="o">+</span><span class="n">U</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">:</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">UndefVarError</span>: U not defined
+
+<span class="ne">Stacktrace</span>:
+ <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">top</span><span class="o">-</span><span class="n">level</span> <span class="n">scope</span>
+   <span class="o">@</span> <span class="n">In</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span><span class="mi">2</span>
+ <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="nb">eval</span>
+   <span class="o">@</span> <span class="o">./</span><span class="n">boot</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">368</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="n">include_string</span><span class="p">(</span><span class="n">mapexpr</span><span class="p">::</span><span class="n">typeof</span><span class="p">(</span><span class="n">REPL</span><span class="o">.</span><span class="n">softscope</span><span class="p">),</span> <span class="n">mod</span><span class="p">::</span><span class="n">Module</span><span class="p">,</span> <span class="n">code</span><span class="p">::</span><span class="n">String</span><span class="p">,</span> <span class="n">filename</span><span class="p">::</span><span class="n">String</span><span class="p">)</span>
+   <span class="o">@</span> <span class="n">Base</span> <span class="o">./</span><span class="n">loading</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">1428</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -837,11 +1030,11 @@ size(A),size(b)
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="iterative.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="disk.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title"><span class="section-number">3.3. </span>Iterative linear algebra</p>
+            <p class="prev-next-title"><span class="section-number">3.4. </span>Discretizing the disk</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../mol/overview.html" title="next page">

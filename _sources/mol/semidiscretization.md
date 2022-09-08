@@ -65,38 +65,44 @@ Since this is a linear PDE, this problem is linear, and it's tridiagonal to boot
 The analysis of absolute stability implies that for a linear ODE $\partial_t\bfu = \bfA \bfu$, the eigenvalues of $\bfA$ should lie within the stability region of the IVP solver after being scaled by the time step $\tau$. When $\bfA=\bfD_{xx}$ and the stability region has finite intersection with the negative real axis, this implies $\tau = O(h^2)$, as we stated for Euler.
 
 ```{code-cell}
-using OrdinaryDiffEq, SparseArrays
+using OrdinaryDiffEq, SparseArrays, BenchmarkTools
 
-function diffusion(m)
-    h = 1/m
-    x = [ i*h for i in 0:m-1 ]
-    Dxx = 1/h^2*spdiagm(-1=>ones(m-1),0=>fill(-2.,m),1=>ones(m-1),1-m=>[1.],m-1=>[1.])
+n = 150
+h = 1/n
+x = [ i*h for i in 0:n-1 ]
+Dxx = 1/h^2*spdiagm(-1=>ones(n-1),0=>fill(-2.,n),1=>ones(n-1),1-n=>[1.],n-1=>[1.])
 
-    u₀(x) = exp(sin(3π*x))
-    ivp = ODEProblem((u,p,t)->Dxx*u,u₀.(x),(0,0.1))
-    return x,solve(ivp,RK4(),abstol=1e-7,reltol=1e-7)
-end
+u₀(x) = exp(sin(3π*x))
+ivp = ODEProblem((u,p,t)->Dxx*u,u₀.(x),(0,0.1))
+@btime solve($ivp,RK4(),abstol=1e-7,reltol=1e-7);
 ```
 
 ```{code-cell}
-x,sol = diffusion(60);
-length(sol.t)
-```
-
-If we double $m$, we cut $h$ in half, and the number of time steps required will go up by a factor of about 4.
-
-```{code-cell}
-x,sol = diffusion(120);
-length(sol.t)
+sol = solve(ivp,RK4(),abstol=1e-7,reltol=1e-7)
+println("$(length(sol.t)) time steps taken")
 ```
 
 ```{code-cell}
 using Plots,PyFormattedStrings
 anim = @animate for t in range(0,0.1,40)
-    plot(x,sol(t),ylims=(0,2.8),
+    plot(x,sol(t),ylims=(0,2.8),label="",
         title=f"t = {t:.3f}",size=(500,260),dpi=150)
 end
 mp4(anim,"diffusion.mp4")
+```
+
+```{code-cell}
+τ = maximum(diff(sol.t))
+
+τ,1/n^2
+```
+
+```{code-cell}
+using LinearAlgebra
+λ = eigvals(Matrix(Dxx))
+
+scatter(real(τ*λ),imag(τ*λ),aspect_ratio=1,label="",
+    xlabel="Re ζ",ylabel="Im ζ")
 ```
 
 But $\bfA$ also has an $O(1)$ eigenvalue, which represents evolution in the ODE on the time scale $O(1)$. We will be forced to take $O(h^{-2})$ time steps to observe that scale. That is overkill from the standpoint of accuracy in this mode, but required by stability.
@@ -110,23 +116,12 @@ This situation is called **stiffness**. There is no accepted universal definitio
 That last criterion appears because implicit methods have much larger stability regions than their explicit counterparts at the same order. They are also the only methods that can have unbounded stability regions.
 
 ```{code-cell}
-function diffusion_stiff(m)
-    h = 1/m
-    x = [ i*h for i in 0:m-1 ]
-    Dxx = 1/h^2*spdiagm(-1=>ones(m-1),0=>fill(-2.,m),1=>ones(m-1),1-m=>[1.],m-1=>[1.])
-
-    u₀(x) = exp(sin(3π*x))
-    ivp = ODEProblem((u,p,t)->Dxx*u,u₀.(x),(0,0.1))
-    return x,solve(ivp,Rodas4P(),abstol=1e-7,reltol=1e-7)
-end
-x,sol = diffusion_stiff(120);
-length(sol.t)
+@btime solve($ivp,Rodas4P(),abstol=1e-7,reltol=1e-7);
 ```
-
-The vastly smaller number of time steps more than makes up for the more expensive steps here:
 
 ```{code-cell}
-using BenchmarkTools
-@btime diffusion(180);
-@btime diffusion_stiff(180);
+sol = solve(ivp,Rodas4P(),abstol=1e-7,reltol=1e-7)
+println("$(length(sol.t)) time steps taken")
 ```
+
+The vastly smaller number of time steps more than makes up for the more expensive steps here.

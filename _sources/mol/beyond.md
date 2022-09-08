@@ -61,7 +61,7 @@ When there are boundary conditions present, we have a few options. If they are f
 For example, consider the **Bratu equation** $\partial_t u = \partial_{xx}u + e^u$ with mixed conditions
 
 $$
-u(0,t) = 0, \uquad \partial_x u(1,t) = 0. 
+u(0,t) = 0, \quad \partial_x u(1,t) = 0. 
 $$
 
 We encode the map from all values to interior values as the function `chop` and the inverse map as `extend`. The value at $x=0$ is trivially zero, while the value at $x=1$ comes from the centered FD approximation 
