@@ -78,12 +78,6 @@ using LinearAlgebra
 ⊗ = kron
 include("diffmats.jl")
 
-n = 8
-R₁ = (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1))
-R₂ = (nx=n,xspan=(0,1),ny=n,yspan=(-1,0)) 
-
-f(x) = x[1]+2
-
 function isboundary(xy)
     x,y = xy
     return (x==-1) | (x==1) | (y==-1) | (y==1) | 
@@ -94,36 +88,42 @@ function isinterface(xy)
     return ((xy[1]==0) & (-1<xy[2]<0))
 end
 
-region = []
-for R in (R₁,R₂)
-    nx,ny = R.nx,R.ny
-    x,Dx,Dxx = diffmats(R.nx,R.xspan...)
-    y,Dy,Dyy = diffmats(R.ny,R.yspan...)
-    N = (nx+1)*(ny+1)
-    Δ = I(ny+1)⊗Dxx + Dyy⊗I(nx+1)
-    grid = vec([[x,y] for x in x, y in y])
-    onbdy = isboundary.(grid)
-    oniface = isinterface.(grid)
-    interior = @. !onbdy & !oniface
-    Dnorm = (I(ny+1)⊗Dx)[oniface,:]
-    push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior,Dnorm))
-end
-```
+function domains(n)
+    R₁ = (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1))
+    R₂ = (nx=n,xspan=(0,1),ny=n,yspan=(-1,0)) 
 
-```{code-cell}
-points = [region[1].grid;region[2].grid]
-offset = [0,region[1].N]
-idx = []
-for (k,r) in zip(offset,region)
-    all = k.+(1:r.N)
-    iface = k.+findall(r.oniface)
-    bdy = k.+findall(r.onbdy)
-    push!(idx,(;all,iface,bdy))
+    region = []
+    for R in (R₁,R₂)
+        nx,ny = R.nx,R.ny
+        x,Dx,Dxx = diffmats(R.nx,R.xspan...)
+        y,Dy,Dyy = diffmats(R.ny,R.yspan...)
+        N = (nx+1)*(ny+1)
+        Δ = I(ny+1)⊗Dxx + Dyy⊗I(nx+1)
+        grid = vec([[x,y] for x in x, y in y])
+        onbdy = isboundary.(grid)
+        oniface = isinterface.(grid)
+        interior = @. !onbdy & !oniface
+        Dnorm = (I(ny+1)⊗Dx)[oniface,:]
+        
+        push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior,Dnorm))
+    end
+
+    offset = [0,region[1].N]
+    idx = []
+    for (k,r) in zip(offset,region)
+        all = k.+(1:r.N)
+        iface = k.+findall(r.oniface)
+        bdy = k.+findall(r.onbdy)
+        push!(idx,(;all,iface,bdy))
+    end
+    
+    return region,idx
 end
 ```
 
 ```{code-cell}
 using Plots
+region,idx = domains(10)
 fig = plot(aspect_ratio=1,m=3,leg=false)
 for (i,r,sym) in zip(idx,region,[:x,:+])
     for s in [r.interior,r.onbdy,r.oniface]
@@ -135,6 +135,9 @@ fig
 ```
 
 ```{code-cell}
+f(x) = x[1]+2  # forcing function
+region,idx = domains(40)
+
 N = sum(r.N for r in region)
 A = sparse(zeros(N,N))
 b = zeros(N)
@@ -145,9 +148,6 @@ for (i,r) in zip(idx,region)
     A[i.bdy,i.bdy] .= diagm(ones(length(i.bdy)))
     b[i.bdy] .= 0
 end
-```
-
-```{code-cell}
 spy(A,color=:redsblues)
 ```
 
@@ -170,8 +170,7 @@ u = A\b;
 ```
 
 ```{code-cell}
-gr()
-plt = plot(aspect_ratio=1)
+plt = plot([-1,-1,1,1,0,0,-1],[1,-1,-1,0,0,1,1],l=(2,:black),label="",aspect_ratio=1)
 for (i,r) in zip(idx,region)
     contour!(r.x,r.y,u[i.all],levels=-.25:0.01:0)
 end
@@ -213,14 +212,6 @@ While the Schwarz methods make it easy to parallelize the solution process and g
 ⊗ = kron
 include("diffmats.jl")
 
-n = 8
-R = [ 
-    (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1)),
-    (nx=n,xspan=(-0.23,1),ny=n,yspan=(-1,0))
-    ]
-
-f(x) = x[1]+2
-
 function isboundary(xy)
     x,y = xy
     return (x==-1) | (x==1) | (y==-1) | (y==1) | 
@@ -235,33 +226,40 @@ end
 function isinterface(xy)
     return ((xy[1]==0) & (-1<xy[2]<0))
 end
-```
 
-```{code-cell}
-region = []
-for i in 1:2
-    nx,ny = R[i].nx,R[i].ny
-    x,Dx,Dxx = diffmats(R[i].nx,R[i].xspan...)
-    y,Dy,Dyy = diffmats(R[i].ny,R[i].yspan...)
-    N = (nx+1)*(ny+1)
-    Δ = I(ny+1)⊗Dxx + Dyy⊗I(nx+1)
-    grid = [[x,y] for x in x, y in y]
-    interior = falses(nx+1,ny+1)
-    interior[2:nx,2:ny] .= true
-    oniface = .!interior
-    otherR = R[3-i]
-    for idx in findall(oniface)
-        if !isinside(grid[idx],otherR.xspan,otherR.yspan)
-            oniface[idx] = false
+function domains(n)
+    R = [ 
+    (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1)),
+    (nx=n,xspan=(-0.23,1),ny=n,yspan=(-1,0))
+    ]
+
+    region = []
+    for i in 1:2
+        nx,ny = R[i].nx,R[i].ny
+        x,Dx,Dxx = diffmats(R[i].nx,R[i].xspan...)
+        y,Dy,Dyy = diffmats(R[i].ny,R[i].yspan...)
+        N = (nx+1)*(ny+1)
+        Δ = I(ny+1)⊗Dxx + Dyy⊗I(nx+1)
+        grid = [[x,y] for x in x, y in y]
+        interior = falses(nx+1,ny+1)
+        interior[2:nx,2:ny] .= true
+        oniface = .!interior
+        otherR = R[3-i]
+        for idx in findall(oniface)
+            if !isinside(grid[idx],otherR.xspan,otherR.yspan)
+                oniface[idx] = false
+            end
         end
+        onbdy = isboundary.(grid)
+        push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior))
     end
-    onbdy = isboundary.(grid)
-    push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior))
+        return region
 end
 ```
 
 ```{code-cell}
 using Plots
+region = domains(12)
 fig = plot(aspect_ratio=1,m=3,leg=false)
 for (r,sym) in zip(region,[:x,:+])
     for s in [r.interior,r.onbdy,r.oniface]
@@ -274,26 +272,21 @@ fig
 
 ```{code-cell}
 using BlockArrays,Dierckx
-
+f(x) = x[1]+2  # forcing function
 N = [r.N for r in region]
 u = BlockVector(zeros(sum(N)),N)
 
-function schwarz(u)
-    u = BlockVector(zeros(sum(N)),N)
+function schwarz(u,f,region)
     for (i,R) in enumerate(region)    
         A = R.Δ
-        b = zeros(R.N)
-        unew = zeros(R.N)
+        b = f.(vec(R.grid))
 
         # True boundary conditions (Dirichlet)
         onbdy = vec(R.onbdy)
         for idx in findall(onbdy)
-            b[idx] = f(R.grid[idx])
+            b[idx] = 0
             A[idx,:] .= 0
             A[idx,idx] = 1
-
-            # unew[idx] = f(R.grid[idx])
-            # b -= unew[idx]*A[:,idx]
         end
 
         # Interface conditions
@@ -305,85 +298,31 @@ function schwarz(u)
             b[idx] = s(R.grid[idx]...)
             A[idx,:] .= 0
             A[idx,idx] = 1
-
-            # unew[idx] = s(R.grid[idx]...)
-            # b -= unew[idx]*A[:,idx]
         end
-
-        # inter = vec(R.interior)
-        # unew[inter] = A[inter,inter]\b[inter]
-
-        unew = A\b
-        u[Block(i)] .= unew
+        
+        u[Block(i)] .= A\b
     end
     return u
 end
 ```
 
 ```{code-cell}
-u = schwarz(u)
-plt = plot(label="")
-for (i,R) in enumerate(region)
-    U = reshape(u[Block(i)],R.nx+1,R.ny+1)
-    contour!(R.x,R.y,U',levels=range(-1,3,30))
+region = domains(40)
+N = [r.N for r in region]
+u = BlockVector(zeros(sum(N)),N)
+
+anim = @animate for i in 1:10
+    global u
+    plt = plot([-1,-1,1,1,0,0,-1],[1,-1,-1,0,0,1,1],l=(2,:black),label="",aspect_ratio=1)
+    for (i,R) in enumerate(region)
+        U = reshape(u[Block(i)],R.nx+1,R.ny+1)
+        contour!(R.x,R.y,U',levels=-.25:0.01:0)
+    end
+    u = schwarz(u,f,region)
+    plt
 end
-plt
-```
 
-```{code-cell}
-i=1;
-R = region[i];
-u = 0*u;
-# X = [x for x in R.x, y in R.y]    
-# Y = [y for x in R.x, y in R.y]
-# U = reshape(u[Block(i)],R.nx+1,R.ny+1)
-        A = R.Δ
-        b = zeros(R.N)
-        unew = zeros(R.N)
-
-       # True boundary conditions (Dirichlet)
-        onbdy = vec(R.onbdy)
-        for idx in findall(onbdy)
-            b[idx] = f(R.grid[idx])
-            A[idx,:] .= 0
-            A[idx,idx] = 1
-            # unew[idx] = f(R.grid[idx])
-            # b -= unew[idx]*A[:,idx]
-
-        end
-       # Interface conditions
-        other = 3-i
-        uu = reshape(0*u[Block(other)],region[other].nx+1,region[other].ny+1)
-        s = Spline2D(region[other].x,region[other].y,uu,kx=1,ky=1)
-        oniface = vec(R.oniface)
-        # for idx in findall(oniface)
-        #     unew[idx] = s(R.grid[idx]...)
-        #     b -= unew[idx]*A[:,idx]
-        # end
-
-        inter = vec(R.interior)
-         unew = A\b
-
-
-norm(R.Δ[inter,:]*unew)
-```
-
-```{code-cell}
-extrema(u)
-```
-
-```{code-cell}
-pyplot()
-surface(R.x,R.y,U')
-```
-
-```{code-cell}
-gui()
-```
-
-```{code-cell}
-h = R.y[2]-R.y[1];
-U[4,:]-2U[3,:]+U[2,:]
+mp4(anim,"schwarz.mp4",fps=1)
 ```
 
 ```{code-cell}
