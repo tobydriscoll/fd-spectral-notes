@@ -78,12 +78,6 @@ using LinearAlgebra
 ⊗ = kron
 include("diffmats.jl")
 
-n = 8
-R₁ = (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1))
-R₂ = (nx=n,xspan=(0,1),ny=n,yspan=(-1,0)) 
-
-f(x) = x[1]+2
-
 function isboundary(xy)
     x,y = xy
     return (x==-1) | (x==1) | (y==-1) | (y==1) | 
@@ -94,36 +88,42 @@ function isinterface(xy)
     return ((xy[1]==0) & (-1<xy[2]<0))
 end
 
-region = []
-for R in (R₁,R₂)
-    nx,ny = R.nx,R.ny
-    x,Dx,Dxx = diffmats(R.nx,R.xspan...)
-    y,Dy,Dyy = diffmats(R.ny,R.yspan...)
-    N = (nx+1)*(ny+1)
-    Δ = I(ny+1)⊗Dxx + Dyy'⊗I(nx+1)
-    grid = vec([[x,y] for x in x, y in y])
-    onbdy = isboundary.(grid)
-    oniface = isinterface.(grid)
-    interior = @. !onbdy & !oniface
-    Dnorm = (I(ny+1)⊗Dx)[oniface,:]
-    push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior,Dnorm))
-end
-```
+function domains(n)
+    R₁ = (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1))
+    R₂ = (nx=n,xspan=(0,1),ny=n,yspan=(-1,0)) 
 
-```{code-cell}
-points = [region[1].grid;region[2].grid]
-offset = [0,region[1].N]
-idx = []
-for (k,r) in zip(offset,region)
-    all = k.+(1:r.N)
-    iface = k.+findall(r.oniface)
-    bdy = k.+findall(r.onbdy)
-    push!(idx,(;all,iface,bdy))
+    region = []
+    for R in (R₁,R₂)
+        nx,ny = R.nx,R.ny
+        x,Dx,Dxx = diffmats(R.nx,R.xspan...)
+        y,Dy,Dyy = diffmats(R.ny,R.yspan...)
+        N = (nx+1)*(ny+1)
+        Δ = I(ny+1)⊗Dxx + Dyy⊗I(nx+1)
+        grid = vec([[x,y] for x in x, y in y])
+        onbdy = isboundary.(grid)
+        oniface = isinterface.(grid)
+        interior = @. !onbdy & !oniface
+        Dnorm = (I(ny+1)⊗Dx)[oniface,:]
+        
+        push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior,Dnorm))
+    end
+
+    offset = [0,region[1].N]
+    idx = []
+    for (k,r) in zip(offset,region)
+        all = k.+(1:r.N)
+        iface = k.+findall(r.oniface)
+        bdy = k.+findall(r.onbdy)
+        push!(idx,(;all,iface,bdy))
+    end
+    
+    return region,idx
 end
 ```
 
 ```{code-cell}
 using Plots
+region,idx = domains(10)
 fig = plot(aspect_ratio=1,m=3,leg=false)
 for (i,r,sym) in zip(idx,region,[:x,:+])
     for s in [r.interior,r.onbdy,r.oniface]
@@ -135,6 +135,9 @@ fig
 ```
 
 ```{code-cell}
+f(x) = x[1]+2  # forcing function
+region,idx = domains(40)
+
 N = sum(r.N for r in region)
 A = sparse(zeros(N,N))
 b = zeros(N)
@@ -145,9 +148,6 @@ for (i,r) in zip(idx,region)
     A[i.bdy,i.bdy] .= diagm(ones(length(i.bdy)))
     b[i.bdy] .= 0
 end
-```
-
-```{code-cell}
 spy(A,color=:redsblues)
 ```
 
@@ -170,15 +170,14 @@ u = A\b;
 ```
 
 ```{code-cell}
-gr()
-plt = plot(aspect_ratio=1)
+plt = plot([-1,-1,1,1,0,0,-1],[1,-1,-1,0,0,1,1],l=(2,:black),label="",aspect_ratio=1)
 for (i,r) in zip(idx,region)
     contour!(r.x,r.y,u[i.all],levels=-.25:0.01:0)
 end
 plt
 ```
 
-We could again use the Schur complementation technique to remove the interface unknowns from the linear system. 
+We could again use the Schur complement technique to remove the interface unknowns from the linear system. 
 
 ## Overlapping
 
@@ -199,8 +198,8 @@ is equivalent to the solution of the subproblems
 
 $$
 \Delta u_i &= 0, \quad \text{in } \Omega_i, \\ 
-B u_i &= 0, \quad \text{on } \Gamma_i,  
-u_i &= P_i u_{3-i}, \quad \text{on } \tilde{Gamma}_i,
+B u_i &= 0, \quad \text{on } \Gamma_i, \\  
+u_i &= P_i u_{3-i}, \quad \text{on } \tilde{\Gamma}_i,
 $$
 
 where $P_i$ represents the projection, say by interpolation, of a function defined in $\Omega_{3-i}$ into one defined on $\tilde{\Gamma}_i$. That is, a subsolution on one subdomain must agree with the other subsolution on the part of its boundary that lies inside the other subdomain. Note that no normal derivative (Neumann condition) is required. This formulation is straightforward to generalize to more than two overlapping subdomains.
@@ -209,21 +208,9 @@ The classical **Schwarz alternating method** (technically, *multiplicative* Schw
 
 While the Schwarz methods make it easy to parallelize the solution process and give some global geometric flexibility, the overlap regions are doubly discretized, which is in some sense wasteful. Furthermore, the convergence rate of the process degrades as the amount of overlap decreases, and when a large number of subdomains is used, there needs to be a coarse global discretization in order to speed up communication between distant parts of the domain. The method is frequently used as a preconditioner in an iterative solution of the global problem.
 
-
-<!--
-
 ```{code-cell}
-using LinearAlgebra
 ⊗ = kron
 include("diffmats.jl")
-
-n = 8
-R = [ 
-    (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1)),
-    (nx=n,xspan=(-0.23,1),ny=n,yspan=(-1,0))
-    ]
-
-f(x) = x[1]+2
 
 function isboundary(xy)
     x,y = xy
@@ -239,33 +226,40 @@ end
 function isinterface(xy)
     return ((xy[1]==0) & (-1<xy[2]<0))
 end
-```
 
-```{code-cell}
-region = []
-for i in 1:2
-    nx,ny = R[i].nx,R[i].ny
-    x,Dx,Dxx = diffmats(R[i].nx,R[i].xspan...)
-    y,Dy,Dyy = diffmats(R[i].ny,R[i].yspan...)
-    N = (nx+1)*(ny+1)
-    Δ = I(ny+1)⊗Dxx + Dyy'⊗I(nx+1)
-    grid = [[x,y] for x in x, y in y]
-    interior = falses(nx+1,ny+1)
-    interior[2:nx,2:ny] .= true
-    oniface = .!interior
-    otherR = R[3-i]
-    for idx in findall(oniface)
-        if !isinside(grid[idx],otherR.xspan,otherR.yspan)
-            oniface[idx] = false
+function domains(n)
+    R = [ 
+    (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1)),
+    (nx=n,xspan=(-0.23,1),ny=n,yspan=(-1,0))
+    ]
+
+    region = []
+    for i in 1:2
+        nx,ny = R[i].nx,R[i].ny
+        x,Dx,Dxx = diffmats(R[i].nx,R[i].xspan...)
+        y,Dy,Dyy = diffmats(R[i].ny,R[i].yspan...)
+        N = (nx+1)*(ny+1)
+        Δ = I(ny+1)⊗Dxx + Dyy⊗I(nx+1)
+        grid = [[x,y] for x in x, y in y]
+        interior = falses(nx+1,ny+1)
+        interior[2:nx,2:ny] .= true
+        oniface = .!interior
+        otherR = R[3-i]
+        for idx in findall(oniface)
+            if !isinside(grid[idx],otherR.xspan,otherR.yspan)
+                oniface[idx] = false
+            end
         end
+        onbdy = isboundary.(grid)
+        push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior))
     end
-    onbdy = isboundary.(grid)
-    push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior))
+        return region
 end
 ```
 
 ```{code-cell}
 using Plots
+region = domains(12)
 fig = plot(aspect_ratio=1,m=3,leg=false)
 for (r,sym) in zip(region,[:x,:+])
     for s in [r.interior,r.onbdy,r.oniface]
@@ -277,30 +271,56 @@ fig
 ```
 
 ```{code-cell}
-u = [zeros(region[1].N),zeros(region[2].N)  ]
-A = region[1].Δ
-b = zeros(region[1].N)
+using BlockArrays,Dierckx
+f(x) = x[1]+2  # forcing function
+N = [r.N for r in region]
+u = BlockVector(zeros(sum(N)),N)
 
-for idx in findall(vec(region[1].onbdy))
-    b[idx] = f(region[1].grid[idx])
-    A[idx,:] .= 0
-    A[idx,idx] = 1
+function schwarz(u,f,region)
+    for (i,R) in enumerate(region)    
+        A = R.Δ
+        b = f.(vec(R.grid))
+
+        # True boundary conditions (Dirichlet)
+        onbdy = vec(R.onbdy)
+        for idx in findall(onbdy)
+            b[idx] = 0
+            A[idx,:] .= 0
+            A[idx,idx] = 1
+        end
+
+        # Interface conditions
+        other = 3-i
+        uu = reshape(u[Block(other)],region[other].nx+1,region[other].ny+1)
+        s = Spline2D(region[other].x,region[other].y,uu,kx=1,ky=1)
+        oniface = vec(R.oniface)
+        for idx in findall(oniface)
+            b[idx] = s(R.grid[idx]...)
+            A[idx,:] .= 0
+            A[idx,idx] = 1
+        end
+        
+        u[Block(i)] .= A\b
+    end
+    return u
 end
-
-for idx in findall(vec(region[1].oniface))
-    b[idx] = u[2]region[1].grid[idx])
-    A[idx,:] .= 0
-    A[idx,idx] = 1
-end
-
-
 ```
 
 ```{code-cell}
-f.(region[1].grid[idx])
-```
+region = domains(40)
+N = [r.N for r in region]
+u = BlockVector(zeros(sum(N)),N)
 
-```{code-cell}
-size(A),size(b)
+anim = @animate for i in 1:10
+    global u
+    plt = plot([-1,-1,1,1,0,0,-1],[1,-1,-1,0,0,1,1],l=(2,:black),label="",aspect_ratio=1)
+    for (i,R) in enumerate(region)
+        U = reshape(u[Block(i)],R.nx+1,R.ny+1)
+        contour!(R.x,R.y,U',levels=-.25:0.01:0)
+    end
+    u = schwarz(u,f,region)
+    plt
+end
+
+mp4(anim,"schwarz.mp4",fps=1)
 ```
--->
