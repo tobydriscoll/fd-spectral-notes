@@ -104,14 +104,14 @@ sphinx:
           "epsm": ["\\epsilon_{\\text{mach}}"]
           "logit": ["\\operatorname{logit}"]
     
-    latex_additional_files: etc/preamble.tex
+    # latex_additional_files: etc/preamble.tex
     latex_elements:
       preamble: >
         \usepackage{mathtools}
         \usepackage{fontspec}
         \usepackage{unicode-math}
         \setmainfont[Ligatures=TeX]{TeX Gyre Schola}
-        \setmathfont{TeX Gyre Schola Math}
+        \setmathfont[Scale=MatchLowercase]{TeX Gyre Schola Math}
         \include{preamble}
       passoptionstopackages: \PassOptionsToPackage{svgnames}{xcolor}
       sphinxsetup: verbatimwithframe=false,VerbatimColor={RGB}{255,252,245}
