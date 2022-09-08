@@ -123,7 +123,7 @@ spy(L)
 û(x,y) = x.^2 + 2y
 f(x,y) = 2
 
-nr,nθ = 37,58
+nr,nθ = 39,58
 r,θ,A = polarlap(nr,nθ)
 
 X = [r*cos(θ) for r in r, θ in θ]
@@ -142,7 +142,7 @@ u[inter] = Ã\f̃;
 ```
 
 ```{code-cell}
-plotlyjs()
+pyplot()
 U = reshape(u,nr+1,nθ)
-surface(X,Y,U)
+surface(X,Y,U,color=:viridis)
 ```
