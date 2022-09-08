@@ -45,7 +45,7 @@ $$
 If we look at the simplest centered difference formula, we get
 
 $$
-\frac{u(h)-u(-h)}{2h} = \frac{ e^{i\xi h} - e^{-i\xi h}}{2h} = \frac{i}{h} \sin(\xi h) =: ig_2(\xi h). 
+\frac{u(h)-u(-h)}{2h} = \frac{ e^{i\xi h} - e^{-i\xi h}}{2h} = \frac{i}{h} \sin(\xi h) =: \frac{i}{h} g_2(\xi h). 
 $$
 
 We can call $g_2$ the **differentiation factor**. It should be compared to the exact derivative $u'(0)=i\xi$. Note the series expansion
