@@ -52,6 +52,7 @@ sphinx:
           "integer": ["\\mathbb{Z}"]
           "bfa" : "\\mathbf{a}"
           "bfb" : "\\mathbf{b}"
+          "bfd" : "\\mathbf{d}"
           "bfe" : "\\mathbf{e}"
           "bff" : "\\mathbf{f}"
           "bfx" : "\\mathbf{x}"

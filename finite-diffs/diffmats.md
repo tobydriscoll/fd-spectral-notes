@@ -86,7 +86,7 @@ $$
 \begin{bmatrix}
   1 \\ u_1 \\ u_2 \\ \vdots \\ u_{n-1} \\ -1
 \end{bmatrix}
-= [ g(x_i) ]_{i=0,\ldots,n}.  
+= [ f(x_i) ]_{i=0,\ldots,n}.  
 $$
 
 Let $\bfd_0,\ldots,\bfd_n$ be the columns of $\bfD_{xx}$. Then 
@@ -117,7 +117,7 @@ $$
 The reduced linear system is now 
 
 $$
-\bfA = \tilde{\bfu} = \bfC^T (\bff - \bfd_0 + \bfd_n). 
+\bfA \tilde{\bfu} = \bfC^T (\bff - \bfd_0 + \bfd_n). 
 $$
 
 In practice we can simply use row and column indexing rather than constructing the matrix $\bfC$.
