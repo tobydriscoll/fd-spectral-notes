@@ -148,11 +148,25 @@ Jv = jac(u)*v
 norm(du-Jv)
 ```
 
+A simple Newton iteration will converge for a sufficiently close initial guess to the solution.
 We don't have to make sure that the initial guess satisfies the boundary conditions, because a single Newton iteration will take care of that for us.
 
 ```{code-cell} julia
-sol = nlsolve(residual,jac,0*x)
+u = 0*x
+for k in 1:4
+    du = jac(u)\residual(u)
+    println("norm du = $(norm(du))")
+    u -= du 
+end
+
 using Plots
+plot(x,u,title="residual norm = $(norm(residual(u)))",label="")
+```
+
+Most practical nonlinear solvers will happily accept a function to compute the exact Jacobian:
+
+```{code-cell} julia
+sol = nlsolve(residual,jac,0*x)
 plot(x,sol.zero,title="residual norm = $(sol.residual_norm)")
 ```
 

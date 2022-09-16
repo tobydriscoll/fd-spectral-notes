@@ -33,7 +33,7 @@ function advdiff(λ,n)
     A[2:n,:] .= Ã[2:n,:]
     f = [1; zeros(n-1); -1]
     return x,A\f 
-end
+end;
 ```
 
 ```{code-cell}
@@ -98,14 +98,13 @@ function advdiff(λ,M,n)
     γ = atan(M)
     s₁ = @. γ*(s-1)/2
     x = @. 1 + 2/M*tan(s₁)
-    ξ₁ = @. (γ/M)*sec(s₁)^2
-    ξ₂ = @. (γ^2/M)*sec(s₁)^2*tan(s₁)
-    Dx = diagm(@. 1/ξ₁)*Ds 
-    Dxx = diagm(@. 1/(ξ₁)^2)*Dss - diagm(@. ξ₂/(ξ₁)^3)*Ds
+    ∂x = @. (γ/M)*sec(s₁)^2
+    ∂²x = @. (γ^2/M)*sec(s₁)^2*tan(s₁)
+    Dx = diagm(@. 1/∂x)*Ds 
+    Dxx = diagm(@. 1/(∂x)^2)*Dss - diagm(@. ∂²x/(∂x)^3)*Ds
 
-    Ã = Dx - λ*Dxx
-    A = diagm(ones(n+1))
-    A[2:n,:] .= Ã[2:n,:]
+    A = Dx - λ*Dxx
+    A[[1,n+1],:] .= I(n+1)[[1,n+1],:]
     f = [1; zeros(n-1); -1]
     return s,x,A\f 
 end
@@ -131,4 +130,4 @@ end
 plt
 ```
 
-The $M$ we chose works very well for the 0.1 and 0.05 cases, is too large for 1.0, and is smaller than ideal for the smallest $\lambda$ values. There are adaptive methods that try to choose $M$ well automatically, or to automate the entire coordinate transformation (**moving-mesh** methods), but that's going far afield for us.
+The $M$ we chose works very well for the 0.1 and 0.05 cases, is too large for 1.0, and is smaller than ideal for the smallest $\lambda$ values. There are adaptive methods that try to choose $M$ well automatically, or to automate the entire coordinate transformation (*moving-mesh* methods), but that's going far afield for us.

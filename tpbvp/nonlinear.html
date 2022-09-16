@@ -678,17 +678,41 @@ If we use fictitious points, the Schur complement trick can be applied to <span 
 </div>
 </div>
 </div>
-<p>We don’t have to make sure that the initial guess satisfies the boundary conditions, because a single Newton iteration will take care of that for us.</p>
+<p>A simple Newton iteration will converge for a sufficiently close initial guess to the solution.
+We don’t have to make sure that the initial guess satisfies the boundary conditions, because a single Newton iteration will take care of that for us.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="o">*</span><span class="n">x</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">4</span><span class="w"></span>
+<span class="w">    </span><span class="n">du</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jac</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">\</span><span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;norm du = </span><span class="si">$</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">du</span><span class="p">))</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">du</span><span class="w"> </span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;residual norm = </span><span class="si">$</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">residual</span><span class="p">(</span><span class="n">u</span><span class="p">)))</span><span class="s">&quot;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>norm du = 23.73029006701672
+norm du = 2.1614159353852893e-11
+norm du = 1.2785410205811886e-12
+norm du = 2.939298814185266e-12
+</pre></div>
+</div>
+<img alt="../_images/nonlinear_8_1.svg" src="../_images/nonlinear_8_1.svg" /></div>
+</div>
+<p>Most practical nonlinear solvers will happily accept a function to compute the exact Jacobian:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nlsolve</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span><span class="n">jac</span><span class="p">,</span><span class="mi">0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
-<span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
 <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sol</span><span class="o">.</span><span class="n">zero</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;residual norm = </span><span class="si">$</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">)</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/nonlinear_8_0.svg" src="../_images/nonlinear_8_0.svg" /></div>
+<img alt="../_images/nonlinear_10_0.svg" src="../_images/nonlinear_10_0.svg" /></div>
 </div>
 <!-- While the numerical method is "discretize-then-linearize," to obtain expressions for the Jacobian it's often easier to linearize first, then discretize. Suppose that we want to linearize the operator $f(u)=u''+uu'+1$ around the function $u=U(x)$. If we perturb $u$ to $U+ \epsilon v(x)$, then 
 
@@ -750,7 +774,7 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.268820917
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.709612834
 </pre></div>
 </div>
 </div>
@@ -762,7 +786,7 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/nonlinear_11_0.svg" src="../_images/nonlinear_11_0.svg" /></div>
+<img alt="../_images/nonlinear_13_0.svg" src="../_images/nonlinear_13_0.svg" /></div>
 </div>
 <p>However, when we decrease <span class="math notranslate nohighlight">\(\lambda\)</span> just a bit, the solution takes <em>much</em> longer and looks very different.</p>
 <div class="cell docutils container">
@@ -773,7 +797,7 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.278816291
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>11.053341458
 </pre></div>
 </div>
 </div>
@@ -785,7 +809,7 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/nonlinear_14_0.svg" src="../_images/nonlinear_14_0.svg" /></div>
+<img alt="../_images/nonlinear_16_0.svg" src="../_images/nonlinear_16_0.svg" /></div>
 </div>
 <p>A closer look at the nonlinear solver results shows that the iteration did not converge in the second case:</p>
 <div class="cell docutils container">
@@ -808,7 +832,7 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.030733042
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.034152584
 </pre></div>
 </div>
 </div>
@@ -820,7 +844,7 @@ The boundary conditions imply that $U+\epsilon v$ is zero at both ends, but sinc
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/nonlinear_19_0.svg" src="../_images/nonlinear_19_0.svg" /></div>
+<img alt="../_images/nonlinear_21_0.svg" src="../_images/nonlinear_21_0.svg" /></div>
 </div>
 </section>
 </section>

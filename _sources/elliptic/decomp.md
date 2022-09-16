@@ -324,7 +324,3 @@ end
 
 mp4(anim,"schwarz.mp4",fps=1)
 ```
-
-```{code-cell}
-
-```
