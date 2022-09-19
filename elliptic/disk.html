@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>3.4. Discretizing the disk &#8212; FD and Spectral methods for PDE</title>
+    <title>3.3. Discretizing the disk &#8212; FD and Spectral methods for PDE</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -55,8 +55,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3.5. Domain decomposition" href="decomp.html" />
-    <link rel="prev" title="3.3. Iterative linear algebra" href="iterative.html" />
+    <link rel="next" title="3.4. Iterative linear algebra" href="iterative.html" />
+    <link rel="prev" title="3.2. Solving the Poisson equation" href="poisson.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -211,14 +211,14 @@ const thebe_selector_output = ".output, .cell_output"
      3.2. Solving the Poisson equation
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="iterative.html">
-     3.3. Iterative linear algebra
-    </a>
-   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     3.4. Discretizing the disk
+     3.3. Discretizing the disk
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="iterative.html">
+     3.4. Iterative linear algebra
     </a>
    </li>
    <li class="toctree-l2">
@@ -459,7 +459,7 @@ title="Print to PDF"
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="discretizing-the-disk">
-<h1><span class="section-number">3.4. </span>Discretizing the disk<a class="headerlink" href="#discretizing-the-disk" title="Permalink to this headline">#</a></h1>
+<h1><span class="section-number">3.3. </span>Discretizing the disk<a class="headerlink" href="#discretizing-the-disk" title="Permalink to this headline">#</a></h1>
 <p>The unit disk is a tensor-product domain—with a twist. Usually we think of <span class="math notranslate nohighlight">\(0\le r \le 1\)</span> and <span class="math notranslate nohighlight">\(-\pi\le \theta &lt; \pi\)</span>, but that formulation leads to an artificial singularity at the origin which then has to be remedied. It’s better to start with</p>
 <div class="math notranslate nohighlight">
 \[
@@ -515,7 +515,7 @@ h = \frac{2}{n_r}, \quad q = \frac{\pi}{n_{\theta}}.
 \end{split}\]</div>
 <p>Following this process term by term for a linear differential operator leads to a Sylvester-style equation that we can transform using Kronecker products.</p>
 <div class="proof example admonition" id="example-0">
-<p class="admonition-title"><span class="caption-number">Example 3.4.1 </span> (Polar Laplacian)</p>
+<p class="admonition-title"><span class="caption-number">Example 3.3.1 </span> (Polar Laplacian)</p>
 <section class="example-content" id="proof-content">
 <p>The Laplacian in polar coordinates is</p>
 <div class="math notranslate nohighlight">
@@ -625,17 +625,17 @@ h = \frac{2}{n_r}, \quad q = \frac{\pi}{n_{\theta}}.
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="iterative.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="poisson.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title"><span class="section-number">3.3. </span>Iterative linear algebra</p>
+            <p class="prev-next-title"><span class="section-number">3.2. </span>Solving the Poisson equation</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="decomp.html" title="next page">
+    <a class='right-next' id="next-link" href="iterative.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">3.5. </span>Domain decomposition</p>
+        <p class="prev-next-title"><span class="section-number">3.4. </span>Iterative linear algebra</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -313,7 +313,8 @@ u = BlockVector(zeros(sum(N)),N)
 
 anim = @animate for i in 1:10
     global u
-    plt = plot([-1,-1,1,1,0,0,-1],[1,-1,-1,0,0,1,1],l=(2,:black),label="",aspect_ratio=1)
+    plt = plot([-1,-1,1,1,0,0,-1],[1,-1,-1,0,0,1,1],l=(2,:black),label="",
+        aspect_ratio=1,dpi=200)
     for (i,R) in enumerate(region)
         U = reshape(u[Block(i)],R.nx+1,R.ny+1)
         contour!(R.x,R.y,U',levels=-.25:0.01:0)

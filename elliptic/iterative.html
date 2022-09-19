@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>3.3. Iterative linear algebra &#8212; FD and Spectral methods for PDE</title>
+    <title>3.4. Iterative linear algebra &#8212; FD and Spectral methods for PDE</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -55,8 +55,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3.4. Discretizing the disk" href="disk.html" />
-    <link rel="prev" title="3.2. Solving the Poisson equation" href="poisson.html" />
+    <link rel="next" title="3.5. Domain decomposition" href="decomp.html" />
+    <link rel="prev" title="3.3. Discretizing the disk" href="disk.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -211,14 +211,14 @@ const thebe_selector_output = ".output, .cell_output"
      3.2. Solving the Poisson equation
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     3.3. Iterative linear algebra
-    </a>
-   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="disk.html">
-     3.4. Discretizing the disk
+     3.3. Discretizing the disk
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     3.4. Iterative linear algebra
     </a>
    </li>
    <li class="toctree-l2">
@@ -526,7 +526,7 @@ title="Print to PDF"
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="iterative-linear-algebra">
-<h1><span class="section-number">3.3. </span>Iterative linear algebra<a class="headerlink" href="#iterative-linear-algebra" title="Permalink to this headline">#</a></h1>
+<h1><span class="section-number">3.4. </span>Iterative linear algebra<a class="headerlink" href="#iterative-linear-algebra" title="Permalink to this headline">#</a></h1>
 <p>Even exploiting sparsity, the time to solve a linear system for an elliptic PDE quickly becomes unreasonable as the grid size increases. In terms of the grid spacing <span class="math notranslate nohighlight">\(h\)</span>, the number of unknowns scales as <span class="math notranslate nohighlight">\(O(h^{-2})\)</span> and the time per linear system solution is <span class="math notranslate nohighlight">\(O(h^{-4})\)</span>. With a convergence rate of 2nd order, a 10-fold decrease in the error requires <span class="math notranslate nohighlight">\(h\)</span> to decrease by a factor of <span class="math notranslate nohighlight">\(3.3\)</span> and the execution time goes up by a factor of about 120. The situation is even more unmanageable in 3D, where the solution time scales with <span class="math notranslate nohighlight">\(O(h^{-6})\)</span>.</p>
 <p>There’s something unsatisfying about solving a linear system exactly (modulo roundoff) when the solution is itself a low-accuracy representation of the continuous object that is the real target. In other words, if a nodal value has only 3 accurate digits, we don’t care that the solution of the discrete system is 0.123456787654, as we are just as happy with 0.123. But factorization-based linear solvers don’t give us a choice in the matter.</p>
 <p>Thus, as the number of unknowns grows, we seek iterative methods to solve the linear systems. We can stop the iterations once we have as much accuracy as we hope to get from the discretization, potentially saving a lot of time.</p>
@@ -561,72 +561,159 @@ title="Print to PDF"
 <p>There are many others, such as QMR, Bi-CGStab, etc.</p>
 <p>All of the methods look for a solution of <span class="math notranslate nohighlight">\(\bfA\bfu=\bfb\)</span> in the nested subspaces spanned by <span class="math notranslate nohighlight">\(\bfb,\bfA\bfb,\bfA^2\bfb,\dots\)</span>. They use different iterations to generate them and to find the optimal solution for different definitions of optimality.</p>
 <p>One extremely useful aspect of these methods is that the only way they use the matrix <span class="math notranslate nohighlight">\(\bfA\)</span> is by computing the matrix product <span class="math notranslate nohighlight">\(\bfA\bfv\)</span> for an arbitrary vector <span class="math notranslate nohighlight">\(\bfv\)</span>. That is, they just apply the linear transformation implied by <span class="math notranslate nohighlight">\(\bfA\)</span>. This enables <strong>matrix-free iterations</strong> in which <span class="math notranslate nohighlight">\(\bfA\)</span> is never explicitly assembled.</p>
-<p>Let’s revisit the Poisson equation with <span class="math notranslate nohighlight">\(f=\Delta u = -\sin(3xy-4y)\bigl(9y^2+(3x-4)^2\bigr)\)</span> for the forcing function and <span class="math notranslate nohighlight">\(g=\sin(3xy-4y)\)</span> on the boundary, which has <span class="math notranslate nohighlight">\(g\)</span> as the solution everywhere.</p>
+<p>For example, here is a way to encode the Laplacian as a linear transformation without using Kronecker products.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">laplacian</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">AV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="o">*</span><span class="n">V</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">V</span><span class="o">*</span><span class="n">Dyy</span><span class="o">&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">AV</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">LinearMaps</span><span class="w"></span>
+<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearMap</span><span class="p">(</span><span class="n">laplacian</span><span class="p">,((</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)));</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">A</span></code> created above isn’t actually a matrix. But it can be dropped in as a replacement, if only matrix-vector multiplication is required.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>24-element Vector{Float64}:
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>In fact, since any matrix equals itself times the identity, it’s possible to construct the matrix by applying the transformation to all the columns of the identity:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="kt">Matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>24×24 Matrix{Float64}:
+ 15.25  -18.0     9.0    0.0   -12.5   …   0.0     0.0     0.0    0.0
+  9.0   -11.75    9.0    0.0     0.0       0.0     0.0     0.0    0.0
+  0.0     9.0   -11.75   9.0     0.0       0.0     0.0     0.0    0.0
+  0.0     9.0   -18.0   15.25    0.0       0.0     0.0     0.0    0.0
+  6.25    0.0     0.0    0.0    -3.5       0.0     0.0     0.0    0.0
+  0.0     6.25    0.0    0.0     9.0   …   0.0     0.0     0.0    0.0
+  0.0     0.0     6.25   0.0     0.0       0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    6.25    0.0       0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     6.25      0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0   …   0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0   …   0.0     0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0       6.25    0.0     0.0    0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     6.25    0.0    0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     0.0     6.25   0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     0.0     0.0    6.25
+  0.0     0.0     0.0    0.0     0.0   …  15.25  -18.0     9.0    0.0
+  0.0     0.0     0.0    0.0     0.0       9.0   -11.75    9.0    0.0
+  0.0     0.0     0.0    0.0     0.0       0.0     9.0   -11.75   9.0
+  0.0     0.0     0.0    0.0     0.0       0.0     9.0   -18.0   15.25
+</pre></div>
+</div>
+</div>
+</div>
+<p>But the point is that a linear system using <code class="docutils literal notranslate"><span class="pre">A</span></code> can typically be solved far more quickly using only the transformation, not the matrix. Let’s revisit the Poisson equation with exact solution <span class="math notranslate nohighlight">\(u(x,y) = \sin(3xy-4y)\)</span>, which gives <span class="math notranslate nohighlight">\(\Delta u = -\sin(3xy-4y)\bigl(9y^2+(3x-4)^2\bigr)\)</span> with Dirichlet boundary conditions.</p>
+<p>Most of the problem setup is the same as before. When we create the linear transformation, we also have to impose the boundary conditions on the result before returning it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Krylov</span><span class="w"></span>
+
+<span class="c"># Solution of Poisson problem with u=g on boundary</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">iterative</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="p">,</span><span class="n">yspan</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">xspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="c"># Identify boundary locations.</span><span class="w"></span>
+<span class="w">    </span><span class="n">isboundary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trues</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">isboundary</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">m</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="nb">false</span><span class="w"></span>
+<span class="w">    </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">isboundary</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="c"># forcing function / boundary values vector</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span><span class="w">   </span><span class="c"># assigned values</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c"># Apply Laplacian operator with Dirichlet condition.</span><span class="w"></span>
+<span class="w">    </span><span class="k">function</span><span class="w"> </span><span class="n">laplacian</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">AV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="o">*</span><span class="n">V</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">V</span><span class="o">*</span><span class="n">Dyy</span><span class="o">&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="n">AV</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w">   </span><span class="c"># Dirichlet condition</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">AV</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearMap</span><span class="p">(</span><span class="n">laplacian</span><span class="p">,(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">u</span><span class="p">,</span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gmres</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span><span class="n">history</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">stats</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>iterative (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">4</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">9</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">^</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="mi">3</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
 <span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">4</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"></span>
 <span class="n">xspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">];</span><span class="w">  </span><span class="n">yspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Most of the problem setup is the same as for the direct system method.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="mi">60</span><span class="w"> </span>
-<span class="n">include</span><span class="p">(</span><span class="s">&quot;diffmats.jl&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">xspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
-<span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
-<span class="n">grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="w"></span>
-
-<span class="c"># Identify boundary locations.</span><span class="w"></span>
-<span class="n">isboundary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trues</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="n">isboundary</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">m</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="nb">false</span><span class="w"></span>
-<span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">isboundary</span><span class="p">);</span><span class="w"></span>
-
-<span class="c"># forcing function / boundary values vector</span><span class="w"></span>
-<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span><span class="w">   </span><span class="c"># assigned values</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Now, instead of using Kronecker products (followed by boundary modifications) to build the matrix <span class="math notranslate nohighlight">\(\bfA\)</span>, we define a function that applies <span class="math notranslate nohighlight">\(\bfA\)</span> using the Sylvester form of the problem.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="c"># Apply Laplacian operator with Dirichlet condition.</span><span class="w"></span>
-<span class="k">function</span><span class="w"> </span><span class="n">laplacian</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">AV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="o">*</span><span class="n">V</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">V</span><span class="o">*</span><span class="n">Dyy</span><span class="o">&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="n">AV</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w">   </span><span class="c"># Dirichlet condition</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">AV</span><span class="p">)</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
-
-<span class="k">using</span><span class="w"> </span><span class="n">Krylov</span><span class="p">,</span><span class="n">LinearMaps</span><span class="w"></span>
-<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearMap</span><span class="p">(</span><span class="n">laplacian</span><span class="p">,(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iterative</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="n">xspan</span><span class="p">,</span><span class="n">yspan</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="w"></span>
+<span class="n">println</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2501×2501 LinearMaps.FunctionMap{Float64}(laplacian; ismutating=false, issymmetric=false, ishermitian=false, isposdef=false)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="p">,</span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gmres</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="w"></span>
-<span class="n">stats</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Simple stats
- niter: 176
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Simple stats
+ niter: 243
  solved: true
  inconsistent: false
- residuals: []
+ residuals: [ 8.2e+02  7.7e+02  7.2e+02 ...  9.7e-06  8.7e-06  7.7e-06 ]
  Aresiduals: []
  κ₂(A): []
  status: solution good enough given atol and rtol
@@ -634,34 +721,32 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+<p>From the above we see that the solution was found to default accuracy using just 205 matrix-vector multiplications.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
-<span class="c"># plotlyjs()</span><span class="w"></span>
-<span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
 <span class="n">surface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">U</span><span class="o">&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:viridis</span><span class="p">,</span><span class="w"></span>
 <span class="w">    </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Solution of Poisson&#39;s equation&quot;</span><span class="p">,</span><span class="w">      </span>
-<span class="w">    </span><span class="n">xaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">),</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">),</span><span class="n">zaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;u(x,y)&quot;</span><span class="p">))</span><span class="w">    </span>
+<span class="w">    </span><span class="n">xaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">),</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">),</span><span class="n">zaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;u(x,y)&quot;</span><span class="p">),</span><span class="n">camera</span><span class="o">=</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="mi">50</span><span class="p">))</span><span class="w">    </span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: using Plots.grid in module Main conflicts with an existing identifier.
-</pre></div>
+<img alt="../_images/iterative_11_0.svg" src="../_images/iterative_11_0.svg" /></div>
 </div>
-<img alt="../_images/iterative_8_1.svg" src="../_images/iterative_8_1.svg" /></div>
-</div>
+<p>Note that there are two senses of accuracy here: solution of the discrete linear system, and discretization error. The second sense is unaffected by GMRES, of course.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,(</span><span class="n">U</span><span class="o">-</span><span class="n">g</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">))</span><span class="o">&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:viridis</span><span class="p">,</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Error&quot;</span><span class="p">,</span><span class="w">      </span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">g</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="w"></span>
+<span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,(</span><span class="n">U</span><span class="o">-</span><span class="n">Û</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:bluesreds</span><span class="p">,</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Error&quot;</span><span class="p">,</span><span class="n">clims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.0008</span><span class="p">,</span><span class="mf">0.0008</span><span class="p">),</span><span class="w">      </span>
 <span class="w">    </span><span class="n">xaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">),</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">),</span><span class="n">zaxis</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;u(x,y)&quot;</span><span class="p">),</span><span class="w"></span>
-<span class="w">    </span><span class="n">right_margin</span><span class="o">=</span><span class="mi">3</span><span class="n">Plots</span><span class="o">.</span><span class="n">mm</span><span class="p">,</span><span class="n">camera</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">50</span><span class="p">))</span><span class="w">   </span>
+<span class="w">    </span><span class="n">right_margin</span><span class="o">=</span><span class="mi">10</span><span class="n">Plots</span><span class="o">.</span><span class="n">mm</span><span class="p">)</span><span class="w">   </span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/iterative_9_0.svg" src="../_images/iterative_9_0.svg" /></div>
+<img alt="../_images/iterative_13_0.svg" src="../_images/iterative_13_0.svg" /></div>
 </div>
 <p>Note that while the Laplacian operator is nominally symmetric and negative definite, boundary conditions can wreck that structure.</p>
 </section>
@@ -669,7 +754,88 @@ title="Print to PDF"
 <h2>Preconditioning<a class="headerlink" href="#preconditioning" title="Permalink to this headline">#</a></h2>
 <p>Krylov methods converge at a rate that depends strongly on the underlying linear operator. For symmetric matrices, the dependence can be characterized in terms of the spectrum of the matrix. When the ratio between the eigenvalues farthest from and closest to the origin is very large, the convergence becomes unacceptably slow.</p>
 <p>In the case of Poisson’s equation, a second-order FD method produces a matrix with condition number <span class="math notranslate nohighlight">\(O(h^{-2})\)</span> when using grid spacing <span class="math notranslate nohighlight">\(h\)</span>, and the number of MINRES or CG iterations grows as <span class="math notranslate nohighlight">\(O(h^{-1})\)</span>.</p>
-<p>The best response is to use a <strong>preconditioner</strong>, which is a way to apply an approximate solution process to improve the convergence rate to the actual solution. For example, if one uses a recursive coarsening procedure to approximate the original FD method, the result is a <em>multigrid</em> preconditioner that can provide convergence in <span class="math notranslate nohighlight">\(O(1)\)</span> iterations in ideal circumstances. Another approach is to decompose the domain into pieces and simplify or ignore the interactions between them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="o">:</span><span class="mi">20</span><span class="o">:</span><span class="mi">120</span><span class="w"></span>
+<span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">yaxis</span><span class="o">=</span><span class="ss">:log10</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iterative</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">xspan</span><span class="p">,</span><span class="n">yspan</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stats</span><span class="o">.</span><span class="n">residuals</span><span class="w"></span>
+<span class="w">    </span><span class="n">plot!</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">length</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">res</span><span class="o">/</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;m=</span><span class="si">$m</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">plt</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/iterative_15_0.svg" src="../_images/iterative_15_0.svg" /></div>
+</div>
+<p>The above is consistent with linear growth in the number of iterations required.</p>
+<p>The response is to use a <strong>preconditioner</strong>, which is a way to apply an approximate solution process to improve the convergence rate to the actual solution. For example, if one uses a recursive coarsening procedure to approximate the original FD method, the result is a <em>multigrid</em> preconditioner that can provide convergence in <span class="math notranslate nohighlight">\(O(1)\)</span> iterations in ideal circumstances. Another approach is to decompose the domain into pieces and simplify or ignore the interactions between them.</p>
+<p>One strategy is known as <strong>alternating direction implicit.</strong> The discrete Laplace operator has the form <span class="math notranslate nohighlight">\(\bfA+\mathbf{B}\)</span>, where <span class="math notranslate nohighlight">\(\bfA\)</span> depends only on <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(\mathbf{B}\)</span> depends only on <span class="math notranslate nohighlight">\(y\)</span>. Observe that</p>
+<div class="math notranslate nohighlight">
+\[
+(\bfI + s\bfA)(\bfI + s\mathbf{B}) = \bfI + s (\bfA+\mathbf{B}) + s^2 \bfA \mathbf{B},
+\]</div>
+<p>so that the matrix <span class="math notranslate nohighlight">\(\mathbf{M} = s^{-1} (\bfI + s\bfA)(\bfI + s\mathbf{B})\)</span> contains <span class="math notranslate nohighlight">\(\bfA+\mathbf{B}\)</span>, along with extra terms. Note that</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{M}^{-1} \bfv = s (\bfI + s\mathbf{B})^{-1}(\bfI + s\bfA)^{-1} \bfv. 
+\]</div>
+<p>Each individual matrix inverse above can be calculated by operating only on one side of the rectangular reshape of <span class="math notranslate nohighlight">\(\mathbf{V}\)</span>, making them fast to perform. Since we are only looking for an approximation, we can even try ignoring the boundary conditions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">iterative</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">xspan</span><span class="p">,</span><span class="n">yspan</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">prec</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">function</span><span class="w"> </span><span class="n">precon</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="n">Dxx</span><span class="w"></span>
+<span class="w">        </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">A</span><span class="o">\</span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w">      </span>
+<span class="w">        </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="n">Dyy</span><span class="w"></span>
+<span class="w">        </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">B</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">u</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">xspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">y</span><span class="p">,</span><span class="n">Dy</span><span class="p">,</span><span class="n">Dyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">yspan</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="c"># Identify boundary locations.</span><span class="w"></span>
+<span class="w">    </span><span class="n">isboundary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trues</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">isboundary</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">m</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="nb">false</span><span class="w"></span>
+<span class="w">    </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">isboundary</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">isinter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">.!</span><span class="w"></span>
+
+<span class="w">    </span><span class="c"># forcing function / boundary values vector</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span><span class="w">   </span><span class="c"># assigned values</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c"># Apply Laplacian operator with Dirichlet condition.</span><span class="w"></span>
+<span class="w">    </span><span class="k">function</span><span class="w"> </span><span class="n">laplacian</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">AV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="o">*</span><span class="n">V</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">V</span><span class="o">*</span><span class="n">Dyy</span><span class="o">&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="n">AV</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w">   </span><span class="c"># Dirichlet condition</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">AV</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearMap</span><span class="p">(</span><span class="n">laplacian</span><span class="p">,(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearMap</span><span class="p">(</span><span class="n">precon</span><span class="p">,(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">u</span><span class="p">,</span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gmres</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span><span class="n">history</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">stats</span><span class="w"></span>
+<span class="k">end</span><span class="w"> </span>
+
+<span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="o">:</span><span class="mi">20</span><span class="o">:</span><span class="mi">100</span><span class="w"></span>
+<span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">yaxis</span><span class="o">=</span><span class="ss">:log10</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iterative</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">xspan</span><span class="p">,</span><span class="n">yspan</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stats</span><span class="o">.</span><span class="n">residuals</span><span class="w"></span>
+<span class="w">    </span><span class="n">plot!</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">length</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">res</span><span class="o">/</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;m=</span><span class="si">$m</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">plt</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/iterative_17_0.svg" src="../_images/iterative_17_0.svg" /></div>
+</div>
 </section>
 <section id="newton-krylov-methods">
 <h2>Newton–Krylov methods<a class="headerlink" href="#newton-krylov-methods" title="Permalink to this headline">#</a></h2>
@@ -704,17 +870,17 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="poisson.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="disk.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title"><span class="section-number">3.2. </span>Solving the Poisson equation</p>
+            <p class="prev-next-title"><span class="section-number">3.3. </span>Discretizing the disk</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="disk.html" title="next page">
+    <a class='right-next' id="next-link" href="decomp.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">3.4. </span>Discretizing the disk</p>
+        <p class="prev-next-title"><span class="section-number">3.5. </span>Domain decomposition</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
