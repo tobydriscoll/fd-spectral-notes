@@ -73,10 +73,9 @@ $$
 
 where $\mathbf{I}_{x}$ and $\mathbf{I}_{y}$ are the $(m+1)\times (m+1)$ and $(n+1)\times (n+1)$ identities, respectively.
 
-## Boundary conditions
+## Dirichlet conditions
 
 The easiest way to incorporate the boundary conditions is to replace the PDE at each boundary node with a discretized form of the BC. This means altering rows of the matrix $\bfA$ resulting from discretizing the interior. For a Dirichlet condition, the new row is just a row of the superidentity $\mathbf{I}_{y} \otimes \mathbf{I}_{y}$. We could clearly "solve" such rows manually and do algebra to remove the corresponding node from the unknowns, but the amount of additional work incurred by leaving them in is usually negligible. 
-
 
 Here is a forcing function for Poisson's equation.
 
@@ -160,7 +159,7 @@ u = A\b
 U = unvec(u)
 ```
 
-## Implementation
+### Implementation
 
 ```{code-cell}
 include("poisson.jl")
@@ -201,6 +200,27 @@ contour(x,y,error',levels=17,aspect_ratio=1,
     right_margin=7Plots.mm)
 plot!([0,1,1,0,0],[0,0,2,2,0],l=(2,:black))
 ```
+
+## Neumann conditions
+
+If we use the boundary row replacement method, generalizing the above to Neumann conditions can be surprisingly easy. The key steps for the Dirichlet case were to define a vector `idx` indicating which rows correspond to boundary nodes, and then make replacements:
+
+:::{code-block} julia
+A[idx,:] .= I(N)[idx,:]    # Dirichlet conditions
+b[idx] .= g.(grid[idx])     # Dirichlet values
+:::
+
+(We're ignoring the row scaling step for simplicity.) 
+
+For a Neumann condition, all we have to do is swap the identity operator (matrix) for one that computes the outward normal derivatives. In the homogeneous case, we don't even need to be concerned with the distinction between inward and outward normals. The only new complication is that we need different operators for the boundaries in the $x$ and $y$ directions. For example, to impose homogeneous Neumann conditions along both edges with constant $x$ values, we use
+
+:::{code-block} julia
+xboundary = trues(m+1,n+1)
+xboundary[2:m,:] .= false
+idx = vec(xboundary)
+A[idx,:] .= kron(I(n+1),Dx)[idx,:]    # Neumann conditions
+b[idx] .= 0                           # Neumann values
+:::
 
 ## Sparsity
 
