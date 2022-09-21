@@ -58,6 +58,7 @@ sphinx:
           "bfx" : "\\mathbf{x}"
           "bfX" : "\\mathbf{X}"
           "bfA" : "\\mathbf{A}"
+          "bfB" : "\\mathbf{B}"
           "bfJ" : "\\mathbf{J}"
           "bfD" : "\\mathbf{D}"
           "bfI" : "\\mathbf{I}"

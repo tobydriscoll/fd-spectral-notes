@@ -30,5 +30,6 @@ chapters:
     - file: mol/ivp
     - file: mol/stability
     - file: mol/semidiscretization
+    - file: mol/theory
     - file: mol/beyond
 
