@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>4.4. Beyond the basics &#8212; FD and Spectral methods for PDE</title>
+    <title>4.5. Beyond the basics &#8212; FD and Spectral methods for PDE</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -51,11 +51,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="4.3. Semidiscretization" href="semidiscretization.html" />
+    <link rel="prev" title="4.4. Convergence theory" href="theory.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -211,13 +211,13 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../elliptic/iterative.html">
-     3.3. Iterative linear algebra
+    <a class="reference internal" href="../elliptic/disk.html">
+     3.3. Discretizing the disk
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../elliptic/disk.html">
-     3.4. Discretizing the disk
+    <a class="reference internal" href="../elliptic/iterative.html">
+     3.4. Iterative linear algebra
     </a>
    </li>
    <li class="toctree-l2">
@@ -252,9 +252,14 @@ const thebe_selector_output = ".output, .cell_output"
      4.3. Semidiscretization
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="theory.html">
+     4.4. Convergence theory
+    </a>
+   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     4.4. Beyond the basics
+     4.5. Beyond the basics
     </a>
    </li>
   </ul>
@@ -529,7 +534,7 @@ title="Print to PDF"
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="beyond-the-basics">
-<h1><span class="section-number">4.4. </span>Beyond the basics<a class="headerlink" href="#beyond-the-basics" title="Permalink to this headline">#</a></h1>
+<h1><span class="section-number">4.5. </span>Beyond the basics<a class="headerlink" href="#beyond-the-basics" title="Permalink to this headline">#</a></h1>
 <section id="nonlinearity">
 <h2>Nonlinearity<a class="headerlink" href="#nonlinearity" title="Permalink to this headline">#</a></h2>
 <p>A nonlinear term in a diffusive problem is usually straightforward to fold into the semidiscretization process. Here is the solution of</p>
@@ -801,11 +806,11 @@ sol = solve(ivp,Rodas4P(),abstol=1e-6,reltol=1e-6);
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="semidiscretization.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="theory.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title"><span class="section-number">4.3. </span>Semidiscretization</p>
+            <p class="prev-next-title"><span class="section-number">4.4. </span>Convergence theory</p>
         </div>
     </a>
 </div>
