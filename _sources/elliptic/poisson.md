@@ -6,7 +6,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.0
 kernelspec:
   display_name: Julia 1.8.0
   language: julia
@@ -15,38 +15,7 @@ kernelspec:
 
 # Solving the Poisson equation
 
-To solve $\Delta u = f$, our approach is the same as for the 1D TPBVP. We discretize the functions and differentiation operators, collocate the PDE at interior nodes, and collocate boundary conditions at boundary nodes, all to get a square linear algebraic system. For rectangular domains, this process is pretty straightforward.
-
-## Kronecker product
-
-If $\bfU$ is the matrix discretization of a function $u(x,y)$ on the rectangle, then we can discretize the action of the Laplacian as
-
 $$
-\Delta u = \partial_{xx} u + \partial_{yy} u \approx \bfD_{xx} \bfU + \bfU \bfD_{yy}^T. 
-$$
-
-where $\bfD_{xx}$ and $\bfD_{yy}$ are 1D differentiation matrices. If we collocate at all of the nodes, then, we get an equation of the form
-
-$$
-\bfD_{xx} \bfU + \bfU \bfD_{yy}^T = \bfF. 
-$$
-
-This is known as a **Sylvester equation**. There are methods for solving it, but they are not of the familiar type with LU factorization, etc. To use those methods, we need a *vector* of unknowns, 
-
-$$
-\bfu = \myvec(\bfU). 
-$$
-
-Fortunately we have a handy identity to exploit:
-
-$$
-\myvec(\bfA\mathbf{B}\bfC) = (\bfC^T \otimes \bfA ) \myvec(\mathbf{B}), 
-$$
-
-where $\otimes$ is the **Kronecker matrix product,**
-
-:::{math}
-    :label: krondef
     \mathbf{A}\otimes \mathbf{B} =
     \begin{bmatrix}
     A_{11} \mathbf{B} & A_{12}\mathbf{B} & \cdots & A_{1n}\mathbf{B} \\
@@ -54,73 +23,55 @@ where $\otimes$ is the **Kronecker matrix product,**
     \vdots & \vdots &  & \vdots \\
     A_{m1} \mathbf{B} & A_{m2}\mathbf{B} & \cdots & A_{mn}\mathbf{B}
     \end{bmatrix}.
-:::
+$$
 
-The Kronecker product obeys several other notable identities:
-
-1. $\mathbf{A}\otimes (\mathbf{B} + \mathbf{C})   = \mathbf{A}\otimes \mathbf{B} + \mathbf{A}\otimes \mathbf{C}$  
-2. $(\mathbf{A} + \mathbf{B}) \otimes \mathbf{C}   = \mathbf{A}\otimes \mathbf{C} + \mathbf{B}\otimes \mathbf{C}$  
-3. $(\mathbf{A} \otimes \mathbf{B}) \otimes \mathbf{C}   =  \mathbf{A} \otimes (\mathbf{B} \otimes \mathbf{C})$ 
-4. $(\mathbf{A} \otimes \mathbf{B})^T  =  \mathbf{A}^T \otimes \mathbf{B}^T$  
-5. $(\mathbf{A} \otimes \mathbf{B})^{-1}  =  \mathbf{A}^{-1} \otimes \mathbf{B}^{-1}$  
-6. $(\mathbf{A} \otimes \mathbf{B})(\mathbf{C}\otimes \mathbf{D})  =  (\mathbf{A}\mathbf{C}) \otimes (\mathbf{B}\mathbf{D})$
-
-Defining $\bfu=\myvec(\bfU)$ and $\bff=\myvec(\bfF)$, the collocated Poisson equation is
++++
 
 $$
 \underbrace{\bigl[ ({\mathbf{I}_{y}} \otimes {\mathbf{D}_{xx}}) + ({\mathbf{D}_{yy}}\otimes {\mathbf{I}_{x}})\bigr]}_{\mathbf{A}} \, \mathbf{u} = \mathbf{f},
 $$
 
-where $\mathbf{I}_{x}$ and $\mathbf{I}_{y}$ are the $(m+1)\times (m+1)$ and $(n+1)\times (n+1)$ identities, respectively.
-
-## Dirichlet conditions
-
-The easiest way to incorporate the boundary conditions is to replace the PDE at each boundary node with a discretized form of the BC. This means altering rows of the matrix $\bfA$ resulting from discretizing the interior. For a Dirichlet condition, the new row is just a row of the superidentity $\mathbf{I}_{y} \otimes \mathbf{I}_{y}$. We could clearly "solve" such rows manually and do algebra to remove the corresponding node from the unknowns, but the amount of additional work incurred by leaving them in is usually negligible. 
-
-Here is a forcing function for Poisson's equation.
-
 ```{code-cell}
 f = (x,y) -> x^2 - y + 2;
+using LinearAlgebra
+⊗ = kron
 ```
 
-We make a crude discretization for illustrative purposes.
+```{code-cell}
+foreach(println,readlines("/Users/driscoll/817/notes/elliptic/diffmats.jl"))
+```
 
 ```{code-cell}
-include("diffmats.jl")
+include("/Users/driscoll/817/notes/elliptic/diffmats.jl")
 m,n = 7,5
 x,Dx,Dxx = diffmats(m,0,3)
 y,Dy,Dyy = diffmats(n,-1,1)
 unvec = u -> reshape(u,m+1,n+1);
 ```
 
-Next, we evaluate $f$ on the grid.
-
 ```{code-cell}
 F = [ f(x,y) for x in x, y in y ]
 ```
 
-Here are the equations for the PDE collocation, before any modifications are made for the boundary conditions.
-
 ```{code-cell}
-A = kron(I(n+1),Dxx) + kron(Dyy,I(m+1))
+A = I(n+1)⊗Dxx + Dyy⊗I(m+1)
 b = vec(F);
 ```
-
-The number of equations is equal to $(m+1)(n+1)$, which is the total number of points on the grid.
 
 ```{code-cell}
 @show N = length(F);
 ```
 
-The combination of Kronecker products and finite differences produces a characteristic sparsity pattern.
+```{code-cell}
+A
+```
 
 ```{code-cell}
 using Plots
-spy(sparse(A),color=:blues,m=3,
+default(size=(400,400))
+spy(A,color=:blues,m=3,
     title="System matrix before boundary conditions")
 ```
-
-We now construct a Boolean array the same size as `F` to indicate where the boundary points lie in the grid.
 
 ```{code-cell}
 isboundary = trues(m+1,n+1)
@@ -129,12 +80,10 @@ idx = vec(isboundary);
 ```
 
 ```{code-cell}
-spy(sparse(isboundary),m=3,color=:darkblue,legend=:none,
+spy(isboundary,m=3,color=:darkblue,legend=:none,
     title="Boundary points",
     xaxis=("column index",[0,n+2]),yaxis=("row index",[0,m+2]) )
 ```
-
-In order to impose Dirichlet boundary conditions, we replace the boundary rows of the system by rows of the identity.
 
 ```{code-cell}
 I_N = I(N)
@@ -145,8 +94,6 @@ A[idx,:] .= I_N[idx,:];     # Dirichlet conditions
 spy(sparse(A),color=:blues,m=3,
     title="System matrix with boundary conditions")    
 ```
-
-Finally, we must replace the rows in the vector $\mathbf{b}$ by the boundary values being assigned to the boundary points. Here, we let the boundary values be 1 everywhere.
 
 ```{code-cell}
 b[idx] .= 1;                 # Dirichlet values
@@ -162,8 +109,8 @@ U = unvec(u)
 ### Implementation
 
 ```{code-cell}
-include("poisson.jl")
-foreach(println,readlines("poisson.jl"))
+include("/Users/driscoll/817/notes/elliptic/poisson.jl")
+foreach(println,readlines("/Users/driscoll/817/notes/elliptic/poisson.jl"))
 ```
 
 We can engineer an example by choosing the solution first. Let $u(x,y)=\sin(3xy-4y)$. Then one can derive $f=\Delta u = -\sin(3xy-4y)\bigl(9y^2+(3x-4)^2\bigr)$ for the forcing function and use $g=u$ on the boundary.
@@ -179,7 +126,7 @@ xspan = [0,1];  yspan = [0,2];
 Here is the finite-difference solution.
 
 ```{code-cell}
-x,y,U = poissonfd(f,g,40,xspan,60,yspan);
+x,y,U = poissonfd(f,g,80,xspan,100,yspan);
 ```
 
 ```{code-cell}
@@ -255,7 +202,7 @@ $$
 and it has homogeneous Dirichlet BC.
 
 ```{code-cell}
-include("diffmats.jl")
+include("/Users/driscoll/817/notes/elliptic/diffmats.jl")
 n = 60
 x,Dx,Dxx = diffmats(n,0,1)
 y,Dy,Dyy = diffmats(n,0,1)
@@ -274,8 +221,7 @@ function jac(u)
     L = kron(I(n+1),Dxx) + kron(Dyy,I(n+1))
     U_x = Dx*reshape(u,n+1,n+1)
     J = 0.05L + spdiagm(u)*kron(I(n+1),Dx) + spdiagm(vec(U_x))
-    J[bdy,:] .= 0
-    J[bdy,bdy] .= I(count(bdy))
+    J[bdy,:] .= I((n+1)*(n+1))[bdy,:]
     return J
 end;
 ```
@@ -287,5 +233,13 @@ sol.residual_norm
 ```
 
 ```{code-cell}
+sol
+```
+
+```{code-cell}
 contour(x,y,reshape(sol.zero,n+1,n+1)',aspect_ratio=1)
+```
+
+```{code-cell}
+
 ```
