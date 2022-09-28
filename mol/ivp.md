@@ -81,7 +81,7 @@ $$
 and the **trapezoid formula**,
 
 $$
-u_{k+1} = u_k + \tfrac{1}{2}\tau \left[ f(t_{k},u_{k}) + f(t_{k+1},u_{k+1})\right] f(t_{k+1},u_{k+1}).
+u_{k+1} = u_k + \tfrac{1}{2}\tau \left[ f(t_{k},u_{k}) + f(t_{k+1},u_{k+1})\right].
 $$
 
 Other common examples are in the following tables.

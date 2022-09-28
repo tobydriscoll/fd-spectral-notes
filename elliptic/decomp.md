@@ -50,7 +50,7 @@ $$
   \bfA_{1o} & \bfA_{1i}
 \end{bmatrix}
 \begin{bmatrix}
-  bfu_{1o} \\ \bfu_{1i}
+  \bfu_{1o} \\ \bfu_{1i}
 \end{bmatrix}
 = \bfb_1, 
 $$
@@ -65,7 +65,7 @@ $$
   & & \bfD_{n1} & \bfD_{n2}
 \end{bmatrix}
 \begin{bmatrix}
-  bfu_{1o} \\ \bfu_{2o} \\ \bfu_{1i} \\ \bfu_{2i}
+  \bfu_{1o} \\ \bfu_{2o} \\ \bfu_{1i} \\ \bfu_{2i}
 \end{bmatrix}
 = 
 \begin{bmatrix}
