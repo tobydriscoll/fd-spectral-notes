@@ -32,4 +32,5 @@ chapters:
     - file: mol/semidiscretization
     - file: mol/theory
     - file: mol/beyond
+    - file: mol/multidim
 
