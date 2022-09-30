@@ -18,7 +18,7 @@ kernelspec:
 ## Krylov methods
 
 ```{code-cell}
-include("diffmats.jl")
+include("/Users/driscoll/817/notes/elliptic/diffmats.jl")
 
 m,n = 3,5
 x,Dx,Dxx = diffmats(m,0,1)
@@ -32,6 +32,10 @@ end
 
 using LinearMaps
 A = LinearMap(laplacian,((m+1)*(n+1)));
+```
+
+```{code-cell}
+A
 ```
 
 ```{code-cell}
@@ -98,14 +102,27 @@ contour(x,y,(U-Û)',color=:bluesreds,aspect_ratio=1,
 ```
 
 ```{code-cell}
+gr()
 m = 20:20:120
-plt = plot(yaxis=:log10)
+plt = plot()
 for m in m
     x,y,U,stats = iterative(m,m,xspan,yspan,f,g);
     res = stats.residuals
-    plot!(0:length(res)-1,res/res[1],label="m=$m")
+    res = @. max(res,eps())
+    plot!(0:length(res)-1,log10.(res/res[1]))
+    # println(length(res))
 end
 plt
+```
+
+```{code-cell}
+default(size=(400,200))
+m = 20
+x,y,U,stats = iterative(m,m,xspan,yspan,f,g);
+res = stats.residuals
+res = @. min(max(res,eps()),1)
+plot(0:length(res)-1,res/res[1],yscale=)
+    # println(length(res))
 ```
 
 ```{code-cell}
@@ -147,11 +164,15 @@ function iterative(m,n,xspan,yspan,f,g,prec)
 end 
 
 m = 20:20:100
-plt = plot(yaxis=:log10)
+plt = plot()
 for m in m
     x,y,U,stats = iterative(m,m,xspan,yspan,f,g,true);
     res = stats.residuals
-    plot!(0:length(res)-1,res/res[1],label="m=$m")
+    plot!(0:length(res)-1,log10.(res/res[1]),label="m=$m",m=3,xlabel="iteration")
 end
 plt
+```
+
+```{code-cell}
+
 ```

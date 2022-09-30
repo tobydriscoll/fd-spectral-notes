@@ -81,7 +81,7 @@ using Plots,PyFormattedStrings
 
 anim = @animate for t in range(0,1,51)
     contour(x,y,unpack(sol(t))',levels=range(0,3,31),aspect_ratio=1,
-        clims=(0,3),fill=true,title=f"t={t:.2f}")
+        clims=(0,3),fill=true,title=f"t={t:.2f}",color=:viridis)
 end
 mp4(anim,"multidim1.mp4")
 ```
@@ -116,17 +116,59 @@ sol = solve(IVP,Rodas4P(autodiff=false));
 ```{code-cell}
 anim = @animate for t in range(0,1,51)
     contour(x,y,reshape(sol(t),m+1,n+1)',levels=range(0,3,31),aspect_ratio=1,
-        clims=(0,3),fill=true,title=f"t={t:.2f}")
+        clims=(0,3),fill=true,title=f"t={t:.2f}",color=:viridis)
 end
 mp4(anim,"multidim2.mp4")
 ```
 
 On my machine, the DAE version finishes a lot faster.
 
-```{code-cell}
++++
 
+## Explicit Jacobians
+
+We may well find that the time required to solve an IVP of this type grows quickly as a function of discretization size, particularly if the problem includes significant diffusion. Since diffusion tends to be stiff, we probably will turn to an implicit solver, which has to solve nonlinear equations at each time step. For example, applying the trapezoid formula with step size $\tau$ to a nonlinear problem $\partial_t u = f(t,u)$ must solve
+
+$$
+\mathbf{u}_{k+1} - \tfrac{1}{2}\tau \mathbf{f}(t_{k+1},\mathbf{u}_{k+1}) = \mathbf{u}_{k} + \tfrac{1}{2}\tau \mathbf{f}(t_{k+1},\mathbf{u}_{k})
+$$
+
+to get $\mathbf{u}_{k+1}$. The Jacobian of this nonlinear system is
+
+$$
+\mathbf{I} - \tfrac{1}{2}\tau \mathbf{J},
+$$
+
+where $\mathbf{J}$ is the Jacobian of just $\mathbf{f}$. Hence, we require the same information as for solving a steady problem with $\mathbff{f}$. Furthermore, we might want to use Newton--Krylov methods, for example, when solving the nonlinear systems.
+
+Fortunately, the DAE code above seems to work properly with automatic differentiation to find the exact Jacobian, though it doesn't necessarily result in a big speedup in this example.
+
+```{code-cell}
+m,n = 42,100
+x,Dx,Dxx = diffmats(m,0,3)
+y,Dy,Dyy = diffmats(n,-1,1)
+U₀ = [ init([x,y]) for x in x, y in y ];
+
+M = zeros(m+1,n+1)
+M[2:m,2:n] .= 1
+∂ₜ = ODEFunction(timederiv!,mass_matrix=spdiagm(vec(M)))
+IVP = ODEProblem(∂ₜ,vec(U₀),(0.,0.8),0.25);
 ```
 
 ```{code-cell}
+println("using FD Jacobian:")
+@elapsed sol = solve(IVP,Rodas4P(autodiff=false))
+```
 
+```{code-cell}
+println("using autodiff Jacobian:")
+@elapsed sol = solve(IVP,Rodas4P(autodiff=true))
+```
+
+```{code-cell}
+anim = @animate for t in range(0,1,51)
+    contour(x,y,reshape(sol(t),m+1,n+1)',levels=range(0,3,31),aspect_ratio=1,
+        clims=(0,3),fill=true,title=f"t={t:.2f}",color=:viridis)
+end
+mp4(anim,"multidim3.mp4")
 ```
