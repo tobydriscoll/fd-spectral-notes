@@ -43,7 +43,9 @@ $$
 u_1 = u_2, \quad \pp{u_1}{n} = -\pp{u_2}{n}, \qquad \text{on }  \Gamma_{12}.
 $$
 
-Now let us discretize the subregions. The equations for the non-interface nodes of $\Omega_1$ have the form
+When we discretize the subregions, we can group the nodes of each into ordinary and interface nodes. In a *conforming* method, the interface nodes of the subregions are collocated on $\Gamma_{12}$, which allows us to impose the coupling conditions at them. (Otherwise we must take an approach that interpolates between the sets of interface nodes or imposes the coupling in an integral sense.)
+
+<!-- Now let us discretize the subregions. The equations for the non-interface nodes of $\Omega_1$ have the form
 
 $$
 \begin{bmatrix}
@@ -71,7 +73,9 @@ $$
 \begin{bmatrix}
   \bfb_1 \\ \bfb_2 \\ \bfzero \\ \bfzero 
 \end{bmatrix}. 
-$$
+$$ -->
+
+Let's solve a Poisson equation on an L-shaped domain. We start by defining indicator functions to flag points on the true boundary and on the interface. 
 
 ```{code-cell}
 using LinearAlgebra
@@ -87,10 +91,14 @@ end
 function isinterface(xy)
     return ((xy[1]==0) & (-1<xy[2]<0))
 end
+```
 
+Now we define structures that describe two rectangular subregions. Each has its own discretization, index vectors for boundary and interface points, and an operator for the normal derivative. 
+
+```{code-cell}
 function domains(n)
-    R₁ = (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1))
-    R₂ = (nx=n,xspan=(0,1),ny=n,yspan=(-1,0)) 
+    R₁ = (nx=n,xspan=(-1,0),ny=2n,yspan=(-1,1),normal=1.)
+    R₂ = (nx=n,xspan=(0,1),ny=n,yspan=(-1,0),normal=-1.) 
 
     region = []
     for R in (R₁,R₂)
@@ -103,7 +111,7 @@ function domains(n)
         onbdy = isboundary.(grid)
         oniface = isinterface.(grid)
         interior = @. !onbdy & !oniface
-        Dnorm = (I(ny+1)⊗Dx)[oniface,:]
+        Dnorm = R.normal*(I(ny+1)⊗Dx)[oniface,:]
         
         push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior,Dnorm))
     end
@@ -118,8 +126,10 @@ function domains(n)
     end
     
     return region,idx
-end
+end;
 ```
+
+Here we can see a coarse discretization. Notice that the unknowns on the interface coincide for the two subregions.
 
 ```{code-cell}
 using Plots
@@ -134,6 +144,8 @@ end
 fig
 ```
 
+The system matrix $A$ begins by discretizing each subdomain independently, including the true boundary conditions. The result is a block-diagonal matrix.
+
 ```{code-cell}
 f(x) = x[1]+2  # forcing function
 region,idx = domains(40)
@@ -144,12 +156,12 @@ b = zeros(N)
 for (i,r) in zip(idx,region)
     A[i.all,i.all] = r.Δ
     b[i.all] = f.(r.grid)
-    A[i.bdy,:] .= 0
-    A[i.bdy,i.bdy] .= diagm(ones(length(i.bdy)))
+    A[i.bdy,:] .= I(N)[i.bdy,:]
     b[i.bdy] .= 0
 end
-spy(A,color=:redsblues)
+spy(A,color=:blues)
 ```
+Next, we impose the continuity of $u$ along the interface.
 
 ```{code-cell}
 Ni = length(idx[1].iface)
@@ -157,13 +169,20 @@ A[idx[1].iface,:] .= 0
 A[idx[1].iface,idx[1].iface] = spdiagm(ones(Ni))
 A[idx[1].iface,idx[2].iface] = -spdiagm(ones(Ni))
 b[idx[1].iface] .= 0
+spy(A,color=:blues)
+```
+Finally, we impose the continuity of the normal derivative. (We could instead use the Schur complement technique to simply remove the interface unknowns from the linear system.)
 
+
+```{code-cell}
 A[idx[2].iface,:] .= 0
 A[idx[2].iface,idx[1].all] = region[1].Dnorm
-A[idx[2].iface,idx[2].all] = -region[2].Dnorm
+A[idx[2].iface,idx[2].all] = region[2].Dnorm
 b[idx[2].iface] .= 0
-spy(A,color=:redsblues)
+spy(A,color=:blues)
 ```
+
+Now it's all over except the crying.
 
 ```{code-cell}
 u = A\b;
@@ -176,8 +195,6 @@ for (i,r) in zip(idx,region)
 end
 plt
 ```
-
-We could again use the Schur complement technique to remove the interface unknowns from the linear system. 
 
 ## Overlapping
 
@@ -207,6 +224,8 @@ where $P_i$ represents the projection, say by interpolation, of a function defin
 The classical **Schwarz alternating method** (technically, *multiplicative* Schwarz) is to seek a fixed point of the new formulation solving alternately on the subdomains, each time pulling its boundary information from the most recent solution(s) on the other subdomain(s). Often we might prefer the *additive* form, in which the subdomain problems are all solved simultaneously with the "previous generation" of subsolutions. This gives an algorithm of the form parallel solve, communicate via interfaces, parallel solve, etc.
 
 While the Schwarz methods make it easy to parallelize the solution process and give some global geometric flexibility, the overlap regions are doubly discretized, which is in some sense wasteful. Furthermore, the convergence rate of the process degrades as the amount of overlap decreases, and when a large number of subdomains is used, there needs to be a coarse global discretization in order to speed up communication between distant parts of the domain. The method is frequently used as a preconditioner in an iterative solution of the global problem.
+
+The subregions in our Poisson problem are set up a bit differently here. Note that the "interface" points, or those on the penetrating part of the boundary, are not aligned with nodes in the other subregion. 
 
 ```{code-cell}
 ⊗ = kron
@@ -253,7 +272,7 @@ function domains(n)
         onbdy = isboundary.(grid)
         push!(region,(;x,y,nx,ny,N,Δ,grid,onbdy,oniface,interior))
     end
-        return region
+    return region
 end
 ```
 
@@ -270,11 +289,10 @@ end
 fig
 ```
 
+The following function performs one Schwarz iteration. It updates each region in turn and thus qualifies as a multiplicative method; if they were updated in parallel, it would be an additive method.
+
 ```{code-cell}
 using BlockArrays,Dierckx
-f(x) = x[1]+2  # forcing function
-N = [r.N for r in region]
-u = BlockVector(zeros(sum(N)),N)
 
 function schwarz(u,f,region)
     for (i,R) in enumerate(region)    
@@ -308,13 +326,14 @@ end
 
 ```{code-cell}
 region = domains(40)
+f(x) = x[1]+2  # forcing function
 N = [r.N for r in region]
 u = BlockVector(zeros(sum(N)),N)
 
 anim = @animate for i in 1:10
     global u
     plt = plot([-1,-1,1,1,0,0,-1],[1,-1,-1,0,0,1,1],l=(2,:black),label="",
-        aspect_ratio=1,dpi=200)
+        aspect_ratio=1,dpi=100)
     for (i,R) in enumerate(region)
         U = reshape(u[Block(i)],R.nx+1,R.ny+1)
         contour!(R.x,R.y,U',levels=-.25:0.01:0)
