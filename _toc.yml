@@ -33,4 +33,12 @@ chapters:
     - file: mol/theory
     - file: mol/beyond
     - file: mol/multidim
+  - file: advection/overview
+    sections:
+    - file: advection/upwind
+    - file: advection/advection_fourier
+    - file: advection/groupvel
+    - file: advection/boundaries
+    - file: advection/systems
+
 
