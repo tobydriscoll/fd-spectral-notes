@@ -40,5 +40,8 @@ chapters:
     - file: advection/groupvel
     - file: advection/boundaries
     - file: advection/systems
+  - file: smim/overview
+    sections:
+    - file: smim/unbounded
 
 
