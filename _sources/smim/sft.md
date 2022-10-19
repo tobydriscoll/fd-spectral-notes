@@ -173,7 +173,7 @@ $$
 
 This gives us an important alternative to the interpolation paradigm above for differentiation of the grid function $v$ to get $w$:
 
-1. Set \hat{w} = i k \hat{v}(k).
+1. Set $\hat{w} = i k \hat{v}(k)$.
 2. Let $w = \mathcal{F}_h^{-1}[\hat{w}]$. 
 
 Due to all the linearity, this gives an equivalent result, but it is a rather different algorithmic path. Sometimes people reserve the term *spectral method* for those that operate within wavenumber space like this, while the version that performs all operations within physical space is *spectral collocation* or (shudder) a *pseudospectral* method. 

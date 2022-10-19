@@ -792,7 +792,7 @@ S''_h(x_j) = \begin{cases}
 \]</div>
 <p>This gives us an important alternative to the interpolation paradigm above for differentiation of the grid function <span class="math notranslate nohighlight">\(v\)</span> to get <span class="math notranslate nohighlight">\(w\)</span>:</p>
 <ol class="simple">
-<li><p>Set \hat{w} = i k \hat{v}(k).</p></li>
+<li><p>Set <span class="math notranslate nohighlight">\(\hat{w} = i k \hat{v}(k)\)</span>.</p></li>
 <li><p>Let <span class="math notranslate nohighlight">\(w = \mathcal{F}_h^{-1}[\hat{w}]\)</span>.</p></li>
 </ol>
 <p>Due to all the linearity, this gives an equivalent result, but it is a rather different algorithmic path. Sometimes people reserve the term <em>spectral method</em> for those that operate within wavenumber space like this, while the version that performs all operations within physical space is <em>spectral collocation</em> or (shudder) a <em>pseudospectral</em> method.</p>
