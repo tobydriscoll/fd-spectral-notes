@@ -43,5 +43,6 @@ chapters:
   - file: smim/overview
     sections:
     - file: smim/unbounded
+    - file: smim/sft
 
 
