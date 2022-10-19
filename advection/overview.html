@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Advection &#8212; FD and Spectral methods for PDE</title>
+    <title>5. Advection &#8212; FD and Spectral methods for PDE</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -21,7 +21,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -38,7 +38,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -55,6 +55,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.1. The CFL condition" href="cfl.html" />
+    <link rel="prev" title="4.6. Multiple space dimensions" href="../mol/multidim.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -109,7 +111,7 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../finite-diffs/overview.html">
    1. Finite differences
@@ -261,6 +263,70 @@ const thebe_selector_output = ".output, .cell_output"
      4.5. Beyond the basics
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/multidim.html">
+     4.6. Multiple space dimensions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
+   5. Advection
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cfl.html">
+     5.1. The CFL condition
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="advection_fourier.html">
+     5.2. von Neumann analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="groupvel.html">
+     5.3. Group velocity and dispersion
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="boundaries.html">
+     5.4. Boundaries and interfaces
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="systems.html">
+     5.5. Hyperbolic systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../smim/overview.html">
+   6. Spectral methods
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/unbounded.html">
+     6.1. Unbounded finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/sft.html">
+     6.2. Semidiscrete Fourier
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -398,7 +464,7 @@ title="Print to PDF"
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="advection">
-<h1>Advection<a class="headerlink" href="#advection" title="Permalink to this headline">#</a></h1>
+<h1><span class="section-number">5. </span>Advection<a class="headerlink" href="#advection" title="Permalink to this headline">#</a></h1>
 <p>The archetypical linear model of advection in one dimension is the PDE</p>
 <div class="math notranslate nohighlight">
 \[
@@ -408,14 +474,17 @@ title="Print to PDF"
 <p>Another important linear hyperbolic PDE is the <strong>wave equation</strong>, which in 1D is</p>
 <div class="math notranslate nohighlight">
 \[
-\partial_{tt} u + c^2 \partial_{xx}. 
+\partial_{tt} u = c^2 \partial_{xx}. 
 \]</div>
-<p>The wave equation allows solutions of velocities <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(-c\)</span> simultaneously. It requires two boundary conditions and initial conditions on both <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(\partial_t u\)</span>, unless it is reformulated as <strong>Maxwell’s equations</strong>,</p>
+<p>The wave equation allows solutions of velocities <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(-c\)</span> simultaneously. It requires two boundary conditions and initial conditions on both <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(\partial_t u\)</span>, unless it is reformulated as <strong>Maxwell’s equations</strong>, which in 1D are</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\partial_t v &amp;= \partial_x w, \\ 
-\partial_t w &amp;= -\partial_x v. 
+\partial_t u &amp;= c \partial_x w, \\ 
+\partial_t w &amp;= c \partial_x u. 
 \end{split}\]</div>
+<p>Here <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(w\)</span> are essentially the electric and magnetic fields, and boundary conditions are often imposed on just one of them.</p>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -445,6 +514,20 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../mol/multidim.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">4.6. </span>Multiple space dimensions</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="cfl.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">5.1. </span>The CFL condition</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
             </footer>
         </div>

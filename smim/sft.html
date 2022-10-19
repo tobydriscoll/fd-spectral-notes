@@ -1,0 +1,864 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>6.2. Semidiscrete Fourier &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="6.1. Unbounded finite differences" href="unbounded.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tpbvp/overview.html">
+   2. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bootstrap.html">
+     2.5. Bootstrapping methods
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../elliptic/overview.html">
+   3. Elliptic PDE
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/tensorproduct.html">
+     3.1. Tensor-product grids
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/poisson.html">
+     3.2. Solving the Poisson equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/disk.html">
+     3.3. Discretizing the disk
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/iterative.html">
+     3.4. Iterative linear algebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/decomp.html">
+     3.5. Domain decomposition
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mol/overview.html">
+   4. Method of lines
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/ivp.html">
+     4.1. Multistep and RK methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/stability.html">
+     4.2. Absolute stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/semidiscretization.html">
+     4.3. Semidiscretization
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/theory.html">
+     4.4. Convergence theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/beyond.html">
+     4.5. Beyond the basics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/multidim.html">
+     4.6. Multiple space dimensions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection/overview.html">
+   5. Advection
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/cfl.html">
+     5.1. The CFL condition
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection_fourier.html">
+     5.2. von Neumann analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/groupvel.html">
+     5.3. Group velocity and dispersion
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/boundaries.html">
+     5.4. Boundaries and interfaces
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/systems.html">
+     5.5. Hyperbolic systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   6. Spectral methods
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="unbounded.html">
+     6.1. Unbounded finite differences
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     6.2. Semidiscrete Fourier
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/smim/sft.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/smim/sft.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/smim/sft.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#unbounded-grid">
+   Unbounded grid
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#spectral-differentiation">
+   Spectral differentiation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gibbs-phenomenon">
+   Gibbs phenomenon
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#higher-derivatives">
+   Higher derivatives
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#operating-in-fourier-space">
+   Operating in Fourier space
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Semidiscrete Fourier</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#unbounded-grid">
+   Unbounded grid
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#spectral-differentiation">
+   Spectral differentiation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gibbs-phenomenon">
+   Gibbs phenomenon
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#higher-derivatives">
+   Higher derivatives
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#operating-in-fourier-space">
+   Operating in Fourier space
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="semidiscrete-fourier">
+<h1><span class="section-number">6.2. </span>Semidiscrete Fourier<a class="headerlink" href="#semidiscrete-fourier" title="Permalink to this headline">#</a></h1>
+<div class="proof definition admonition" id="definition-0">
+<p class="admonition-title"><span class="caption-number">Definition 6.2.1 </span> (Fourier transform)</p>
+<section class="definition-content" id="proof-content">
+<p>The <strong>Fourier transform</strong> of a function <span class="math notranslate nohighlight">\(u\in L^2\)</span> is the <span class="math notranslate nohighlight">\(L^2\)</span> function</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{F}[u](k) = \hat{u}(k) = \int_{-\infty}^\infty e^{-ikx}u(x)\, dx, 
+\]</div>
+<p>defined for <span class="math notranslate nohighlight">\(k\in \mathbb{R}\)</span>, known as the <strong>wavenumber</strong>.</p>
+</section>
+</div><p>This is the <em>analysis</em> step. The inverse transform that reconstructs <span class="math notranslate nohighlight">\(u\)</span> from <span class="math notranslate nohighlight">\(\hat{u}\)</span> is called <em>synthesis</em>:</p>
+<div class="math notranslate nohighlight">
+\[
+u(x) = \frac{1}{2\pi} \int_{-\infty}^\infty e^{ikx} \hat{u}(k)\, dk. 
+\]</div>
+<section id="unbounded-grid">
+<h2>Unbounded grid<a class="headerlink" href="#unbounded-grid" title="Permalink to this headline">#</a></h2>
+<p>If we sample <span class="math notranslate nohighlight">\(u\)</span> on the unbounded grid <span class="math notranslate nohighlight">\(h\mathbb{Z}\)</span>, we lose the ability to distinguish all possible wavenumbers, because</p>
+<div class="math notranslate nohighlight">
+\[
+e^{i(k+(2\pi/h))x_j} = e^{ikx_j} \cdot e^{i(2\pi/h)(jh)} = e^{ikx_j} \cdot \left( e^{2\pi i} \right)^j = e^{ikx_j}. 
+\]</div>
+<p>This effect is called <strong>aliasing</strong>, and it implies that the wavenumber can be restricted to the domain</p>
+<div class="math notranslate nohighlight">
+\[
+-\frac{\pi}{h} \le k &lt; \frac{\pi}{h}. 
+\]</div>
+<div class="proof definition admonition" id="definition-1">
+<p class="admonition-title"><span class="caption-number">Definition 6.2.2 </span> (Semidiscrete Fourier transform)</p>
+<section class="definition-content" id="proof-content">
+<p>A grid function <span class="math notranslate nohighlight">\(v_j\)</span> defined on the unbounded grid <span class="math notranslate nohighlight">\(x_j=jh\)</span>, has SFT</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{v}(k) = \mathcal{F}_h[v](k) = h \sum_{j=-\infty}^\infty e^{-ikx_j} v_j,
+\]</div>
+<p>defined for <span class="math notranslate nohighlight">\(k\in [-\pi/h,\pi/h)\)</span>. The inverse SFT is</p>
+<div class="math notranslate nohighlight">
+\[
+v_j = \frac{1}{2\pi} \int_{-\pi/h}^{\pi/h} e^{ikx_j} \hat{v}(k)\, dk. 
+\]</div>
+</section>
+</div><p>This is actually deeply connected to a standard Fourier series. There, a bounded (periodic) function in space implies discrete wavenumbers, whereas here, discretization in space implies boundedness (periodicity) in wavenumber. Fourier analysis has many such dualities.</p>
+</section>
+<section id="spectral-differentiation">
+<h2>Spectral differentiation<a class="headerlink" href="#spectral-differentiation" title="Permalink to this headline">#</a></h2>
+<p>The heart of a spectral method is to interpolate the data, differentiate the interpolant, and evaluate on the grid. Interpolation is taken care of by allowing the ISFT to be evaluated at off-grid points:</p>
+<div class="math notranslate nohighlight">
+\[
+p(x) = \frac{1}{2\pi} \int_{-\pi/h}^{\pi/h} e^{ikx} \hat{v}(k)\, dk. 
+\]</div>
+<p>If we now take the continuous transform of <span class="math notranslate nohighlight">\(p\)</span>, we necessarily get</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\hat{p}(k) = \begin{cases}
+  \hat{v}(k), &amp; |k| \le \pi/h, \\ 
+  0, &amp; \text{otherwise}.
+  \end{cases}
+\end{split}\]</div>
+<p>We call <span class="math notranslate nohighlight">\(p\)</span> the <strong>band-limited interpolant</strong> of the grid function <span class="math notranslate nohighlight">\(v\)</span>. Now we define spectral differentiation of a grid function <span class="math notranslate nohighlight">\(v\)</span> to another grid function <span class="math notranslate nohighlight">\(w\)</span> by</p>
+<ol class="simple">
+<li><p>Find the band-limited interpolant <span class="math notranslate nohighlight">\(p(x)\)</span> of <span class="math notranslate nohighlight">\(v\)</span>.</p></li>
+<li><p>Set <span class="math notranslate nohighlight">\(w_j = p'(x_j)\)</span> for all <span class="math notranslate nohighlight">\(j\)</span>.</p></li>
+</ol>
+<p>To find our infinite differentiation matrix, we note that column <span class="math notranslate nohighlight">\(j\)</span> of a matrix can be found by applying it to the vector that has <span class="math notranslate nohighlight">\(1\)</span> in element <span class="math notranslate nohighlight">\(j\)</span> and zero elsewhere. To put this another way, we need to differentiate the following grid function.</p>
+<div class="proof definition admonition" id="definition-2">
+<p class="admonition-title"><span class="caption-number">Definition 6.2.3 </span> (Grid delta function)</p>
+<section class="definition-content" id="proof-content">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\delta_j = \begin{cases}
+  1, &amp; j=0, \\ 
+  0, &amp; \text{otherwise}.
+  \end{cases}
+\end{split}\]</div>
+</section>
+</div><p>Clearly,</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{F}_h[\delta](k) = h \sum_{j=-\infty}^\infty e^{-ikx_j} \delta_{j} = h,
+\]</div>
+<p>constant for all <span class="math notranslate nohighlight">\(k\)</span> in the wavenumber band. Its BLI is therefore</p>
+<div class="math notranslate nohighlight">
+\[
+S_h(x) = \frac{h}{2\pi} \int_{-\pi/h}^{\pi/h} e^{ikx} \, dk = \frac{\sin(\pi x/h)}{\pi x/h},
+\]</div>
+<p>a <strong>sinc function</strong>. Thus, column 0 of our infinite differentiation matrix has entries</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+S'_h(x_j) = \begin{cases}
+  0, &amp; j=0, \\ 
+  \dfrac{(-1)^j}{jh}, &amp; j \neq 0.
+  \end{cases}
+\end{split}\]</div>
+<p>This is what we used in the previous section.</p>
+</section>
+<section id="gibbs-phenomenon">
+<h2>Gibbs phenomenon<a class="headerlink" href="#gibbs-phenomenon" title="Permalink to this headline">#</a></h2>
+<p>We can also exploit the obvious fact that</p>
+<div class="math notranslate nohighlight">
+\[
+v_j = \sum_{m=-\infty}^\infty v_m \delta_{j-m}.
+\]</div>
+<p>and use linearity to write the band-limited interpolant of <span class="math notranslate nohighlight">\(v\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[
+p(x) = \sum_{m=-\infty}^\infty v_m S_h(x-x_m).
+\]</div>
+<p>(Note that shifting <span class="math notranslate nohighlight">\(\delta\)</span> to have center at <span class="math notranslate nohighlight">\(x_m\)</span> does the same thing to the sinc function.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Sugar</span><span class="p">,</span> <span class="n">SpectralMethodsTrefethen</span>
+<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p3</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p3()
+    h = 1
+    xmax = 10
+    clf()
+    x = -xmax:h:xmax                     # computational grid
+    xx = -xmax-h/20:h/10:xmax+h/20       # plotting grid
+    v = zeros(length(x), 3)
+    v[:, 1] = @. float(x == 0)
+    v[:, 2] = @. float(abs(x) ≤ 3)
+    v[:, 3] = @. max(0, 1 - abs(x) / 3)
+    for plt = 1:3
+        subplot(4, 1, plt)
+        plot(x, v[:, plt], &quot;.&quot;, markersize=6)
+        p = 0
+        for i = 1:length(x)
+            p = @. p + v[i, plt] * sinpi((xx - x[i]) / h) / (π * (xx - x[i]) / h)
+        end
+        plot(xx, p, &quot;-&quot;)
+        axis([-xmax, xmax, -0.5, 1.5])
+        xticks(1:0)
+        yticks(0:1)
+    end
+    return gcf()
+end
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p3</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/sft_2_0.png" src="../_images/sft_2_0.png" />
+</div>
+</div>
+<p>Note in the middle graph above that the BLI is not a great way to approximate a discrete square wave. In fact, it’s worth taking a look at what happens to the square wave as we reduce <span class="math notranslate nohighlight">\(h\)</span> for it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p3g</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/sft_4_0.png" src="../_images/sft_4_0.png" />
+</div>
+</div>
+<p>The overshoot in the interpolant gets narrower but not shorter, a fact now known as the <strong>Gibbs phenomenon</strong>. One point of view is that we get convergence as <span class="math notranslate nohighlight">\(h\to 0 \)</span> in the 2-norm, but not in the <span class="math notranslate nohighlight">\(\infty\)</span>-norm.</p>
+</section>
+<section id="higher-derivatives">
+<h2>Higher derivatives<a class="headerlink" href="#higher-derivatives" title="Permalink to this headline">#</a></h2>
+<p>We can use the same process as above to deduce an infinite differentiation matrix for the second derivative. Column 0 is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+S''_h(x_j) = \begin{cases}
+  -\dfrac{\pi^2}{3h^2}, &amp; j=0, \\ 
+  2\dfrac{(-1)^{j+1}}{j^2h^2}, &amp; j \neq 0.
+  \end{cases}
+\end{split}\]</div>
+</section>
+<section id="operating-in-fourier-space">
+<h2>Operating in Fourier space<a class="headerlink" href="#operating-in-fourier-space" title="Permalink to this headline">#</a></h2>
+<p>Perhaps the single most attractive feature of the Fourier transform is that differentiation becomes trivial:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{F}[u'](k) = ik \mathcal{F}[u](k). 
+\]</div>
+<p>This gives us an important alternative to the interpolation paradigm above for differentiation of the grid function <span class="math notranslate nohighlight">\(v\)</span> to get <span class="math notranslate nohighlight">\(w\)</span>:</p>
+<ol class="simple">
+<li><p>Set \hat{w} = i k \hat{v}(k).</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(w = \mathcal{F}_h^{-1}[\hat{w}]\)</span>.</p></li>
+</ol>
+<p>Due to all the linearity, this gives an equivalent result, but it is a rather different algorithmic path. Sometimes people reserve the term <em>spectral method</em> for those that operate within wavenumber space like this, while the version that performs all operations within physical space is <em>spectral collocation</em> or (shudder) a <em>pseudospectral</em> method.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./smim"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="unbounded.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">6.1. </span>Unbounded finite differences</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

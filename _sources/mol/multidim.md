@@ -28,7 +28,7 @@ on the rectangle $[0,3] \times [-1,1]$, where $u=0$ on $y=\pm 1$ and homogeneous
 First, let's consider how to remove boundary values from the unknowns by implicit application of the boundary conditions. For the Neumann conditions we will use the one-sided FD formula
 
 $$
--\tfrac{3}{2}u(0) + 2 u(h) - \tfrac{1}[2}u(2h) = 0
+-\tfrac{3}{2}u(0) + 2 u(h) - \tfrac{1}{2}u(2h) = 0
 $$
 
 and its antireflection at the right boundary. The equation above defines $u$ at the boundary in terms of interior values, so we don't have to include the boundary values in our ODE unknowns.
