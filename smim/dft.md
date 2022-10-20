@@ -40,7 +40,7 @@ $$
 The **discrete Fourier transform** of a discretized, periodic function $v_j$ is 
 
 $$
-\mathcal{F}_h[u](k) = \hat{v}_k = h \sum_{j=1}^N e^{-ikx_j}\, v_j, \qquad  k = -\tfrac{N}{2}+1,-\frac{N}{2}+2,\ldots,\tfrac{N}{2}. 
+\mathcal{F}_N[u](k) = \hat{v}_k = h \sum_{j=1}^N e^{-ikx_j}\, v_j, \qquad  k = -\tfrac{N}{2}+1,-\frac{N}{2}+2,\ldots,\tfrac{N}{2}. 
 $$
 
 Its inverse is
@@ -61,7 +61,7 @@ $$
 (These are equivalent wavenumbers on the grid, by aliasing.) This is called the **sawtooth** Fourier mode, because
 
 $$
-\exp[ i \frac{N}{2} x_j ] = \exp[ i \frac{pi}{h} (jh) ] = (-1)^j,
+\exp\left[ i \frac{N}{2} x_j \right] = \exp\left[ i \frac{\pi}{h} (jh) \right] = (-1)^j,
 $$
 
 i.e., the sawtooth mode toggles between $1$ and $-1$ on the grid. 
@@ -71,7 +71,7 @@ The inverse transform as given above puts all the content in $k=+N/2$, which is 
 The remedy is to split the content in the sawtooth mode evenly between the equivalent wavenumbers:
 
 $$
-v_j = \frac{1}{2\pi} \sum_{k=-N/2}^{N/2}' e^{ikx_j}\, \hat{v}_k, \qquad  j=1,\ldots,N,
+v_j = \frac{1}{2\pi} \sideset{}{'}\sum_{k=-N/2}^{N/2} e^{ikx_j}\, \hat{v}_k, \qquad  j=1,\ldots,N,
 $$
 
 where the prime on the sum means to apply a factor of $1/2$ to the first and last terms. For the transform itself, this makes no change, but at the sawtooth mode, we now differentiate 
@@ -89,7 +89,7 @@ Before leaving this subject, we point out that the situation above arises only f
 The band-limited interpolant is now 
 
 $$
-p(x) = \frac{1}{2\pi} \sum_{k=-N/2}^{N/2}' e^{ikx}\, \hat{v}_k,
+p(x) = \frac{1}{2\pi} \sideset{}{'}\sum_{k=-N/2}^{N/2} e^{ikx}\, \hat{v}_k,
 $$
 
 for $x\in(0,2\pi]$. As always, we can differentiate this interpolant and evaluate it on the grid. But to derive a column of the differentiation matrix, we only need to apply the process to the discrete periodic $\delta$, where $d_j=1$ for all $j=mN$ and $d_j=0$ otherwise. The resulting $p$ is the periodic version of the sinc function:
@@ -165,4 +165,24 @@ Sugar.get_source(first(methods(p6))) |> last |> print
 
 ```{code-cell} julia
 p6();
+```
+
+It's worth considering the absolute stability restriction that is implied by the spectral differentiation. First, we note that the stability region of the leapfrog scheme is $[-i,i]$ on the imaginary axis. 
+
+Multiplication by the DM in physical space is equivalent to operating in Fourier space, as described earlier. But in Fourier space, the operation is diagonal: $\hat{w}_k = g(k) \hat{v}_k$, where $g(k)=ik$ except for zero at the sawtooth mode. What this shows is that the discretized Fourier modes actually diagonalize the DM (which turns out to be true for any circulant matrix), and the eigenvalues are the discrete values of $g(k)$:
+
+$$
+\lambda_k = ik, \qquad k=1-\tfrac{N}{2},\dots,\tfrac{N}{2}-1. 
+$$ 
+
+The tricky bit in this example is the pointwise multiplication of $\partial_x u$ by $c(x)$, which corresponds to left-multiplication of $\bfD_x$ by a diagonal matrix. It's hard to say precisely what happens to the eigenvalues, but as an estimate, we should suppose that they are scaled by no more than the maximum value of $c$, which is $6/5$. The consequent stability restriction is
+
+$$
+\tfrac{6}{5} \tau \left(\tfrac{N}{2}-1 \right) \le 1,
+$$
+
+or roughly $\tau \le 5/3N$. This is a bit pessimistic; as shown in the next figure, the critical value appears to be closer to 1.9 than 1.67:
+
+```{code-cell} julia
+p6u();
 ```
