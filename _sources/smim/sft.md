@@ -13,7 +13,7 @@ kernelspec:
   name: julia-1.8
 ---
 
-# Semidiscrete Fourier
+# Unbounded spectral
 
 ::::{prf:definition} Fourier transform
 The **Fourier transform** of a function $u\in L^2$ is the $L^2$ function
@@ -168,12 +168,12 @@ $$
 Perhaps the single most attractive feature of the Fourier transform is that differentiation becomes trivial:
 
 $$
-\mathcal{F}[u'](k) = ik \mathcal{F}[u](k). 
+\mathcal{F}[u'](k) = ik \,\mathcal{F}[u](k). 
 $$
 
 This gives us an important alternative to the interpolation paradigm above for differentiation of the grid function $v$ to get $w$:
 
-1. Set $\hat{w} = i k \hat{v}(k)$.
+1. Set $\hat{w} = i k\, \hat{v}(k)$.
 2. Let $w = \mathcal{F}_h^{-1}[\hat{w}]$. 
 
 Due to all the linearity, this gives an equivalent result, but it is a rather different algorithmic path. Sometimes people reserve the term *spectral method* for those that operate within wavenumber space like this, while the version that performs all operations within physical space is *spectral collocation* or (shudder) a *pseudospectral* method. 

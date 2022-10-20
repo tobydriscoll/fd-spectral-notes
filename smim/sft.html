@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>6.2. Semidiscrete Fourier &#8212; FD and Spectral methods for PDE</title>
+    <title>6.2. Unbounded spectral &#8212; FD and Spectral methods for PDE</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -55,6 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.3. Periodic discrete functions" href="dft.html" />
     <link rel="prev" title="6.1. Unbounded finite differences" href="unbounded.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -323,7 +324,17 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     6.2. Semidiscrete Fourier
+     6.2. Unbounded spectral
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="dft.html">
+     6.3. Periodic discrete functions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="smoothness.html">
+     6.4. Smoothness effects
     </a>
    </li>
   </ul>
@@ -558,7 +569,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Semidiscrete Fourier</h1>
+                <h1>Unbounded spectral</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -603,8 +614,8 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="semidiscrete-fourier">
-<h1><span class="section-number">6.2. </span>Semidiscrete Fourier<a class="headerlink" href="#semidiscrete-fourier" title="Permalink to this headline">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="unbounded-spectral">
+<h1><span class="section-number">6.2. </span>Unbounded spectral<a class="headerlink" href="#unbounded-spectral" title="Permalink to this headline">#</a></h1>
 <div class="proof definition admonition" id="definition-0">
 <p class="admonition-title"><span class="caption-number">Definition 6.2.1 </span> (Fourier transform)</p>
 <section class="definition-content" id="proof-content">
@@ -788,11 +799,11 @@ S''_h(x_j) = \begin{cases}
 <p>Perhaps the single most attractive feature of the Fourier transform is that differentiation becomes trivial:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathcal{F}[u'](k) = ik \mathcal{F}[u](k). 
+\mathcal{F}[u'](k) = ik \,\mathcal{F}[u](k). 
 \]</div>
 <p>This gives us an important alternative to the interpolation paradigm above for differentiation of the grid function <span class="math notranslate nohighlight">\(v\)</span> to get <span class="math notranslate nohighlight">\(w\)</span>:</p>
 <ol class="simple">
-<li><p>Set <span class="math notranslate nohighlight">\(\hat{w} = i k \hat{v}(k)\)</span>.</p></li>
+<li><p>Set <span class="math notranslate nohighlight">\(\hat{w} = i k\, \hat{v}(k)\)</span>.</p></li>
 <li><p>Let <span class="math notranslate nohighlight">\(w = \mathcal{F}_h^{-1}[\hat{w}]\)</span>.</p></li>
 </ol>
 <p>Due to all the linearity, this gives an equivalent result, but it is a rather different algorithmic path. Sometimes people reserve the term <em>spectral method</em> for those that operate within wavenumber space like this, while the version that performs all operations within physical space is <em>spectral collocation</em> or (shudder) a <em>pseudospectral</em> method.</p>
@@ -832,6 +843,13 @@ S''_h(x_j) = \begin{cases}
             <p class="prev-next-subtitle">previous</p>
             <p class="prev-next-title"><span class="section-number">6.1. </span>Unbounded finite differences</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="dft.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6.3. </span>Periodic discrete functions</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             </footer>

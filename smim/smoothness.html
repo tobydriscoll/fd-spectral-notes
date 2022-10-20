@@ -1,0 +1,997 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>6.4. Smoothness effects &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="6.3. Periodic discrete functions" href="dft.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tpbvp/overview.html">
+   2. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bootstrap.html">
+     2.5. Bootstrapping methods
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../elliptic/overview.html">
+   3. Elliptic PDE
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/tensorproduct.html">
+     3.1. Tensor-product grids
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/poisson.html">
+     3.2. Solving the Poisson equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/disk.html">
+     3.3. Discretizing the disk
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/iterative.html">
+     3.4. Iterative linear algebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/decomp.html">
+     3.5. Domain decomposition
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mol/overview.html">
+   4. Method of lines
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/ivp.html">
+     4.1. Multistep and RK methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/stability.html">
+     4.2. Absolute stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/semidiscretization.html">
+     4.3. Semidiscretization
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/theory.html">
+     4.4. Convergence theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/beyond.html">
+     4.5. Beyond the basics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/multidim.html">
+     4.6. Multiple space dimensions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection/overview.html">
+   5. Advection
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/cfl.html">
+     5.1. The CFL condition
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection_fourier.html">
+     5.2. von Neumann analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/groupvel.html">
+     5.3. Group velocity and dispersion
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/boundaries.html">
+     5.4. Boundaries and interfaces
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/systems.html">
+     5.5. Hyperbolic systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   6. Spectral methods
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="unbounded.html">
+     6.1. Unbounded finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sft.html">
+     6.2. Unbounded spectral
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="dft.html">
+     6.3. Periodic discrete functions
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     6.4. Smoothness effects
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/smim/smoothness.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/smim/smoothness.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/smim/smoothness.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transform-theorem">
+   Transform theorem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#aliasing-effects">
+   Aliasing effects
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pointwise-accuracy">
+   Pointwise accuracy
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#examples">
+   Examples
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algebraic">
+     Algebraic
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytic">
+     Analytic
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entire">
+     Entire
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#numerical-experiment">
+   Numerical experiment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eigenvalues">
+   Eigenvalues
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Smoothness effects</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transform-theorem">
+   Transform theorem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#aliasing-effects">
+   Aliasing effects
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pointwise-accuracy">
+   Pointwise accuracy
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#examples">
+   Examples
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#algebraic">
+     Algebraic
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytic">
+     Analytic
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entire">
+     Entire
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#numerical-experiment">
+   Numerical experiment
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eigenvalues">
+   Eigenvalues
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="smoothness-effects">
+<h1><span class="section-number">6.4. </span>Smoothness effects<a class="headerlink" href="#smoothness-effects" title="Permalink to this headline">#</a></h1>
+<p>The most appealing aspect of spectral methods is the potential of error that decreases like <span class="math notranslate nohighlight">\(c^{-N}\)</span> rather than <span class="math notranslate nohighlight">\(N^{-p}\)</span>. However, in order to fully realize that potential, the underlying function being approximated must have a high level of smoothness. In fact, as stated below, it has to be <strong>analytic</strong> in a region containing the interval of approximation, meaning extensible to a differentiable function of a complex variable.</p>
+<p>Since sampling at grid size <span class="math notranslate nohighlight">\(h\)</span> limits the scope of the wavenumber to <span class="math notranslate nohighlight">\(|k| \le \pi/h\)</span>, the key is to have a Fourier transform that decays rapidly, so that the amount of energy missed at grid size <span class="math notranslate nohighlight">\(h\)</span> vanishes quickly as <span class="math notranslate nohighlight">\(h\to 0\)</span>. There are three steps to proving convergence rates. The first, which we will just accept as given from classical analysis, comes from tying the smoothness of a function to the decay rate of its Fourier transform. The second step is to bound the effect of discretization on that decay rate. Finally, the results on transforms can be translated into statements on pointwise convergence in physical space.</p>
+<section id="transform-theorem">
+<h2>Transform theorem<a class="headerlink" href="#transform-theorem" title="Permalink to this headline">#</a></h2>
+<p>Theorem 4.1 and its successors in the text identify 4 levels of smoothness for a function <span class="math notranslate nohighlight">\(u\in L^2(\mathbb{R})\)</span>. In order of increasing smoothness, they are:</p>
+<p><strong>Level 1, parameterized by integer <span class="math notranslate nohighlight">\(p\)</span>.</strong> <span class="math notranslate nohighlight">\(u\)</span> has <span class="math notranslate nohighlight">\(p-1\)</span> continuous derivatives in <span class="math notranslate nohighlight">\(L^2\)</span>, and a <span class="math notranslate nohighlight">\(p\)</span>th derivative of bounded variation.</p>
+<p><strong>Level 2.</strong> <span class="math notranslate nohighlight">\(u\)</span> has infinitely many continuous derivatives in <span class="math notranslate nohighlight">\(L^2\)</span>.</p>
+<p><strong>Level 3, parameterized by <span class="math notranslate nohighlight">\(a&gt;0\)</span>.</strong> <span class="math notranslate nohighlight">\(u\)</span> can be extended to an analytic function of <span class="math notranslate nohighlight">\(x\in \mathbb{C}\)</span> in a strip <span class="math notranslate nohighlight">\(|\operatorname{Im}(z)| &lt; a\)</span>, with <span class="math notranslate nohighlight">\(|u|\)</span> uniformly bounded as an <span class="math notranslate nohighlight">\(L^2\)</span> function along every horizontal line in the strip.</p>
+<p><strong>Level 4, parameterized by <span class="math notranslate nohighlight">\(a&gt;0\)</span>.</strong> <span class="math notranslate nohighlight">\(u\)</span> can be extended to an entire function (differentiable in the whole complex plane) and is of <em>exponential type</em>, meaning that <span class="math notranslate nohighlight">\(|u(z)|=o(e^{a|z|})\)</span> for some <span class="math notranslate nohighlight">\(a&gt;0\)</span>.</p>
+<p>Let’s consider the results of Theorem 4.1 in reverse order. These are all “if and only if” statements.</p>
+<p>At Level 4, the Fourier transform <span class="math notranslate nohighlight">\(\hat{u}\)</span> is supported within the interval <span class="math notranslate nohighlight">\([-a,a]\)</span>. That is, <span class="math notranslate nohighlight">\(u\)</span> is actually a band-limited function. This result is known as the <em>Paley–Wiener Theorem</em>.</p>
+<p>At Level 3, the function</p>
+<div class="math notranslate nohighlight">
+\[
+e^{a|k| } \hat{u}(k)
+\]</div>
+<p>is in <span class="math notranslate nohighlight">\(L^2(\mathbb{R})\)</span>. This essentially dictates at least an exponential decay rate for <span class="math notranslate nohighlight">\(\hat{u}\)</span>. This level is generally the sweet spot for spectral methods.</p>
+<p>Level 2 is the least frequently encountered in practice. There are a few well-known examples of infinitely differentiable functions that fail to be analytic on the whole real line, such as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+u(x) = \begin{cases}
+0,&amp; x \le 0, \\ 
+\exp(-1/x^2), &amp; x&gt;0. 
+\end{cases}
+\end{split}\]</div>
+<p>For such functions, the decay of <span class="math notranslate nohighlight">\(\hat{u}\)</span> is beyond all algebraic orders, but not exponential. However, these rarely arise organically.</p>
+<p>Finally, Level 1 is limited to an algebraic decay rate, <span class="math notranslate nohighlight">\(\hat{u}(k) = O(|k|^{-p-1})\)</span>. The Gibbs phenomenon corresponds to a step or square wave function, which has <span class="math notranslate nohighlight">\(p=0\)</span> and a decay rate of <span class="math notranslate nohighlight">\(1/|k|\)</span>. More examples follow later on.</p>
+</section>
+<section id="aliasing-effects">
+<h2>Aliasing effects<a class="headerlink" href="#aliasing-effects" title="Permalink to this headline">#</a></h2>
+<p>The next step is to apply an important identity:</p>
+<div class="proof theorem admonition" id="theorem-0">
+<p class="admonition-title"><span class="caption-number">Theorem 6.4.1 </span> (Poisson summation formula / Aliasing formula)</p>
+<section class="theorem-content" id="proof-content">
+<p>Suppose <span class="math notranslate nohighlight">\(u\in L^2(\mathbb{R})\)</span> has a first derivative of bounded variation, and let <span class="math notranslate nohighlight">\(v\)</span> be a grid function defined by <span class="math notranslate nohighlight">\(v_j=u(x_j)\)</span> for all <span class="math notranslate nohighlight">\(x_j=jh\)</span>. Then for all <span class="math notranslate nohighlight">\(k\)</span> with <span class="math notranslate nohighlight">\(|k| \le \pi/h\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{v}(k) = \sum_{m=-\infty}^\infty \hat{u}\left( k + \frac{2m\pi}{h} \right). 
+\]</div>
+</section>
+</div><p>This formula asserts that the transform of <span class="math notranslate nohighlight">\(v\)</span> at wavenumber <span class="math notranslate nohighlight">\(k\)</span> is simply the sum of the transform of <span class="math notranslate nohighlight">\(u\)</span> at all the wavenumbers equivalent to <span class="math notranslate nohighlight">\(k\)</span> on the grid.</p>
+<p>At each level, the decay rates on <span class="math notranslate nohighlight">\(\hat{u}\)</span> can be used to bound the effects of the aliasing summation as functions of <span class="math notranslate nohighlight">\(h\)</span>.</p>
+<p>At Level 1, <span class="math notranslate nohighlight">\(p-1\)</span> continuous derivatives buys <span class="math notranslate nohighlight">\(|\hat{u}(k)-\hat{v}(k)| = O(h^{p+1})\)</span>.</p>
+<p>At Level 2, the aliasing error is beyond all orders.</p>
+<p>At Level 3, the statement gets technical:</p>
+<div class="math notranslate nohighlight">
+\[
+|\hat{u}(k)-\hat{v}(k)| = O\bigl( e^{-\pi(a-\epsilon)/h}  \bigr), \qquad \epsilon &gt; 0.
+\]</div>
+<p>At Level 4, band-limitedness implies we get the full transform: <span class="math notranslate nohighlight">\(\hat{v}(k)=\hat{u}(k)\)</span> if <span class="math notranslate nohighlight">\(a\le \pi/h\)</span>.</p>
+</section>
+<section id="pointwise-accuracy">
+<h2>Pointwise accuracy<a class="headerlink" href="#pointwise-accuracy" title="Permalink to this headline">#</a></h2>
+<p>Parseval’s identity states that the 2-norms in physical and transform space are essentially equivalent. Hence rapid decay on <span class="math notranslate nohighlight">\(|\hat{u}(k)-\hat{v}(k)|\)</span> becomes rapid decay in the norm of <span class="math notranslate nohighlight">\(u(x)-v(x)\)</span>, and this can be transferred to pointwise bounds on the difference or its <span class="math notranslate nohighlight">\(d\)</span>th derivative.</p>
+<p>Level 1: <span class="math notranslate nohighlight">\(p-1\)</span> continuous derivatives implies</p>
+<div class="math notranslate nohighlight">
+\[
+|w_j-u^{(d)}(x_j)| = O(h^{p-d}),
+\]</div>
+<p>i.e., order of accuracy <span class="math notranslate nohighlight">\(p-d\)</span>. This is the only one of the results that depends on the derivative order <span class="math notranslate nohighlight">\(d\)</span>.</p>
+<p>Level 2: Convergence remains beyond all orders.</p>
+<p>Level 3: The convergence statement is the same as for <span class="math notranslate nohighlight">\(|\hat{u}-\hat{v}|\)</span>.</p>
+<p>Level 4: Results are exact if <span class="math notranslate nohighlight">\(h\le \pi/a\)</span>.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">#</a></h2>
+<section id="algebraic">
+<h3>Algebraic<a class="headerlink" href="#algebraic" title="Permalink to this headline">#</a></h3>
+<div class="proof definition admonition" id="definition-1">
+<p class="admonition-title"><span class="caption-number">Definition 6.4.1 </span> (Convolution)</p>
+<section class="definition-content" id="proof-content">
+<p>The <strong>convolution</strong> of functions <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span> on the real line is <span class="math notranslate nohighlight">\(u \star v\)</span>, given by</p>
+<div class="math notranslate nohighlight">
+\[
+(u\star v)(x) = \int_{-\infty}^\infty u(t)v(x-t)\, dt = (v\star u)(x). 
+\]</div>
+</section>
+</div><div class="proof theorem admonition" id="theorem-2">
+<p class="admonition-title"><span class="caption-number">Theorem 6.4.2 </span></p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(w= u \star v\)</span>. Then <span class="math notranslate nohighlight">\(\hat{w}(k) = \hat{u}(k)\hat{v}(k)\)</span>.</p>
+</section>
+</div><p>The square wave <span class="math notranslate nohighlight">\(s(x)\)</span> has value <span class="math notranslate nohighlight">\(\tfrac{1}{2}\)</span> for <span class="math notranslate nohighlight">\(|x|\le 1\)</span> and zero elsewhere. It has transform</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{s}(k) = \int_{-1}^1 \tfrac{1}{2} e^{ikx}\, dx = \frac{sin(k)}{k}. 
+\]</div>
+<p>Note that <span class="math notranslate nohighlight">\(s\)</span> has zero derivatives but is BV (Level 1, <span class="math notranslate nohighlight">\(p=0\)</span>), so its transform decays like <span class="math notranslate nohighlight">\(O(k^{-1})\)</span>. The function <span class="math notranslate nohighlight">\(s\star s\)</span> has a transform decay of <span class="math notranslate nohighlight">\(O(k^{-2})\)</span> and has <span class="math notranslate nohighlight">\(p=1\)</span>, and so on with additional convolutions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
+<span class="n">trap</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+<span class="n">s</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">float</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">≤</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">ss</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">trap</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span> <span class="n">s</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">s</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">t</span><span class="p">),</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1024</span><span class="p">)</span>
+<span class="n">sss</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">trap</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span> <span class="n">s</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">ss</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">t</span><span class="p">),</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1024</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">layout</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;s&quot;</span><span class="p">)</span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">subplot</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;s ⋆ s&quot;</span><span class="p">)</span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">sss</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">subplot</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;s ⋆ s ⋆ s&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/smoothness_1_0.svg" src="../_images/smoothness_1_0.svg" /></div>
+</div>
+</section>
+<section id="analytic">
+<h3>Analytic<a class="headerlink" href="#analytic" title="Permalink to this headline">#</a></h3>
+<p>For any <span class="math notranslate nohighlight">\(\sigma &gt; 0\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[
+u(x) = \frac{\sigma}{x^2+\sigma^2}, \qquad \hat{u}(k) = \pi e^{-\sigma|k| }. 
+\]</div>
+<p>For a complex argument, <span class="math notranslate nohighlight">\(u\)</span> is meromorphic with simple poles at <span class="math notranslate nohighlight">\(z=\pm i\sigma\)</span>. Clearly, <span class="math notranslate nohighlight">\(u\)</span> is Level 3 with any <span class="math notranslate nohighlight">\(a &lt; \sigma\)</span>. If we were to use <span class="math notranslate nohighlight">\(a=\sigma\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[
+\int_{-\infty}^\infty \frac{\sigma^2}{|(x+iy)^2 + \sigma^2|^2} \, dx
+\]</div>
+<p>cannot be bounded uniformly as <span class="math notranslate nohighlight">\(y\to a\)</span>, thanks to the nonintegrable singularity at the pole. (This explains the need for the <span class="math notranslate nohighlight">\(\epsilon\)</span> in the Level 3 results.)</p>
+</section>
+<section id="entire">
+<h3>Entire<a class="headerlink" href="#entire" title="Permalink to this headline">#</a></h3>
+<p>If we use <span class="math notranslate nohighlight">\(f(x) = \sin(x)/x\)</span>, then its transform is (up to a constant factor) the square wave <span class="math notranslate nohighlight">\(s(k)\)</span>. Note that <span class="math notranslate nohighlight">\(f\)</span> has a removable singularity at the origin and is entire, while <span class="math notranslate nohighlight">\(|f(z)|\)</span> is maximized in the imaginary directions and is bounded by <span class="math notranslate nohighlight">\(e^{|z|}/|z| = o(e^{|z|})\)</span>. This makes its transform be supported in <span class="math notranslate nohighlight">\([-1,1]\)</span>.</p>
+<p>An interesting edge case is the Gaussian, <span class="math notranslate nohighlight">\(u(x)=e^{-x^2/2\sigma^2}\)</span>. It is entire but <em>not</em> of exponential type <span class="math notranslate nohighlight">\(a\)</span> for any value of <span class="math notranslate nohighlight">\(a\)</span>. Its transform is another Gaussian, which correspondingly decays more rapidly than an exponential but is not compactly supported.</p>
+</section>
+</section>
+<section id="numerical-experiment">
+<h2>Numerical experiment<a class="headerlink" href="#numerical-experiment" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Sugar</span><span class="p">,</span> <span class="n">SpectralMethodsTrefethen</span>
+<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p7</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p7()
+    # Compute derivatives for various values of N:
+    Nmax = 50
+    allN = 6:2:Nmax
+    E = zeros(4, length(allN))
+    for N = 6:2:Nmax
+        h = 2π / N
+        x = h * (1:N)
+        column = [0; @. 0.5 * (-1)^(1:N-1) * cot((1:N-1) * h / 2)]
+        D = toeplitz(column, column[[1; N:-1:2]])
+        v = @. abs(sin(x))^3                     # 3rd deriv in BV
+        vʹ = @. 3sin(x) * cos(x) * abs(sin(x))
+        j = round(Int, N / 2 - 2)
+        E[1, j] = norm(D * v - vʹ, Inf)
+        v = @. exp(-sin(x / 2)^(-2))               # C-infinity
+        vʹ = @. 0.5v * sin(x) / sin(x / 2)^4
+        E[2, j] = norm(D * v - vʹ, Inf)
+        v = @. 1 / (1 + sin(x / 2)^2)                 # analytic in a strip
+        vʹ = @. -sin(x / 2) * cos(x / 2) * v^2
+        E[3, j] = norm(D * v - vʹ, Inf)
+        v = sin.(10x)
+        vʹ = 10cos.(10x)   # band-limited
+        E[4, j] = norm(D * v - vʹ, Inf)
+    end
+
+    # Plot results:
+    titles = [L&quot;|\sin(x)|^3&quot;, L&quot;\exp(-\sin^{-2}(x/2))&quot;, L&quot;1/(1+\sin^2(x/2))&quot;, L&quot;\sin(10x)&quot;]
+    clf()
+    for iplot = 1:4
+        subplot(2, 2, iplot)
+        semilogy(allN, E[iplot, :], &quot;.-&quot;, markersize=6)
+        axis([0, Nmax, 1e-16, 1e3])
+        grid(true)
+        xticks(0:10:Nmax)
+        yticks(10.0 .^ (-15:5:0))
+        title(titles[iplot])
+        iplot &gt; 2 ? xlabel(&quot;N&quot;) : nothing
+        iplot % 2 &gt; 0 ? ylabel(&quot;error&quot;) : nothing
+    end
+    return gcf()
+end
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p7</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/smoothness_4_0.png" src="../_images/smoothness_4_0.png" />
+</div>
+</div>
+</section>
+<section id="eigenvalues">
+<h2>Eigenvalues<a class="headerlink" href="#eigenvalues" title="Permalink to this headline">#</a></h2>
+<p>The eigenvalues of differential operators can be approximated in much the same manner as BVP solutions. Consider</p>
+<div class="math notranslate nohighlight">
+\[
+-u'' + x^2 u = \lambda u, \quad x \in \mathbb{R}.
+\]</div>
+<p>The exact eigenvalues are the odd positive integers, and the eigenfunctions decay superexponentially. By discretizing the problem over <span class="math notranslate nohighlight">\([-L,L]\)</span> for sufficiently large <span class="math notranslate nohighlight">\(L\)</span>, the eigenfunctions will be so small at the ends as to be periodically extendable for numerical purposes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p8</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p8()
+    L = 8                             # domain is [-L L], periodic
+    for N = 6:6:36
+        h = 2π / N
+        x = h * (1:N)
+        x = @. L * (x - π) / π
+        column = [-π^2 / 3h^2 - 1 / 6; @. -0.5 * (-1)^(1:N-1) / sin(h * (1:N-1) / 2)^2]
+        D² = (π / L)^2 * toeplitz(column)  # 2nd-order differentiation
+        eigenvalues = sort(eigvals(-D² + diagm(x .^ 2)))
+        @show N
+        foreach(println,eigenvalues[1:4])
+        println(&quot;&quot;)
+    end
+end
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p8</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>N = 6
+0.4614729169954706
+7.494134621050524
+7.720916053006559
+28.83248377834014
+
+N = 12
+0.9781372812985987
+3.17160532064718
+4.455935291166781
+8.92452905811993
+
+N = 18
+0.9999700014993042
+3.000644066795811
+4.992595324407723
+7.039571897981489
+
+N = 24
+0.999999997629049
+3.0000000984108692
+4.999997965273301
+7.000024998156544
+
+N = 30
+0.9999999999999726
+3.0000000000007443
+4.999999999975596
+7.00000000050862
+
+N = 36
+1.0000000000000349
+2.9999999999999867
+4.999999999999988
+6.999999999999977
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./smim"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="dft.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">6.3. </span>Periodic discrete functions</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
