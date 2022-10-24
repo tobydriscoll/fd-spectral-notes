@@ -337,6 +337,26 @@ const thebe_selector_output = ".output, .cell_output"
      6.4. Smoothness effects
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/barycentric.html">
+     6.5. Barycentric formula
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/potential.html">
+     6.6. Potential theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebdm.html">
+     6.7. Chebyshev differentiation matrix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebbvp.html">
+     6.8. Chebyshev for BVPs
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -626,9 +646,10 @@ P(x) = \sum_{i=0}^n y_i \ell_i(x),
 \]</div>
 <p>where each <span class="math notranslate nohighlight">\(\ell_i\)</span> is the <strong>cardinal polynomial</strong></p>
 <div class="math notranslate nohighlight">
-\[
-\ell_i(x) = \frac{\Phi(x)}{\Phi'(x_i)(x-x_i)} = \frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)},
-\]</div>
+\[\begin{split}
+\ell_i(x) &amp; = \frac{\Phi(x)}{\Phi'(x_i)(x-x_i)} \\ 
+&amp;= \frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)},
+\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\Phi(x)=\prod (x-x_i)\)</span> is a polynomial we will keep in our pocket for later. This famous formula is not a good one to use directly for numerical computation, but it does lead to some recursive definitions that can be used to derive a general finite-difference formula. That is, given nodes <span class="math notranslate nohighlight">\(x_i\)</span> for <span class="math notranslate nohighlight">\(i=0,\ldots,n\)</span> and a derivative order <span class="math notranslate nohighlight">\(m\)</span>, we can find the <strong>weights</strong> <span class="math notranslate nohighlight">\(w_i\)</span> such that</p>
 <div class="math notranslate nohighlight">
 \[

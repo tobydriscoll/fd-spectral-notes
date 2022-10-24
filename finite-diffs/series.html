@@ -337,6 +337,26 @@ const thebe_selector_output = ".output, .cell_output"
      6.4. Smoothness effects
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/barycentric.html">
+     6.5. Barycentric formula
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/potential.html">
+     6.6. Potential theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebdm.html">
+     6.7. Chebyshev differentiation matrix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebbvp.html">
+     6.8. Chebyshev for BVPs
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -611,15 +631,10 @@ T(h) &amp;= \frac{u(h)-u(0)}{h} - u'(0) \\
 </div><p>There is a lot of boilerplate in these calculations that we can condense using formal power series. Suppose <span class="math notranslate nohighlight">\(hD\)</span> represents the differentiation operator times the step size <span class="math notranslate nohighlight">\(h\)</span>. Then define <span class="math notranslate nohighlight">\(Z=\exp(hD)\)</span>. In Sage, this is done via the following:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">R</span><span class="o">.&lt;</span><span class="n">hD</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">QQ</span><span class="p">[[]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">R</span><span class="o">.&lt;</span><span class="n">hD</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">QQ</span><span class="p">[[]]</span>
 <span class="n">ser</span> <span class="o">=</span> <span class="n">hD</span> <span class="o">+</span> <span class="n">O</span><span class="p">(</span><span class="n">hD</span><span class="o">^</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">ser</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
 <span class="n">Z</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 + hD + 1/2*hD^2 + 1/6*hD^3 + 1/24*hD^4 + 1/120*hD^5 + 1/720*hD^6 + 1/5040*hD^7 + O(hD^8)
 </pre></div>
 </div>
 </div>
@@ -627,13 +642,8 @@ T(h) &amp;= \frac{u(h)-u(0)}{h} - u'(0) \\
 <p>We can interpret Taylor’s theorem as stating that <span class="math notranslate nohighlight">\(Z\)</span> is an operator that <em>shifts</em> a smooth function <span class="math notranslate nohighlight">\(u(x)\)</span> to the function <span class="math notranslate nohighlight">\(u(x+h)\)</span>. Thus, for example, the forward difference formula is represented by the series</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fd1</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">-</span> <span class="mi">1</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fd1</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">-</span> <span class="mi">1</span>
 <span class="n">fd1</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hD + 1/2*hD^2 + 1/6*hD^3 + 1/24*hD^4 + 1/120*hD^5 + 1/720*hD^6 + 1/5040*hD^7 + O(hD^8)
 </pre></div>
 </div>
 </div>
@@ -646,13 +656,8 @@ T(h) &amp;= \frac{u(h)-u(0)}{h} - u'(0) \\
 <p>which restates the example above. Similarly, the two-term backward difference is also first-order accurate:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bd1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Z</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bd1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Z</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
 <span class="n">bd1</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hD - 1/2*hD^2 + 1/6*hD^3 - 1/24*hD^4 + 1/120*hD^5 - 1/720*hD^6 + 1/5040*hD^7 + O(hD^8)
 </pre></div>
 </div>
 </div>
@@ -660,13 +665,8 @@ T(h) &amp;= \frac{u(h)-u(0)}{h} - u'(0) \\
 <p>The centered difference, however, is second-order accurate:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cd2</span> <span class="o">=</span> <span class="p">(</span><span class="n">Z</span> <span class="o">-</span> <span class="n">Z</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd2</span> <span class="o">=</span> <span class="p">(</span><span class="n">Z</span> <span class="o">-</span> <span class="n">Z</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
 <span class="n">cd2</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hD + 1/6*hD^3 + 1/120*hD^5 + 1/5040*hD^7 + O(hD^8)
 </pre></div>
 </div>
 </div>
@@ -683,13 +683,8 @@ u(x+h) - u(x) &amp; = hu'(x) + \frac{1}{2}h^2u''(x) + \cdots \\
 <p>There is a more direct method, though. Formally, <span class="math notranslate nohighlight">\(Z=e^{hD}\)</span> around <span class="math notranslate nohighlight">\(h=0\)</span>, so that <span class="math notranslate nohighlight">\(hD = \log(Z)\)</span> around <span class="math notranslate nohighlight">\(Z=1\)</span>. Hence, finite difference formulas are found by truncating expansions of <span class="math notranslate nohighlight">\(\log(z)\)</span> around <span class="math notranslate nohighlight">\(z=1\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">var</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
 <span class="n">taylor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-1/4*(z - 1)^4 + 1/3*(z - 1)^3 - 1/2*(z - 1)^2 + z - 1
 </pre></div>
 </div>
 </div>
@@ -704,12 +699,7 @@ a_1 Z + a_0 &amp; \approx \log(Z).
 <p>Hence,</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>z - 1
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -717,12 +707,7 @@ a_1 Z + a_0 &amp; \approx \log(Z).
 <p>If we find a formula using values at <span class="math notranslate nohighlight">\(0\)</span>, <span class="math notranslate nohighlight">\(h\)</span>, and <span class="math notranslate nohighlight">\(2h\)</span> to get <span class="math notranslate nohighlight">\(u'(0)\)</span>, then we have <span class="math notranslate nohighlight">\(a_2 Z^2 + a_1 Z + a_0 \approx \log(Z)\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-1/2*z^2 + 2*z - 3/2
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -741,12 +726,7 @@ a_{-1} + a_0 Z + a_1 Z^2 &amp; \approx Z \log(Z)
 \end{split}\]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1/2*z^2 - 1/2
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -754,12 +734,7 @@ a_{-1} + a_0 Z + a_1 Z^2 &amp; \approx Z \log(Z)
 <p>Similarly, we can derive a five-point centered formula via</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">^</span><span class="mi">2</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-1/12*z^4 + 2/3*z^3 - 2/3*z + 1/12
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">^</span><span class="mi">2</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -770,12 +745,7 @@ a_{-1} + a_0 Z + a_1 Z^2 &amp; \approx Z \log(Z)
 <p>We can play the same games for formulas for the 2nd and higher derivatives. Here is the most popular formula for a second derivative: centered, using three nodes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>z^2 - 2*z + 1
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -783,12 +753,7 @@ a_{-1} + a_0 Z + a_1 Z^2 &amp; \approx Z \log(Z)
 <p>We can verify that the formula is second-order accurate:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">Z</span><span class="o">^</span><span class="mi">2</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">Z</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">Z</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hD^2 + 1/12*hD^4 + 1/360*hD^6 + O(hD^8)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">Z</span><span class="o">^</span><span class="mi">2</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">Z</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">Z</span>
 </pre></div>
 </div>
 </div>
@@ -801,24 +766,14 @@ u''(0) = \frac{u_{-1}-2u_0+u_1}{h^2} - \frac{1}{12}h^2 u^{(4)}(0) + O(h^4).
 <p>This can be carried out to 4th-order using 5 points:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">^</span><span class="mi">2</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-1/12*z^4 + 4/3*z^3 - 5/2*z^2 + 4/3*z - 1/12
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">z</span><span class="o">^</span><span class="mi">2</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="o">*</span><span class="n">Z</span><span class="o">^</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="n">Z</span><span class="o">^</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">Z</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="n">Z</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span><span class="o">/</span><span class="n">Z</span><span class="o">^</span><span class="mi">2</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hD^2 - 1/90*hD^6 + O(hD^8)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="o">*</span><span class="n">Z</span><span class="o">^</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="n">Z</span><span class="o">^</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">Z</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="n">Z</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span><span class="o">/</span><span class="n">Z</span><span class="o">^</span><span class="mi">2</span>
 </pre></div>
 </div>
 </div>
@@ -826,12 +781,7 @@ u''(0) = \frac{u_{-1}-2u_0+u_1}{h^2} - \frac{1}{12}h^2 u^{(4)}(0) + O(h^4).
 <p>We can also do asymmetric (forward and backward) formulas:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-z^3 + 4*z^2 - 5*z + 2
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">expand</span><span class="p">(</span><span class="n">taylor</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>

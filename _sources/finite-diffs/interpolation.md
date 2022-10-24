@@ -64,7 +64,8 @@ $$
 where each $\ell_i$ is the **cardinal polynomial** 
 
 $$
-\ell_i(x) = \frac{\Phi(x)}{\Phi'(x_i)(x-x_i)} = \frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)},
+\ell_i(x) & = \frac{\Phi(x)}{\Phi'(x_i)(x-x_i)} \\ 
+&= \frac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)},
 $$
 
 where $\Phi(x)=\prod (x-x_i)$ is a polynomial we will keep in our pocket for later. This famous formula is not a good one to use directly for numerical computation, but it does lead to some recursive definitions that can be used to derive a general finite-difference formula. That is, given nodes $x_i$ for $i=0,\ldots,n$ and a derivative order $m$, we can find the **weights** $w_i$ such that

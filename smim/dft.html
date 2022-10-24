@@ -337,6 +337,26 @@ const thebe_selector_output = ".output, .cell_output"
      6.4. Smoothness effects
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="barycentric.html">
+     6.5. Barycentric formula
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="potential.html">
+     6.6. Potential theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebdm.html">
+     6.7. Chebyshev differentiation matrix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebbvp.html">
+     6.8. Chebyshev for BVPs
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -704,37 +724,35 @@ S'_N(x_j) = \begin{cases}
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p4()
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p4(N = 24)
     # Set up grid and differentiation matrix:
-    N = 24
     h = 2π / N
     x = h * (1:N)
-    column = [0; @. 0.5 * (-1)^(1:N-1) * cot((1:N-1) * h / 2)]
-    D = toeplitz(column, column[[1; N:-1:2]])
+    entry(k) = k==0 ? 0.0 : 0.5 * (-1)^k * cot(k * h / 2)
+    D = [ entry(mod(i-j,N)) for i in 1:N, j in 1:N ]
 
     # Differentiation of a hat function:
     v = @. max(0, 1 - abs(x - π) / 2)
-    clf()
-    subplot(2, 2, 1)
-    plot(x, v, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -0.5, 1.5])
-    grid(true)
-    title(&quot;function&quot;)
-    subplot(2, 2, 2), plot(x, D * v, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -1, 1])
-    grid(true)
-    title(&quot;spectral derivative&quot;)
+    fig = Figure()
+    ax = Axis(fig[1, 1], title=&quot;function&quot;)
+    scatterlines!(x, v)
+    limits!(ax, 0, 2π, -0.5, 1.5)
+    ax = Axis(fig[1, 2], title=&quot;spectral derivative&quot;)
+    scatterlines!(x, D * v)
+    limits!(ax, 0, 2π, -1, 1)
 
     # Differentiation of exp(sin(x)):
     v = @. exp(sin(x))
     vʹ = @. cos(x) * v
-    subplot(2, 2, 3), plot(x, v, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, 0, 3]), grid(true)
-    subplot(2, 2, 4), plot(x, D * v, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -2, 2]), grid(true)
-    error = round(norm(D * v - vʹ, Inf), sigdigits=5)
-    text(2.2, 1.4, &quot;max error = $error&quot;, fontsize=8)
-    return gcf()
+    ax = Axis(fig[2, 1])
+    scatterlines!(x, v)
+    limits!(ax, 0, 2π, 0, 3)
+    ax = Axis(fig[2, 2])
+    scatterlines!(x, D * v)
+    limits!(ax, 0, 2π, -2, 2)
+    error = norm(D * v - vʹ, Inf)
+    text!(2.2, 1.4, text=f&quot;max error = {error:.5g}&quot;, textsize=20)
+    return fig
 end
 </pre></div>
 </div>
@@ -742,7 +760,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p4</span><span class="p">();</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p4</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -769,40 +787,49 @@ end
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p5()
-    #        For complex v, delete &quot;real&quot; commands.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p5(N = 24)
+    function fderiv(v::Vector{T}) where T &lt;: Real
+        v̂ = rfft(v)
+        ŵ = 1im * [0:N/2-1; 0] .* v̂
+        return irfft(ŵ, N) 
+    end
+    function fderiv(v)
+        v̂ = fft(v)
+        ŵ = 1im * [0:N/2-1; 0; -N/2+1:-1] .* v̂
+        return ifft(ŵ)
+    end
+
     # Differentiation of a hat function:
-    N = 24
     h = 2π / N
     x = h * (1:N)
     v = @. max(0, 1 - abs(x - π) / 2)
-    v̂ = fft(v)
-    ŵ = 1im * [0:N/2-1; 0; -N/2+1:-1] .* v̂
-    w = real(ifft(ŵ))
-    clf()
-    subplot(2, 2, 1)
-    plot(x, v, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -0.5, 1.5])
-    grid(true)
-    title(&quot;function&quot;)
-    subplot(2, 2, 2), plot(x, w, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -1, 1])
-    grid(true)
-    title(&quot;spectral derivative&quot;)
+    w = fderiv(v)
+    fig = Figure()
+    ax = Axis(fig[1, 1],
+        xticks = MultiplesTicks(5, π, &quot;π&quot;), 
+        title=&quot;function&quot;
+    )
+    scatterlines!(x, v)
+    
+    ax = Axis(fig[1, 2], 
+        xticks = MultiplesTicks(5, π, &quot;π&quot;),
+        title=&quot;spectral derivative&quot;
+    )
+    scatterlines!(x, w)
 
     # Differentiation of exp(sin(x)):
     v = @. exp(sin(x))
     vʹ = @. cos(x) * v
-    v̂ = fft(v)
-    ŵ = 1im * [0:N/2-1; 0; -N/2+1:-1] .* v̂
-    w = real(ifft(ŵ))
-    subplot(2, 2, 3), plot(x, v, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, 0, 3]), grid(true)
-    subplot(2, 2, 4), plot(x, w, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -2, 2]), grid(true)
-    error = round(norm(w - vʹ, Inf), sigdigits=4)
-    text(2.2, 1.4, &quot;max error = $error&quot;, fontsize=8)
-    return gcf()
+    w = fderiv(v)
+    ax = Axis(fig[2, 1], xticks = MultiplesTicks(5, π, &quot;π&quot;))
+    scatterlines!(x, v)
+    limits!(ax, 0, 2π, 0, 3)
+    ax = Axis(fig[2, 2], xticks = MultiplesTicks(5, π, &quot;π&quot;))
+    scatterlines!(x, w)
+    limits!(ax, 0, 2π, -2, 2)
+    error = norm(w - vʹ, Inf)
+    text!(2.2, 1.4, text=f&quot;max error = {error:.5g}&quot;, textsize=20)
+    return fig
 end
 </pre></div>
 </div>
@@ -810,7 +837,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p5</span><span class="p">();</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p5</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -826,41 +853,15 @@ end
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p5r()
-    #        For complex v, delete &quot;real&quot; commands.
-    # Differentiation of a hat function:
-    N = 24
-    h = 2π / N
-    x = h * (1:N)
-    v = @. max(0, 1 - abs(x - π) / 2)
-    v̂ = rfft(v)
-    ŵ = 1im * [0:N/2-1; 0] .* v̂
-    w = irfft(ŵ,N)
-    clf()
-    subplot(2, 2, 1)
-    plot(x, v, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -0.5, 1.5])
-    grid(true)
-    title(&quot;function&quot;)
-    subplot(2, 2, 2), plot(x, w, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -1, 1])
-    grid(true)
-    title(&quot;spectral derivative&quot;)
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">UndefVarError</span>: p5r not defined
 
-    # Differentiation of exp(sin(x)):
-    v = @. exp(sin(x))
-    vʹ = @. cos(x) * v
-    v̂ = rfft(v)
-    ŵ = 1im * [0:N/2-1; 0] .* v̂
-    w = irfft(ŵ,N)
-    subplot(2, 2, 3), plot(x, v, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, 0, 3]), grid(true)
-    subplot(2, 2, 4), plot(x, w, &quot;.-&quot;, markersize=6)
-    axis([0, 2π, -2, 2]), grid(true)
-    error = round(norm(w - vʹ, Inf), sigdigits=4)
-    text(2.2, 1.4, &quot;max error = $error&quot;, fontsize=8)
-    return gcf()
-end
+<span class="ne">Stacktrace</span>:
+ <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">top</span><span class="o">-</span><span class="n">level</span> <span class="n">scope</span>
+   <span class="o">@</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span><span class="mi">1</span>
+ <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="nb">eval</span>
+   <span class="o">@</span> <span class="o">./</span><span class="n">boot</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">368</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
+ <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="n">include_string</span><span class="p">(</span><span class="n">mapexpr</span><span class="p">::</span><span class="n">typeof</span><span class="p">(</span><span class="n">REPL</span><span class="o">.</span><span class="n">softscope</span><span class="p">),</span> <span class="n">mod</span><span class="p">::</span><span class="n">Module</span><span class="p">,</span> <span class="n">code</span><span class="p">::</span><span class="n">String</span><span class="p">,</span> <span class="n">filename</span><span class="p">::</span><span class="n">String</span><span class="p">)</span>
+   <span class="o">@</span> <span class="n">Base</span> <span class="o">./</span><span class="n">loading</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">1428</span>
 </pre></div>
 </div>
 </div>
@@ -882,48 +883,42 @@ end
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p6()
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p6(⍺ = 1.5)
     # Grid, variable coefficient, and initial data:
-    N = 128
-    h = 2π / N
+    N = 128;  h = 2π / N
     x = h * (1:N)
-    t = 0
-    Δt = h / 4
+    t = 0;  Δt = ⍺ / N
     c = @. 0.2 + sin(x - 1)^2
     v = @. exp(-100 * (x - 1) .^ 2)
     vold = @. exp(-100 * (x - 0.2Δt - 1) .^ 2)
 
     # Time-stepping by leap frog formula:
     tmax = 8
-    tplot = 0.15
-    clf()
-    plotgap = round(tplot / Δt)
-    Δt = tplot / plotgap
-    nplots = round(Int, tmax / tplot)
-    data = [v zeros(N, nplots)]
-    tdata = [t]
-    for i in 1:nplots
-        for n in 1:plotgap
-            t = t + Δt
-            v̂ = rfft(v)
-            ŵ = 1im * [0:N/2-1; 0] .* v̂
-            w = irfft(ŵ,N)
-            vnew = vold - 2Δt * c .* w
-            vold = v
-            v = vnew
+    nsteps = ceil(Int, tmax / Δt)
+    Δt = tmax / nsteps
+    V = [v fill(NaN, N, nsteps)]
+    t = Δt*(0:nsteps)
+    for i in 1:nsteps
+        v̂ = rfft( V[:,i] )
+        ŵ = 1im * [0:N/2-1; 0] .* v̂
+        w = irfft(ŵ, N)
+        V[:,i+1] = vold - 2Δt * c .* w
+        vold = V[:,i]
+        if norm(V[:,i+1], Inf) &gt; 2.5
+            break 
         end
-        data[:, i+1] = v
-        tdata = [tdata; t]
     end
-    mesh(x, tdata, data&#39;, ccount=0)
-    view(10, 70)
-    xlim(0, 2π)
-    ylim(0, tmax)
-    zlim(0, 5)
-    xlabel(&quot;x&quot;)
-    ylabel(&quot;t&quot;)
-    zlabel(&quot;u&quot;)
-    return gcf()
+
+    fig = Figure()
+    Axis3(fig[1, 1],
+        xticks = MultiplesTicks(5, π, &quot;π&quot;),
+        xlabel=&quot;x&quot;, ylabel=&quot;t&quot;, zlabel=&quot;u&quot;, 
+        azimuth=4.5, elevation=1.44,
+    )
+    gap = max(1,round(Int, 0.15/Δt) - 1)
+    surface!(x, t, V, colorrange=(0,1))
+    [ lines!(x, fill(t[j], N), V[:, j].+.01, color=:ivory) for j in 1:gap:nsteps+1 ]
+    return fig
 end
 </pre></div>
 </div>
@@ -931,7 +926,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">();</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -953,7 +948,7 @@ end
 <p>or roughly <span class="math notranslate nohighlight">\(\tau \le 5/3N\)</span>. This is a bit pessimistic; as shown in the next figure, the critical value appears to be closer to 1.9 than 1.67:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6u</span><span class="p">();</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">(</span><span class="mf">1.9</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

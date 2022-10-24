@@ -55,6 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.5. Barycentric formula" href="barycentric.html" />
     <link rel="prev" title="6.3. Periodic discrete functions" href="dft.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -334,6 +335,26 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      6.4. Smoothness effects
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="barycentric.html">
+     6.5. Barycentric formula
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="potential.html">
+     6.6. Potential theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebdm.html">
+     6.7. Chebyshev differentiation matrix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebbvp.html">
+     6.8. Chebyshev for BVPs
     </a>
    </li>
   </ul>
@@ -794,46 +815,47 @@ u(x) = \frac{\sigma}{x^2+\sigma^2}, \qquad \hat{u}(k) = \pi e^{-\sigma|k| }.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p7()
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p7(allN = 6:2:50)
+    @assert(all(iseven.(allN)),&quot;N must be even&quot;)
     # Compute derivatives for various values of N:
-    Nmax = 50
-    allN = 6:2:Nmax
-    E = zeros(4, length(allN))
-    for N = 6:2:Nmax
-        h = 2π / N
-        x = h * (1:N)
-        column = [0; @. 0.5 * (-1)^(1:N-1) * cot((1:N-1) * h / 2)]
-        D = toeplitz(column, column[[1; N:-1:2]])
-        v = @. abs(sin(x))^3                     # 3rd deriv in BV
-        vʹ = @. 3sin(x) * cos(x) * abs(sin(x))
-        j = round(Int, N / 2 - 2)
-        E[1, j] = norm(D * v - vʹ, Inf)
-        v = @. exp(-sin(x / 2)^(-2))               # C-infinity
-        vʹ = @. 0.5v * sin(x) / sin(x / 2)^4
-        E[2, j] = norm(D * v - vʹ, Inf)
-        v = @. 1 / (1 + sin(x / 2)^2)                 # analytic in a strip
-        vʹ = @. -sin(x / 2) * cos(x / 2) * v^2
-        E[3, j] = norm(D * v - vʹ, Inf)
-        v = sin.(10x)
-        vʹ = 10cos.(10x)   # band-limited
-        E[4, j] = norm(D * v - vʹ, Inf)
+    Nmax = maximum(allN)
+    data = [ 
+        # uʹʹʹ in BV
+        (x -&gt; abs(sin(x))^3,  x -&gt; 3 * sin(x) * cos(x) * abs(sin(x)), 
+            L&quot;|\sin(x)|^3&quot;, (1,1)), 
+        # C-infinity
+        (x -&gt; exp(-sin(x / 2)^(-2)), 
+            x -&gt; 0.5exp(-sin(x / 2)^(-2)) * sin(x) / sin(x / 2)^4, 
+            L&quot;\exp(-\sin^{-2}(x/2))&quot;, (1,2)), 
+        # analytic in a strip
+        (x -&gt; 1 / (1 + sin(x / 2)^2), 
+            x -&gt; -sin(x / 2) * cos(x / 2) / (1 + sin(x / 2)^2)^2,
+            L&quot;1/(1+\sin^2(x/2))&quot;, (2,1) ),
+        # band-limited 
+        (x -&gt; sin(10x), x -&gt; 10cos(10x),  L&quot;\sin(10x)&quot;, (2,2))
+    ]
+    fig = Figure()
+    E = zeros(length(allN))
+    ax = []
+    for (fun,deriv,title,pos) in data
+        for (k,N) in enumerate(allN)
+            h = 2π / N
+            x = h * (1:N)
+            entry(k) = k==0 ? 0.0 : 0.5 * (-1)^k * cot(k * h / 2)
+            D = [ entry(mod(i-j, N)) for i in 1:N, j in 1:N ]
+            E[k] = norm(D * fun.(x) - deriv.(x), Inf)
+        end
+        push!(ax,
+            Axis(fig[pos[1], pos[2]],
+                title=title, yscale=log10
+            ))
+        scatterlines!(allN, E)
+        ax[end].xlabel = (pos[1] == 2) ? &quot;N&quot; : &quot;&quot;
+        ax[end].ylabel = (pos[2] == 1) ? &quot;error&quot; : &quot;&quot;
     end
-
-    # Plot results:
-    titles = [L&quot;|\sin(x)|^3&quot;, L&quot;\exp(-\sin^{-2}(x/2))&quot;, L&quot;1/(1+\sin^2(x/2))&quot;, L&quot;\sin(10x)&quot;]
-    clf()
-    for iplot = 1:4
-        subplot(2, 2, iplot)
-        semilogy(allN, E[iplot, :], &quot;.-&quot;, markersize=6)
-        axis([0, Nmax, 1e-16, 1e3])
-        grid(true)
-        xticks(0:10:Nmax)
-        yticks(10.0 .^ (-15:5:0))
-        title(titles[iplot])
-        iplot &gt; 2 ? xlabel(&quot;N&quot;) : nothing
-        iplot % 2 &gt; 0 ? ylabel(&quot;error&quot;) : nothing
-    end
-    return gcf()
+    linkxaxes!(ax...)
+    linkyaxes!(ax...)
+    return fig
 end
 </pre></div>
 </div>
@@ -841,7 +863,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p7</span><span class="p">();</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p7</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -861,70 +883,35 @@ end
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p8</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+<span class="n">println</span><span class="p">()</span>
+<span class="n">println</span><span class="p">()</span>
+<span class="n">p8</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p8()
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p8( N = 6:6:36)
     L = 8                             # domain is [-L L], periodic
-    for N = 6:6:36
+    λ = zeros(4,0)
+    for N in N
         h = 2π / N
-        x = h * (1:N)
-        x = @. L * (x - π) / π
-        column = [-π^2 / 3h^2 - 1 / 6; @. -0.5 * (-1)^(1:N-1) / sin(h * (1:N-1) / 2)^2]
-        D² = (π / L)^2 * toeplitz(column)  # 2nd-order differentiation
-        eigenvalues = sort(eigvals(-D² + diagm(x .^ 2)))
-        @show N
-        foreach(println,eigenvalues[1:4])
-        println(&quot;&quot;)
+        x = [ (L/π)*(i*h - π) for i in 1:N ]
+        entry(k) = k==0 ? -π^2 / 3h^2 - 1/6 : -0.5 * (-1)^k / sin(h * k / 2)^2
+        D² = [(π / L)^2 * entry(mod(i-j, N)) for i in 1:N, j in 1:N]  # 2nd-order differentiation
+        λ = [ λ eigvals(-D² + diagm(x .^ 2))[1:4] ]
     end
+    header = [&quot;N = $n&quot; for n in N]
+    pretty_table(λ; header, formatters=ft_printf(&quot;%.14f&quot;))
 end
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p8</span><span class="p">();</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>N = 6
-0.4614729169954706
-7.494134621050524
-7.720916053006559
-28.83248377834014
 
-N = 12
-0.9781372812985987
-3.17160532064718
-4.455935291166781
-8.92452905811993
-
-N = 18
-0.9999700014993042
-3.000644066795811
-4.992595324407723
-7.039571897981489
-
-N = 24
-0.999999997629049
-3.0000000984108692
-4.999997965273301
-7.000024998156544
-
-N = 30
-0.9999999999999726
-3.0000000000007443
-4.999999999975596
-7.00000000050862
-
-N = 36
-1.0000000000000349
-2.9999999999999867
-4.999999999999988
-6.999999999999977
+┌───────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┐
+│<span class=" -Color -Color-Bold">             N = 6 </span>│<span class=" -Color -Color-Bold">           N = 12 </span>│<span class=" -Color -Color-Bold">           N = 18 </span>│<span class=" -Color -Color-Bold">           N = 24 </span>│<span class=" -Color -Color-Bold">           N = 30 </span>│<span class=" -Color -Color-Bold">           N = 36 </span>│
+├───────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┼──────────────────┤
+│  0.46147291699547 │ 0.97813728129861 │ 0.99997000149932 │ 0.99999999762906 │ 1.00000000000002 │ 1.00000000000000 │
+│  7.49413462105052 │ 3.17160532064718 │ 3.00064406679583 │ 3.00000009841089 │ 3.00000000000075 │ 2.99999999999999 │
+│  7.72091605300656 │ 4.45593529116678 │ 4.99259532440771 │ 4.99999796527330 │ 4.99999999997561 │ 5.00000000000000 │
+│ 28.83248377834011 │ 8.92452905811993 │ 7.03957189798149 │ 7.00002499815656 │ 7.00000000050865 │ 7.00000000000001 │
+└───────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┘
 </pre></div>
 </div>
 </div>
@@ -965,6 +952,13 @@ N = 36
             <p class="prev-next-subtitle">previous</p>
             <p class="prev-next-title"><span class="section-number">6.3. </span>Periodic discrete functions</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="barycentric.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6.5. </span>Barycentric formula</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             </footer>

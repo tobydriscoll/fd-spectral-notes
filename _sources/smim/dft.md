@@ -115,7 +115,7 @@ Sugar.get_source(first(methods(p4))) |> last |> print
 ```
 
 ```{code-cell} julia
-p4();
+p4()
 ```
 
 The differentiation of the nonsmooth function is very poor, but for the smooth case, it's very accurate.
@@ -138,7 +138,7 @@ Sugar.get_source(first(methods(p5))) |> last |> print
 ```
 
 ```{code-cell} julia
-p5();
+p5()
 ```
 
 There is some inefficiency in the use of the FFT above. When the original function is real, its transform has conjugate symmetry, and the transform can be simplified to find only the first half of the transform. Julia exposes this special form of the FFT for you to exploit:
@@ -164,7 +164,7 @@ Sugar.get_source(first(methods(p6))) |> last |> print
 ```
 
 ```{code-cell} julia
-p6();
+p6()
 ```
 
 It's worth considering the absolute stability restriction that is implied by the spectral differentiation. First, we note that the stability region of the leapfrog scheme is $[-i,i]$ on the imaginary axis. 
@@ -184,5 +184,5 @@ $$
 or roughly $\tau \le 5/3N$. This is a bit pessimistic; as shown in the next figure, the critical value appears to be closer to 1.9 than 1.67:
 
 ```{code-cell} julia
-p6u();
+p6(1.9)
 ```

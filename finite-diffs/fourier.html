@@ -337,6 +337,26 @@ const thebe_selector_output = ".output, .cell_output"
      6.4. Smoothness effects
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/barycentric.html">
+     6.5. Barycentric formula
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/potential.html">
+     6.6. Potential theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebdm.html">
+     6.7. Chebyshev differentiation matrix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebbvp.html">
+     6.8. Chebyshev for BVPs
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -657,7 +677,23 @@ e^{i(\pi/h)(kh)} = e^{i\pi k} = (-1)^k,
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fourier_3_0.svg" src="../_images/fourier_3_0.svg" /></div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>ArgumentError: Package FiniteDifferences not found in current path.
+- Run `import Pkg; Pkg.add(&quot;FiniteDifferences&quot;)` to install the FiniteDifferences package.
+
+Stacktrace:
+ [1] macro expansion
+   @ ./loading.jl:1163 [inlined]
+ [2] macro expansion
+   @ ./lock.jl:223 [inlined]
+ [3] require(into::Module, mod::Symbol)
+   @ Base ./loading.jl:1144
+ [4] eval
+   @ ./boot.jl:368 [inlined]
+ [5] include_string(mapexpr::typeof(REPL.softscope), mod::Module, code::String, filename::String)
+   @ Base ./loading.jl:1428
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="non-centered-formulas">

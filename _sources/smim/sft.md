@@ -139,13 +139,13 @@ Sugar.get_source(first(methods(p3))) |> last |> print
 ```
 
 ```{code-cell} julia
-p3();
+p3()
 ```
 
 Note in the middle graph above that the BLI is not a great way to approximate a discrete square wave. In fact, it's worth taking a look at what happens to the square wave as we reduce $h$ for it:
 
 ```{code-cell} julia
-p3g();
+p3g()
 ```
 
 The overshoot in the interpolant gets narrower but not shorter, a fact now known as the **Gibbs phenomenon**. One point of view is that we get convergence as $h\to 0 $ in the 2-norm, but not in the $\infty$-norm.

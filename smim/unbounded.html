@@ -337,6 +337,26 @@ const thebe_selector_output = ".output, .cell_output"
      6.4. Smoothness effects
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="barycentric.html">
+     6.5. Barycentric formula
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="potential.html">
+     6.6. Potential theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebdm.html">
+     6.7. Chebyshev differentiation matrix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebbvp.html">
+     6.8. Chebyshev for BVPs
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -652,28 +672,31 @@ D_{ij} = (-1)^{k} \cot\left(k \tfrac{h}{2}\right), \qquad k = i-j \mod N.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p2()
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p2(Nvec = 2:2:100)
+    fig = Figure()
+    Axis(
+        fig[1, 1],
+        xscale=log10, yscale=log10,
+        xlabel=&quot;N&quot;, ylabel=&quot;error&quot;,
+        title=&quot;Convergence of spectral differentiation&quot;,
+    )
+    @assert(all(iseven.(Nvec)),&quot;N must be even&quot;)
     # For various N (even), set up grid as before:
-    clf()
-    for N = 2:2:100
+     for N in Nvec
         h = 2π / N
         x = [-π + i * h for i = 1:N]
         u = @. exp(sin(x))
         uprime = @. cos(x) * u
 
         # Construct spectral differentiation matrix:
-        entry(k) = k==0 ? 0 : (-1)^k * 0.5cot( k * h / 2 )
+        entry(k) = k==0 ? 0.0 : (-1)^k * 0.5cot( k * h / 2 )
         D = [ entry(mod(i-j,N)) for i in 1:N, j in 1:N ]
 
         # Plot max(abs(D*u-uprime)):
         error = norm(D * u - uprime, Inf)
-        loglog(N, error, &quot;k.&quot;, markersize=6)
+        scatter!(N, error, color=:black)
     end
-    grid(true)
-    xlabel(&quot;N&quot;)
-    ylabel(&quot;error&quot;)
-    title(&quot;Convergence of spectral differentiation&quot;)
-    return gcf()
+    return fig
 end
 </pre></div>
 </div>
@@ -681,7 +704,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p2</span><span class="p">();</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p2</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
