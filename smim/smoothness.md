@@ -169,7 +169,7 @@ Sugar.get_source(first(methods(p7))) |> last |> print
 ```
 
 ```{code-cell} julia
-p7();
+p7()
 ```
 
 ## Eigenvalues
@@ -185,8 +185,7 @@ The exact eigenvalues are the odd positive integers, and the eigenfunctions deca
 
 ```{code-cell} julia
 Sugar.get_source(first(methods(p8))) |> last |> print
-```
-
-```{code-cell} julia
-p8();
+println()
+println()
+p8()
 ```

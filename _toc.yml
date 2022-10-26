@@ -46,5 +46,10 @@ chapters:
     - file: smim/sft
     - file: smim/dft
     - file: smim/smoothness
+    - file: smim/barycentric
+    - file: smim/potential
+    - file: smim/chebdm
+    - file: smim/chebbvp
+    - file: smim/chebfft
 
 

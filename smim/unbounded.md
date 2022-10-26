@@ -103,7 +103,7 @@ Sugar.get_source(first(methods(p2))) |> last |> print
 ```
 
 ```{code-cell} julia
-p2();
+p2()
 ```
 
 This use of periodic interpolants is the foundation of what are known as **Fourier spectral methods.**
