@@ -17,11 +17,11 @@ kernelspec:
 
 We will next explore the interactions between three closely related situations: 
 
-1. Chebyshev series, $x\[-1,1]$.
+1. Chebyshev series, $x\in [-1,1]$.
 2. Fourier series, $\theta\in \mathbb{R}$.
 3. Laurent series, $z\in \mathbb{C}$, $|z|=1$. 
 
-The relationships between these variables are straightforward. 
+The relationships between these variables are straightforward:
 
 $$
 z &= e^{i\theta} \\ 
@@ -50,6 +50,7 @@ $$
 Therefore, each $T_n$ is a polynomial of degree $n$ with leading coefficient $2^{n-1}$. Each Chebyshev polynomial represents even oscillation around the circle but projects down to oscillations pushed out toward the boundaries of $[-1,1]$:
 
 ```{code-cell} julia
+include("smij-functions.jl")
 using CairoMakie
 fig = Figure(); ax = Axis3(fig[1, 1])
 θ = π*(0:200)/200
@@ -107,7 +108,7 @@ x = real(z)
 [scatterlines!([x,x],[-imag(z),imag(z)],color=:black,linestyle=:dash) for (x,z) in zip(x,z)]
 scatter!(x,0*x)
 labels = [ latexstring("v_$j") for j in 0:7 ]
-text!(x .+ 0.02, 0*x, text=labels, align=(:center,:bottom) )
+text!(x .+ 0.03, 0*x, text=labels, align=(:left,:bottom) )
 
 hidedecorations!(ax)
 hidespines!(ax)
@@ -126,7 +127,7 @@ vv = [v; v[N:-1:2]]
 fft(vv)/N
 ```
 
-The symmetries in both the data and the transform allow saving space and time by computing only the even (cosine) part by a special syntax:
+The symmetries in both the data and the transform allow saving space and time by computing only the even (cosine) part by a special syntax. In the case of real data, we use:
 
 ```{code-cell} julia
 FFTW.r2r(v,FFTW.REDFT00) / N
@@ -154,3 +155,200 @@ $$
 
 except at the endpoints, where special formulas are needed again.
 
+We use the following code to implement Chebyshev differentiation via the FFT.
+
+```{code-block} julia
+function chebfft(v)
+    # Simple, not optimal. If v is complex, delete "real" commands.
+    N = length(v)-1
+    N==0 && return [0.0]
+    x = [ cos(π*k/N) for k in 0:N ]
+    V = [v; v[N:-1:2]]              # transform x -> theta
+    U = real(fft(V))
+    W = real(ifft(1im*[0:N-1 ;0; 1-N:-1] .* U))
+    w = zeros(N+1)
+    @. w[2:N] = -W[2:N]/sqrt(1-x[2:N]^2)    # transform theta -> x
+    w[1] = sum( n^2 * U[n+1] for n in 0:N-1 )/N + 0.5N*U[N+1];
+    w[N+1] = sum( (-1)^(n+1) * n^2 * U[n+1] for n in 0:N-1 )/N + 0.5N*(-1)^(N+1)*U[N+1];
+    return w
+end
+```
+
+### p18: Chebyshev differentiation via FFT (compare p11)
+
+We reprise a computation done earlier by the differentiation matrix.
+
+```{code-cell}
+u = x -> exp(x) * sin(5x) 
+uʹ = x -> exp(x) * (sin(5x) + 5 * cos(5x))
+xx = (-200:200) / 200
+vv = @. u.(xx)
+results = []
+for (i,N) in enumerate([10, 20])
+    _, x = cheb(N)
+    v = u.(x)
+    error = chebfft(v) - uʹ.(x)
+    ee = polyinterp(x, error).(xx)
+    push!(results, (;x,v,error,ee))
+end
+```
+
+```{code-cell}
+using CairoMakie
+fig = Figure()
+for (i,r) in enumerate(results)
+    N = length(r.x)
+    Axis(fig[i, 1], title="u(x),  N=$N")
+    scatter!(r.x, r.v)
+    lines!(xx, vv)
+    Axis(fig[i, 2], title="error in uʹ(x),  N=$N")
+    scatter!(r.x, r.error)
+    lines!(xx, r.ee)
+end
+fig
+```
+
+### p19: 2nd-order wave eq. on Chebyshev grid (compare p6)
+
+We can solve the wave equation $\partial_{tt} u = \partial_{xx} u$ directly as a 2nd-order equation through discretization of the time derivative as a 2nd-order centered difference:
+
+$$
+\frac{\bfu_{j-1} - 2\bfu_j +  \bfu_{j+1}}{\tau^2} = \bfD_{xx} \bfu_j,
+$$
+
+which rearranges to
+
+$$
+\bfu_{j+1} = 2\bfu_j - \bfu_{j-1} + \tau^2 (\bfD_{xx} \bfu_j).
+$$
+
+Even though we have apparently used a differentiation matrix above, we can always replace its application to a vector by the FFT process. We're being lazy and wasteful here by just applying `chebfft` twice in a row, rather than properly coding the second derivative directly.
+
+```{code-cell}
+# Time-stepping by leap frog formula:
+N = 80
+_, x = cheb(N)
+Δt = 8 / N^2
+v = @. exp(-200 * x^2)
+vold = @. exp(-200 * (x - Δt)^2)
+
+tmax = 4
+nsteps = ceil(Int, tmax / Δt)
+Δt = tmax / nsteps
+V = [v fill(NaN, N+1, nsteps)]
+t = Δt*(0:nsteps)
+for i in 1:nsteps
+    w = chebfft(chebfft(V[:,i]))
+    w[1] = w[N+1] = 0
+    V[:,i+1] = 2V[:,i] - vold + Δt^2 * w
+    vold = V[:,i]
+    if norm(V[:,i+1], Inf) > 2.5
+        nsteps = i
+        break 
+    end
+end
+```
+
+```{code-cell}
+using PyFormattedStrings
+# Plot results:
+fig = Figure()
+Axis3(fig[1, 1],
+    xticks = MultiplesTicks(5, π, "π"),
+    xlabel="x", ylabel="t", zlabel="u", 
+    elevation=1.44,
+)
+gap = max(1,round(Int, 0.075/(t[2]-t[1])) - 1)
+surface!(x, t, V, colorrange=(0,1))
+[ lines!(x, fill(t[j], length(x)), V[:, j].+.01, color=:ivory) for j in 1:gap:size(V,2) ]
+fig
+```
+
+```{code-cell}
+fig = Figure(size=(480,360))
+index = Observable(1)
+ax = Axis(fig[1, 1],xlabel="x", ylabel="u" )
+lines!(x, @lift(V[:,$index]))
+record(fig, "p19.mp4", 1:10:size(V,2)+1) do i
+    index[] = i
+    ax.title = f"t = {t[i]:.2f}"
+    limits!(-1,1,-1,1)
+end;
+```
+
+<video autoplay controls><source src="p19.mp4" type="video/mp4"></video>
+
+
+### p20: 2nd-order wave eq. in 2D via FFT (compare p19)
+
+The 2D wave equation is analogously solved via 
+
+$$
+\bfu_{j+1} = 2\bfu_j - \bfu_{j-1} + \tau^2 (\bfD_{xx} \bfu_j + \bfD_{yy} \bfu_j).
+$$
+
+It's simplest to maintain the unknown $\bfu$ as a matrix-shaped grid function. Then we can apply `chebfft` to each column of data for the $x$ derivatives, and to each row of data for the $y$ derivatives. To make smooth plots, we also use a grid interpolation function to a finer grid.
+
+```{code-cell}
+# Grid and initial data:
+N = 36
+x = y = cheb(N)[2]
+Δt = 6 / N^2
+xx = yy = range(-1,1,81)
+nsteps = ceil(Int, 1 / Δt)
+Δt = 1 / nsteps
+
+vv = [exp(-40 * ((x - 0.4)^2 + y^2)) for x in x, y in y]
+vvold = vv
+
+t = Δt*(0:nsteps)
+V = zeros(length(xx),length(yy),nsteps+1)
+V[:,:,1] = gridinterp(vv,xx,yy)
+
+# Time-stepping by leap frog formula:
+uxx = zeros(N+1, N+1)
+uyy = zeros(N+1, N+1)
+for n in 1:nsteps
+    ii = 2:N
+    for i in 2:N
+        uxx[i,:] .= chebfft(chebfft(vv[i,:]))
+        uyy[:,i] .= chebfft(chebfft(vv[:,i]))
+    end
+    uxx[[1,N+1],:] .= uyy[[1,N+1],:] .= 0
+    uxx[:,[1,N+1]] .= uyy[:,[1,N+1]] .= 0
+    vvnew = 2vv - vvold + Δt^2 * (uxx + uyy)
+    vvold,vv = vv,vvnew
+    V[:,:,n+1] = gridinterp(vv,xx,yy)
+end
+```
+
+```{code-cell}
+inc = div(nsteps,3)
+fig = Figure()
+ax = [ Axis3(fig[j,i], zticks=[0,0.5,1]) for i in 1:2, j in 1:2 ]
+for (i,n) in enumerate(1:inc:nsteps+1) 
+    surface!(ax[i],xx,yy,V[:,:,n])
+    ax[i].title = f"t = {t[n]:.3f}"
+    limits!(ax[i],-1,1,-1,1,-0.3,1)
+    ax[i].elevation = π/5
+end
+fig
+```
+
+```{code-cell}
+fig = Figure(size=(480,320))
+index = Observable(1)
+# ax = Axis(fig[1, 1], xlabel="x", ylabel="y", aspect=DataAspect())
+ax = Axis3(fig[1, 1], xlabel="x", ylabel="y", azimuth=-π/2, elevation=π/2)
+# co = contourf!(ax,xx, yy, @lift(V[:,:,$index]), 
+#     levels=range(-0.3,1,24),
+#     colormap=:bluesreds )
+co = surface!(xx, yy, @lift(V[:,:,$index]), 
+        colormap=:bluesreds, colorrange=[-0.8,0.8] )
+record(fig, "p20.mp4", 1:size(V,3)) do i
+    index[] = i
+    ax.title = f"t = {t[i]:.2f}"
+end;
+```
+
+<video autoplay controls><source src="p20.mp4" type="video/mp4"></video>

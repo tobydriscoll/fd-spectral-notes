@@ -21,7 +21,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -38,7 +38,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -55,6 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.9. Chebyshev and the FFT" href="chebfft.html" />
     <link rel="prev" title="6.7. Chebyshev differentiation matrix" href="chebdm.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -356,6 +357,11 @@ const thebe_selector_output = ".output, .cell_output"
      6.8. Chebyshev for BVPs
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebfft.html">
+     6.9. Chebyshev and the FFT
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -617,9 +623,9 @@ title="Print to PDF"
 <p>The solution of the linear system produces the grid function <span class="math notranslate nohighlight">\(v\)</span> at Chebyshev points. Unlike FD methods, however, these values also imply a global interpolant over the solution domain. In fact, it would be a crime to use linear interpolation or a cubic spline for off-grid points, as those methods would erase the advantage of spectral accuracy (though you would be unlikely to notice much on a plot of the solution for any smooth method). We use the <code class="docutils literal notranslate"><span class="pre">polyinterp</span></code> function defined earlier to evaluate the solution anywhere; in principle, we should specialize it to Chebyshev points, for which the barycentric weights are known in closed form, but the performance issue is not meaningful to us for these demonstrations.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Sugar</span><span class="p">,</span> <span class="n">SpectralMethodsTrefethen</span>
-<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p13</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
-<span class="n">p13</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Sugar</span><span class="p">,</span><span class="w"> </span><span class="n">SpectralMethodsTrefethen</span><span class="w"></span>
+<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p13</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
+<span class="n">p13</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -653,8 +659,8 @@ end
 <p>we again derive a nonlinear algebraic system by discretization. Here is a code that uses a fixed-point iteration to approximately solve the nonlinear system:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p14</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
-<span class="n">p14</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p14</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
+<span class="n">p14</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -698,8 +704,8 @@ end
 \]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p15</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
-<span class="n">p15</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p15</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
+<span class="n">p15</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -742,7 +748,7 @@ end
 <p>One new wrinkle in 2D is that the interpolant must also be evaluated in a tensor-product fashion. For example, suppose a grid function has <span class="math notranslate nohighlight">\(U_{ij}\)</span> given at all <span class="math notranslate nohighlight">\((x_i,y_j)\)</span> for independent Chebyshev grids in <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. To evaluate the interpolant at <span class="math notranslate nohighlight">\((\xi,\eta)\)</span>, we first evaluate 1D interpolants at <span class="math notranslate nohighlight">\((\xi,y_j)\)</span> for all <span class="math notranslate nohighlight">\(j\)</span>, and then do one more 1D evaluation at <span class="math notranslate nohighlight">\((\xi,\eta)\)</span>. This can be visualized as collapsing each column of data down to the point <span class="math notranslate nohighlight">\(\xi\)</span>, then collapsing the remaining row to a single point. In practice we can do this reasonably efficiently on a grid of <span class="math notranslate nohighlight">\((\xi,\eta)\)</span> values, and we implement that as <code class="docutils literal notranslate"><span class="pre">gridinterp</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">gridinterp</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">gridinterp</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -768,9 +774,9 @@ end
 <p>Here is a solution of <span class="math notranslate nohighlight">\(\Delta u = 10\sin(8x(y-1))\)</span> over <span class="math notranslate nohighlight">\([-1,1]^2\)</span> with homogeneous Dirichlet conditions:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p16</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
-<span class="n">fig1</span><span class="p">,</span><span class="n">fig2</span> <span class="o">=</span> <span class="n">p16</span><span class="p">();</span>
-<span class="n">fig1</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p16</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
+<span class="n">fig1</span><span class="p">,</span><span class="n">fig2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p16</span><span class="p">();</span><span class="w"></span>
+<span class="n">fig1</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -814,7 +820,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig2</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig2</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -830,8 +836,8 @@ end
 <p>where <span class="math notranslate nohighlight">\(k\)</span> is a real parameter. Here is an example solution:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p17</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
-<span class="n">p17</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p17</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
+<span class="n">p17</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -904,6 +910,13 @@ end
             <p class="prev-next-subtitle">previous</p>
             <p class="prev-next-title"><span class="section-number">6.7. </span>Chebyshev differentiation matrix</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="chebfft.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6.9. </span>Chebyshev and the FFT</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             </footer>

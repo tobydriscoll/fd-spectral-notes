@@ -21,7 +21,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -38,7 +38,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -357,6 +357,11 @@ const thebe_selector_output = ".output, .cell_output"
      6.8. Chebyshev for BVPs
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebfft.html">
+     6.9. Chebyshev and the FFT
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -659,9 +664,9 @@ w_j = (-1)^j \binom{n}{j}, \qquad j=0,\ldots,n.
 <p>Once the weights have been found, evaluating <span class="math notranslate nohighlight">\(p\)</span> at one point takes only <span class="math notranslate nohighlight">\(O(n)\)</span> flops, regardless of the interpolated values <span class="math notranslate nohighlight">\(y_i\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Sugar</span><span class="p">,</span> <span class="n">SpectralMethodsTrefethen</span>
-<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">polyinterp</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
-<span class="n">println</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Sugar</span><span class="p">,</span><span class="w"> </span><span class="n">SpectralMethodsTrefethen</span><span class="w"></span>
+<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">polyinterp</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
+<span class="n">println</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -690,15 +695,15 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Plots</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
 
-<span class="n">f</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">sin</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span> <span class="mi">3</span><span class="o">*</span><span class="n">rand</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span> <span class="mi">3</span><span class="p">]</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">polyinterp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;polynomial&quot;</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="ss">:bottomleft</span><span class="p">)</span>
-<span class="n">plot!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;function&quot;</span><span class="p">)</span>
-<span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;data&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="mi">3</span><span class="o">*</span><span class="n">rand</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w"></span>
+<span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polyinterp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"></span>
+<span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;polynomial&quot;</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="ss">:bottomleft</span><span class="p">)</span><span class="w"></span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;function&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;data&quot;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -712,14 +717,14 @@ end
 <p>The Hermite error formula for polynomial interpolation includes a factor <span class="math notranslate nohighlight">\(\Phi(x)\)</span>. On equispaced node sets of length <span class="math notranslate nohighlight">\(n+1\)</span>, this behaves poorly across the interpolating interval as <span class="math notranslate nohighlight">\(n\to \infty\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="ss">:log</span><span class="p">,[</span><span class="mf">1e-25</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="s">&quot;|Φ(x)|&quot;</span><span class="p">))</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1100</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">n</span> <span class="k">in</span> <span class="mi">8</span><span class="o">:</span><span class="mi">16</span><span class="o">:</span><span class="mi">56</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">Phi</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-&gt;</span> <span class="n">prod</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="k">in</span> <span class="n">x</span><span class="p">)</span>
-    <span class="n">plot!</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">abs</span><span class="o">.</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="p">(</span><span class="n">t</span><span class="p">)),</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;N=</span><span class="si">$n</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="k">end</span>
-<span class="n">plt</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="ss">:log</span><span class="p">,[</span><span class="mf">1e-25</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="s">&quot;|Φ(x)|&quot;</span><span class="p">))</span><span class="w"></span>
+<span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1100</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">8</span><span class="o">:</span><span class="mi">16</span><span class="o">:</span><span class="mi">56</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">prod</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">x</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">plot!</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">abs</span><span class="o">.</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="p">(</span><span class="n">t</span><span class="p">)),</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;N=</span><span class="si">$n</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">plt</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -735,13 +740,13 @@ x_j = \cos\left( \frac{j\pi}{N} \right), \qquad j = 0,\ldots,N.
 <p>These points are the abscissas of equally spaced points on the unit circle:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">l</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span>
-<span class="n">plot!</span><span class="p">(</span><span class="n">cos</span><span class="p">,</span><span class="n">sin</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nb">π</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">θ</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="nb">π</span><span class="o">/</span><span class="n">N</span>
-<span class="n">z</span> <span class="o">=</span> <span class="n">cis</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span>
-<span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">imag</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-<span class="n">plot!</span><span class="p">([</span><span class="n">x</span> <span class="n">x</span><span class="p">]</span><span class="o">&#39;</span><span class="p">,[</span><span class="n">zero</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">y</span><span class="p">]</span><span class="o">&#39;</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="p">(</span><span class="ss">:dash</span><span class="p">,</span><span class="ss">:black</span><span class="p">),</span><span class="n">m</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="ss">:black</span><span class="p">))</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">l</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span><span class="w"></span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">cos</span><span class="p">,</span><span class="n">sin</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nb">π</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"></span>
+<span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="nb">π</span><span class="o">/</span><span class="n">N</span><span class="w"></span>
+<span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cis</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">real</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">imag</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"></span>
+<span class="n">plot!</span><span class="p">([</span><span class="n">x</span><span class="w"> </span><span class="n">x</span><span class="p">]</span><span class="o">&#39;</span><span class="p">,[</span><span class="n">zero</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="o">&#39;</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="p">(</span><span class="ss">:dash</span><span class="p">,</span><span class="ss">:black</span><span class="p">),</span><span class="n">m</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="ss">:black</span><span class="p">))</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -751,14 +756,14 @@ x_j = \cos\left( \frac{j\pi}{N} \right), \qquad j = 0,\ldots,N.
 <p>As we will show in the next section, these points produce a <span class="math notranslate nohighlight">\(|\Phi|\)</span> that is nearly flat across the interval:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="ss">:log</span><span class="p">,[</span><span class="mf">1e-25</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="s">&quot;|Φ(x)|&quot;</span><span class="p">))</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1100</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">N</span> <span class="k">in</span> <span class="mi">8</span><span class="o">:</span><span class="mi">16</span><span class="o">:</span><span class="mi">56</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="nd">@.</span> <span class="n">cos</span><span class="p">((</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="nb">π</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
-    <span class="n">Phi</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-&gt;</span> <span class="n">prod</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="k">in</span> <span class="n">x</span><span class="p">)</span>
-    <span class="n">plot!</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">abs</span><span class="o">.</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="p">(</span><span class="n">t</span><span class="p">)),</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;N=</span><span class="si">$N</span><span class="s">&quot;</span><span class="p">)</span>
-<span class="k">end</span>
-<span class="n">plt</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot</span><span class="p">(</span><span class="n">yaxis</span><span class="o">=</span><span class="p">(</span><span class="ss">:log</span><span class="p">,[</span><span class="mf">1e-25</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="s">&quot;|Φ(x)|&quot;</span><span class="p">))</span><span class="w"></span>
+<span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1100</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">8</span><span class="o">:</span><span class="mi">16</span><span class="o">:</span><span class="mi">56</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">cos</span><span class="p">((</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="nb">π</span><span class="o">/</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">prod</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">x</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">plot!</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">abs</span><span class="o">.</span><span class="p">(</span><span class="n">Phi</span><span class="o">.</span><span class="p">(</span><span class="n">t</span><span class="p">)),</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;N=</span><span class="si">$N</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">plt</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -773,9 +778,9 @@ w_j = (-1)^j \cdot \begin{cases} \tfrac{1}{2}, &amp; j=0 \text{ or } j=N, \\ 1, 
 <p>The poor conditioning of equispaced points in polynomial interpolation is known as the <strong>Runge phenomenon</strong>. It’s typically demonstrated on a very innocuous-looking function, <span class="math notranslate nohighlight">\(1/(1 + 16x^2)\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p9</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
-<span class="n">println</span><span class="p">()</span>
-<span class="n">p9</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p9</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
+<span class="n">println</span><span class="p">()</span><span class="w"></span>
+<span class="n">p9</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>

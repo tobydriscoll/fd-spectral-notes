@@ -21,7 +21,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -38,7 +38,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -355,6 +355,11 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="chebbvp.html">
      6.8. Chebyshev for BVPs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebfft.html">
+     6.9. Chebyshev and the FFT
     </a>
    </li>
   </ul>
@@ -718,8 +723,8 @@ S'_N(x_j) = \begin{cases}
 <p>Naturally, column 0 is the same as column <span class="math notranslate nohighlight">\(N\)</span>, and the rest of the columns are shifted versions of it. The result is again a circulant matrix.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">Sugar</span><span class="p">,</span> <span class="n">SpectralMethodsTrefethen</span>
-<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p4</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Sugar</span><span class="p">,</span><span class="w"> </span><span class="n">SpectralMethodsTrefethen</span><span class="w"></span>
+<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p4</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -760,7 +765,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p4</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p4</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -782,7 +787,7 @@ end
 <p>This pathway becomes acutely relevant because of the <strong>Fast Fourier Transform</strong>, credited to Cooley and Tukey in modern times but going back to Gauss. The FFT allows computation of the DFT and IDFT in <span class="math notranslate nohighlight">\(O(N\log N)\)</span> operations, versus the <span class="math notranslate nohighlight">\(O(N^2)\)</span> of a naive DFT implementation as well as for matrix-vector multiplication in physical space. Asymptotically, the FFT pathway should be the fastest by far, although the <span class="math notranslate nohighlight">\(N\)</span> at which it begins to have an advantage is often larger than one wants to use in practice anyway.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p5</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p5</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -837,7 +842,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p5</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p5</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -848,7 +853,7 @@ end
 <p>There is some inefficiency in the use of the FFT above. When the original function is real, its transform has conjugate symmetry, and the transform can be simplified to find only the first half of the transform. Julia exposes this special form of the FFT for you to exploit:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p5r</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p5r</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -878,7 +883,7 @@ end
 <p>This function applies the midpoint/leapfrog method in time, with FFT-based spectral differentiation in space:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p6</span><span class="p">)))</span> <span class="o">|&gt;</span> <span class="n">last</span> <span class="o">|&gt;</span> <span class="n">print</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p6</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -926,7 +931,7 @@ end
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">()</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">()</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -948,7 +953,7 @@ end
 <p>or roughly <span class="math notranslate nohighlight">\(\tau \le 5/3N\)</span>. This is a bit pessimistic; as shown in the next figure, the critical value appears to be closer to 1.9 than 1.67:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">(</span><span class="mf">1.9</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">(</span><span class="mf">1.9</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>

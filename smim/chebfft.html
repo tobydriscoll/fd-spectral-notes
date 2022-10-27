@@ -21,7 +21,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -38,7 +38,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -568,6 +568,23 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#differentiation">
    Differentiation
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p18-chebyshev-differentiation-via-fft-compare-p11">
+     p18: Chebyshev differentiation via FFT (compare p11)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p19-2nd-order-wave-eq-on-chebyshev-grid-compare-p6">
+     p19: 2nd-order wave eq. on Chebyshev grid (compare p6)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p20-2nd-order-wave-eq-in-2d-via-fft-compare-p19">
+     p20: 2nd-order wave eq. in 2D via FFT (compare p19)
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -597,6 +614,23 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#differentiation">
    Differentiation
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p18-chebyshev-differentiation-via-fft-compare-p11">
+     p18: Chebyshev differentiation via FFT (compare p11)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p19-2nd-order-wave-eq-on-chebyshev-grid-compare-p6">
+     p19: 2nd-order wave eq. on Chebyshev grid (compare p6)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p20-2nd-order-wave-eq-in-2d-via-fft-compare-p19">
+     p20: 2nd-order wave eq. in 2D via FFT (compare p19)
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -612,11 +646,11 @@ title="Print to PDF"
 <h1><span class="section-number">6.9. </span>Chebyshev and the FFT<a class="headerlink" href="#chebyshev-and-the-fft" title="Permalink to this headline">#</a></h1>
 <p>We will next explore the interactions between three closely related situations:</p>
 <ol class="simple">
-<li><p>Chebyshev series, <span class="math notranslate nohighlight">\(x\[-1,1]\)</span>.</p></li>
+<li><p>Chebyshev series, <span class="math notranslate nohighlight">\(x\in [-1,1]\)</span>.</p></li>
 <li><p>Fourier series, <span class="math notranslate nohighlight">\(\theta\in \mathbb{R}\)</span>.</p></li>
 <li><p>Laurent series, <span class="math notranslate nohighlight">\(z\in \mathbb{C}\)</span>, <span class="math notranslate nohighlight">\(|z|=1\)</span>.</p></li>
 </ol>
-<p>The relationships between these variables are straightforward.</p>
+<p>The relationships between these variables are straightforward:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 z &amp;= e^{i\theta} \\ 
@@ -644,18 +678,19 @@ T_{n+1}(x) = 2x T_n(x) - T_{n-1}(x), \qquad n=1,2,\dots.
 <p>Therefore, each <span class="math notranslate nohighlight">\(T_n\)</span> is a polynomial of degree <span class="math notranslate nohighlight">\(n\)</span> with leading coefficient <span class="math notranslate nohighlight">\(2^{n-1}\)</span>. Each Chebyshev polynomial represents even oscillation around the circle but projects down to oscillations pushed out toward the boundaries of <span class="math notranslate nohighlight">\([-1,1]\)</span>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">CairoMakie</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">();</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">Axis3</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">θ</span> <span class="o">=</span> <span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">200</span><span class="p">)</span><span class="o">/</span><span class="mi">200</span>
-<span class="n">lines!</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="mi">0</span><span class="o">*</span><span class="n">θ</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="ss">:dash</span><span class="p">)</span>
-<span class="n">lines!</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="mi">15</span><span class="n">θ</span><span class="p">))</span>
-<span class="n">lines!</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="mi">0</span><span class="o">*</span><span class="n">θ</span><span class="p">,</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="mi">15</span><span class="n">θ</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="mf">0.2</span><span class="nb">π</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">azimuth</span> <span class="o">=</span> <span class="mf">1.4</span><span class="nb">π</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">limits</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">)</span>
-<span class="n">hidedecorations!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">hidespines!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">fig</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;smij-functions.jl&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">();</span><span class="w"> </span><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis3</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w"></span>
+<span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">200</span><span class="p">)</span><span class="o">/</span><span class="mi">200</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="mi">0</span><span class="o">*</span><span class="n">θ</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="ss">:dash</span><span class="p">)</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="mi">15</span><span class="n">θ</span><span class="p">))</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">),</span><span class="mi">0</span><span class="o">*</span><span class="n">θ</span><span class="p">,</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="mi">15</span><span class="n">θ</span><span class="p">))</span><span class="w"></span>
+<span class="n">ax</span><span class="o">.</span><span class="n">elevation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.2</span><span class="nb">π</span><span class="w"></span>
+<span class="n">ax</span><span class="o">.</span><span class="n">azimuth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.4</span><span class="nb">π</span><span class="w"></span>
+<span class="n">ax</span><span class="o">.</span><span class="n">limits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">)</span><span class="w"></span>
+<span class="n">hidedecorations!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+<span class="n">hidespines!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -689,23 +724,23 @@ p(x) = \breve{p}(z) = \tilde{p}(\theta),
 <p>We are interested in using the connections when all the versions of <span class="math notranslate nohighlight">\(p\)</span> interpolate a given grid function. In particular, if <span class="math notranslate nohighlight">\(p\)</span> interpolates a grid function defined at the Chebyshev points in <span class="math notranslate nohighlight">\(x\)</span>, then <span class="math notranslate nohighlight">\(\tilde{p}(\theta)\)</span> interpolates a grid function around the unit circle, where each of the interior points defines two values:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">LaTeXStrings</span>
-<span class="n">q</span> <span class="o">=</span> <span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">800</span><span class="p">)</span><span class="o">/</span><span class="mi">400</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">()</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">aspect</span><span class="o">=</span><span class="n">DataAspect</span><span class="p">())</span>
-<span class="n">lines!</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">q</span><span class="p">),</span><span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">q</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">)</span>
-<span class="n">lines!</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">θ</span> <span class="o">=</span> <span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">7</span><span class="p">)</span><span class="o">/</span><span class="mi">7</span>
-<span class="n">z</span> <span class="o">=</span> <span class="n">cis</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-<span class="p">[</span><span class="n">scatterlines!</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="p">],[</span><span class="o">-</span><span class="n">imag</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">imag</span><span class="p">(</span><span class="n">z</span><span class="p">)],</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="ss">:dash</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">)</span> <span class="k">in</span> <span class="n">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">)]</span>
-<span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span> <span class="n">latexstring</span><span class="p">(</span><span class="s">&quot;v_</span><span class="si">$j</span><span class="s">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="mi">7</span> <span class="p">]</span>
-<span class="n">text!</span><span class="p">(</span><span class="n">x</span> <span class="o">.+</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mi">0</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="p">(</span><span class="ss">:center</span><span class="p">,</span><span class="ss">:bottom</span><span class="p">)</span> <span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LaTeXStrings</span><span class="w"></span>
+<span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">800</span><span class="p">)</span><span class="o">/</span><span class="mi">400</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">aspect</span><span class="o">=</span><span class="n">DataAspect</span><span class="p">())</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">(</span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">q</span><span class="p">),</span><span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">q</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">)</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="w"></span>
+<span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">7</span><span class="p">)</span><span class="o">/</span><span class="mi">7</span><span class="w"></span>
+<span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cis</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">real</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"></span>
+<span class="p">[</span><span class="n">scatterlines!</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="p">],[</span><span class="o">-</span><span class="n">imag</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="n">imag</span><span class="p">(</span><span class="n">z</span><span class="p">)],</span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="ss">:dash</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">)]</span><span class="w"></span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="n">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">latexstring</span><span class="p">(</span><span class="s">&quot;v_</span><span class="si">$j</span><span class="s">&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="mi">7</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="n">text!</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">.+</span><span class="w"> </span><span class="mf">0.03</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">*</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="w"> </span><span class="n">align</span><span class="o">=</span><span class="p">(</span><span class="ss">:left</span><span class="p">,</span><span class="ss">:bottom</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
 
-<span class="n">hidedecorations!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">hidespines!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">fig</span>
+<span class="n">hidedecorations!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+<span class="n">hidespines!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -716,13 +751,13 @@ p(x) = \breve{p}(z) = \tilde{p}(\theta),
 <p>The function <span class="math notranslate nohighlight">\([v_0,v_1,\dots,v_N,v_{N-1},\dots,v_1]\)</span> is even in <span class="math notranslate nohighlight">\(\theta\)</span>, which is why a cosine series is sufficient for <span class="math notranslate nohighlight">\(\tilde{p}\)</span>. In fact, the DFT of this function gives us the <span class="math notranslate nohighlight">\(a_n\)</span> coefficients directly.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">FFTW</span>
-<span class="n">N</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
-<span class="n">θ</span> <span class="o">=</span> <span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span>
-<span class="n">x</span> <span class="o">=</span> <span class="nd">@.</span> <span class="n">cos</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span>
-<span class="n">v</span> <span class="o">=</span> <span class="nd">@.</span> <span class="mi">2</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="n">θ</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="n">cos</span><span class="p">(</span><span class="mi">3</span><span class="n">θ</span><span class="p">)</span>
-<span class="n">vv</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">;</span> <span class="n">v</span><span class="p">[</span><span class="n">N</span><span class="o">:-</span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">]]</span>
-<span class="n">fft</span><span class="p">(</span><span class="n">vv</span><span class="p">)</span><span class="o">/</span><span class="n">N</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">FFTW</span><span class="w"></span>
+<span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"></span>
+<span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="mi">2</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="n">θ</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">3</span><span class="n">cos</span><span class="p">(</span><span class="mi">3</span><span class="n">θ</span><span class="p">)</span><span class="w"></span>
+<span class="n">vv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">v</span><span class="p">;</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="n">N</span><span class="o">:-</span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">]]</span><span class="w"></span>
+<span class="n">fft</span><span class="p">(</span><span class="n">vv</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -746,10 +781,10 @@ p(x) = \breve{p}(z) = \tilde{p}(\theta),
 </div>
 </div>
 </div>
-<p>The symmetries in both the data and the transform allow saving space and time by computing only the even (cosine) part by a special syntax:</p>
+<p>The symmetries in both the data and the transform allow saving space and time by computing only the even (cosine) part by a special syntax. In the case of real data, we use:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">FFTW</span><span class="o">.</span><span class="n">r2r</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">FFTW</span><span class="o">.</span><span class="n">REDFT00</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">FFTW</span><span class="o">.</span><span class="n">r2r</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">FFTW</span><span class="o">.</span><span class="n">REDFT00</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -786,6 +821,229 @@ p'(1) = \sum_{n=0}^N n^2 a_n, \qquad p'(-1) = \sum_{n=0}^N (-1)^{n+1} n^2 a_n.
 {p}''(x) = \frac{-x}{(1-x^2)^{3/2}} \tilde{p}'(\theta) + \frac{1}{1-x^2}\tilde{p}''(\theta), 
 \]</div>
 <p>except at the endpoints, where special formulas are needed again.</p>
+<p>We use the following code to implement Chebyshev differentiation via the FFT.</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">chebfft</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c"># Simple, not optimal. If v is complex, delete &quot;real&quot; commands.</span><span class="w"></span>
+<span class="w">    </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">N</span><span class="o">==</span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="nb">π</span><span class="o">*</span><span class="n">k</span><span class="o">/</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">v</span><span class="p">;</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="n">N</span><span class="o">:-</span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">]]</span><span class="w">              </span><span class="c"># transform x -&gt; theta</span><span class="w"></span>
+<span class="w">    </span><span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">real</span><span class="p">(</span><span class="n">fft</span><span class="p">(</span><span class="n">V</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">W</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">real</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="mi">1</span><span class="nb">im</span><span class="o">*</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="mi">1</span><span class="o">-</span><span class="n">N</span><span class="o">:-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">U</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@.</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">W</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w">    </span><span class="c"># transform theta -&gt; x</span><span class="w"></span>
+<span class="w">    </span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="w"> </span><span class="n">n</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">U</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="n">N</span><span class="o">*</span><span class="n">U</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">w</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">U</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="n">N</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">U</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">w</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+<section id="p18-chebyshev-differentiation-via-fft-compare-p11">
+<h3>p18: Chebyshev differentiation via FFT (compare p11)<a class="headerlink" href="#p18-chebyshev-differentiation-via-fft-compare-p11" title="Permalink to this headline">#</a></h3>
+<p>We reprise a computation done earlier by the differentiation matrix.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">)</span><span class="w"> </span>
+<span class="n">uʹ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">))</span><span class="w"></span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="o">:</span><span class="mi">200</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="n">vv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span><span class="w"></span>
+<span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">])</span><span class="w"></span>
+<span class="w">    </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chebfft</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">uʹ</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ee</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polyinterp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="p">(;</span><span class="n">x</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">ee</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;u(x),  N=</span><span class="si">$N</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatter!</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">lines!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">vv</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;error in uʹ(x),  N=</span><span class="si">$N</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatter!</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">lines!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">ee</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/chebfft_10_0.png" src="../_images/chebfft_10_0.png" />
+</div>
+</div>
+</section>
+<section id="p19-2nd-order-wave-eq-on-chebyshev-grid-compare-p6">
+<h3>p19: 2nd-order wave eq. on Chebyshev grid (compare p6)<a class="headerlink" href="#p19-2nd-order-wave-eq-on-chebyshev-grid-compare-p6" title="Permalink to this headline">#</a></h3>
+<p>We can solve the wave equation <span class="math notranslate nohighlight">\(\partial_{tt} u = \partial_{xx} u\)</span> directly as a 2nd-order equation through discretization of the time derivative as a 2nd-order centered difference:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\bfu_{j-1} - 2\bfu_j +  \bfu_{j+1}}{\tau^2} = \bfD_{xx} \bfu_j,
+\]</div>
+<p>which rearranges to</p>
+<div class="math notranslate nohighlight">
+\[
+\bfu_{j+1} = 2\bfu_j - \bfu_{j-1} + \tau^2 (\bfD_{xx} \bfu_j).
+\]</div>
+<p>Even though we have apparently used a differentiation matrix above, we can always replace its application to a vector by the FFT process. We’re being lazy and wasteful here by just applying <code class="docutils literal notranslate"><span class="pre">chebfft</span></code> twice in a row, rather than properly coding the second derivative directly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="c"># Time-stepping by leap frog formula:</span><span class="w"></span>
+<span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="w"></span>
+<span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">Δt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="o">^</span><span class="mi">2</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">vold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Δt</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">tmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"></span>
+<span class="n">nsteps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ceil</span><span class="p">(</span><span class="kt">Int</span><span class="p">,</span><span class="w"> </span><span class="n">tmax</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Δt</span><span class="p">)</span><span class="w"></span>
+<span class="n">Δt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tmax</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">nsteps</span><span class="w"></span>
+<span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">v</span><span class="w"> </span><span class="n">fill</span><span class="p">(</span><span class="nb">NaN</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nsteps</span><span class="p">)]</span><span class="w"></span>
+<span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Δt</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">nsteps</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">nsteps</span><span class="w"></span>
+<span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chebfft</span><span class="p">(</span><span class="n">chebfft</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="p">]))</span><span class="w"></span>
+<span class="w">    </span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">vold</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Δt</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">w</span><span class="w"></span>
+<span class="w">    </span><span class="n">vold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">2.5</span><span class="w"></span>
+<span class="w">        </span><span class="n">nsteps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">        </span><span class="k">break</span><span class="w"> </span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">PyFormattedStrings</span><span class="w"></span>
+<span class="c"># Plot results:</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">Axis3</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="n">xticks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MultiplesTicks</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;π&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">zlabel</span><span class="o">=</span><span class="s">&quot;u&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">elevation</span><span class="o">=</span><span class="mf">1.44</span><span class="p">,</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">gap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">round</span><span class="p">(</span><span class="kt">Int</span><span class="p">,</span><span class="w"> </span><span class="mf">0.075</span><span class="o">/</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">surface!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="p">,</span><span class="w"> </span><span class="n">colorrange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="p">[</span><span class="w"> </span><span class="n">lines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">]</span><span class="o">.+</span><span class="mf">.01</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:ivory</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">gap</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/chebfft_13_0.png" src="../_images/chebfft_13_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">480</span><span class="p">,</span><span class="mi">360</span><span class="p">))</span><span class="w"></span>
+<span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Observable</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;u&quot;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nd">@lift</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="o">$</span><span class="n">index</span><span class="p">]))</span><span class="w"></span>
+<span class="n">record</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p19.mp4&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">10</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">    </span><span class="n">index</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s">&quot;t = {t[i]:.2f}&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">limits!</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><video autoplay controls><source src="p19.mp4" type="video/mp4"></video></p>
+</section>
+<section id="p20-2nd-order-wave-eq-in-2d-via-fft-compare-p19">
+<h3>p20: 2nd-order wave eq. in 2D via FFT (compare p19)<a class="headerlink" href="#p20-2nd-order-wave-eq-in-2d-via-fft-compare-p19" title="Permalink to this headline">#</a></h3>
+<p>The 2D wave equation is analogously solved via</p>
+<div class="math notranslate nohighlight">
+\[
+\bfu_{j+1} = 2\bfu_j - \bfu_{j-1} + \tau^2 (\bfD_{xx} \bfu_j + \bfD_{yy} \bfu_j).
+\]</div>
+<p>It’s simplest to maintain the unknown <span class="math notranslate nohighlight">\(\bfu\)</span> as a matrix-shaped grid function. Then we can apply <code class="docutils literal notranslate"><span class="pre">chebfft</span></code> to each column of data for the <span class="math notranslate nohighlight">\(x\)</span> derivatives, and to each row of data for the <span class="math notranslate nohighlight">\(y\)</span> derivatives. To make smooth plots, we also use a grid interpolation function to a finer grid.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="c"># Grid and initial data:</span><span class="w"></span>
+<span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">36</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="w"></span>
+<span class="n">Δt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="o">^</span><span class="mi">2</span><span class="w"></span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">81</span><span class="p">)</span><span class="w"></span>
+<span class="n">nsteps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ceil</span><span class="p">(</span><span class="kt">Int</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Δt</span><span class="p">)</span><span class="w"></span>
+<span class="n">Δt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">nsteps</span><span class="w"></span>
+
+<span class="n">vv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.4</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">]</span><span class="w"></span>
+<span class="n">vvold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vv</span><span class="w"></span>
+
+<span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Δt</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">nsteps</span><span class="p">)</span><span class="w"></span>
+<span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="n">length</span><span class="p">(</span><span class="n">yy</span><span class="p">),</span><span class="n">nsteps</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="o">:</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gridinterp</span><span class="p">(</span><span class="n">vv</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">)</span><span class="w"></span>
+
+<span class="c"># Time-stepping by leap frog formula:</span><span class="w"></span>
+<span class="n">uxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">uyy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">nsteps</span><span class="w"></span>
+<span class="w">    </span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="w"></span>
+<span class="w">        </span><span class="n">uxx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">chebfft</span><span class="p">(</span><span class="n">chebfft</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">]))</span><span class="w"></span>
+<span class="w">        </span><span class="n">uyy</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">chebfft</span><span class="p">(</span><span class="n">chebfft</span><span class="p">(</span><span class="n">vv</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="p">]))</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="n">uxx</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">uyy</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">uxx</span><span class="p">[</span><span class="o">:</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">uyy</span><span class="p">[</span><span class="o">:</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="n">vvnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="n">vv</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">vvold</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Δt</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">uxx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">uyy</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">vvold</span><span class="p">,</span><span class="n">vv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vv</span><span class="p">,</span><span class="n">vvnew</span><span class="w"></span>
+<span class="w">    </span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gridinterp</span><span class="p">(</span><span class="n">vv</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">inc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">div</span><span class="p">(</span><span class="n">nsteps</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">Axis3</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">zticks</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">inc</span><span class="o">:</span><span class="n">nsteps</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
+<span class="w">    </span><span class="n">surface!</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">,</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="p">])</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s">&quot;t = {t[n]:.3f}&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">elevation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">π</span><span class="o">/</span><span class="mi">5</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/chebfft_17_0.png" src="../_images/chebfft_17_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">480</span><span class="p">,</span><span class="mi">320</span><span class="p">))</span><span class="w"></span>
+<span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Observable</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="c"># ax = Axis(fig[1, 1], xlabel=&quot;x&quot;, ylabel=&quot;y&quot;, aspect=DataAspect())</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis3</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;y&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">azimuth</span><span class="o">=-</span><span class="nb">π</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">elevation</span><span class="o">=</span><span class="nb">π</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="c"># co = contourf!(ax,xx, yy, @lift(V[:,:,$index]), </span><span class="w"></span>
+<span class="c">#     levels=range(-0.3,1,24),</span><span class="w"></span>
+<span class="c">#     colormap=:bluesreds )</span><span class="w"></span>
+<span class="n">co</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">surface!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">yy</span><span class="p">,</span><span class="w"> </span><span class="nd">@lift</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="o">:</span><span class="p">,</span><span class="o">$</span><span class="n">index</span><span class="p">]),</span><span class="w"> </span>
+<span class="w">        </span><span class="n">colormap</span><span class="o">=</span><span class="ss">:bluesreds</span><span class="p">,</span><span class="w"> </span><span class="n">colorrange</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.8</span><span class="p">]</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="n">record</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p20.mp4&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">    </span><span class="n">index</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s">&quot;t = {t[i]:.2f}&quot;</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><video autoplay controls><source src="p20.mp4" type="video/mp4"></video></p>
+</section>
 </section>
 </section>
 

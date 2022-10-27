@@ -21,7 +21,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -38,7 +38,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -357,6 +357,11 @@ const thebe_selector_output = ".output, .cell_output"
      6.8. Chebyshev for BVPs
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebfft.html">
+     6.9. Chebyshev and the FFT
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -643,16 +648,16 @@ x_i = a + ih, \quad h = \frac{b-a}{n}, \quad i=0,\ldots,n,
 \end{split}\]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="n">LinearAlgebra</span>
-<span class="k">function</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="c"># assumes evenly spaced nodes</span>
-    <span class="n">h</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">Dx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="o">-</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="o">=&gt;</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="mi">2</span><span class="p">],</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="mi">2</span><span class="p">;</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">)])</span>
-    <span class="n">Dxx</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">h</span><span class="o">^</span><span class="mi">2</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="o">=&gt;</span><span class="p">[</span><span class="mi">1</span><span class="p">;</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">)])</span>
-    <span class="n">Dxx</span><span class="p">[</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Dxx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">h</span><span class="o">^</span><span class="mi">2</span>
-    <span class="k">return</span> <span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span>
-<span class="k">end</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c"># assumes evenly spaced nodes</span><span class="w"></span>
+<span class="w">    </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="n">h</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="o">-</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="o">=&gt;</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="mi">2</span><span class="p">],</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="mi">2</span><span class="p">;</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">)])</span><span class="w"></span>
+<span class="w">    </span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="n">h</span><span class="o">^</span><span class="mi">2</span><span class="o">*</span><span class="n">diagm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="o">=&gt;</span><span class="p">[</span><span class="mi">1</span><span class="p">;</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="o">=&gt;</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">)])</span><span class="w"></span>
+<span class="w">    </span><span class="n">Dxx</span><span class="p">[</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="n">h</span><span class="o">^</span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Dx</span><span class="p">,</span><span class="n">Dxx</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -710,19 +715,19 @@ u''(x) = f(x)
 <p>In practice we can simply use row and column indexing rather than constructing the matrix <span class="math notranslate nohighlight">\(\bfC\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
-<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">50</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">h</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
-<span class="n">_</span><span class="p">,</span><span class="n">Dxx</span> <span class="o">=</span> <span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">A</span> <span class="o">=</span> <span class="n">Dxx</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
-<span class="n">rhs</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">Dxx</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">Dxx</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span>
-<span class="n">ũ</span> <span class="o">=</span> <span class="n">A</span><span class="o">\</span><span class="n">rhs</span>
-<span class="n">u</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span><span class="n">ũ</span><span class="p">;</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="w"></span>
+<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">50</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="o">*</span><span class="n">h</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"></span>
+<span class="n">_</span><span class="p">,</span><span class="n">Dxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diffmats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dxx</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"></span>
+<span class="n">rhs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Dxx</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Dxx</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="p">]</span><span class="w"></span>
+<span class="n">ũ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="o">\</span><span class="n">rhs</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">;</span><span class="n">ũ</span><span class="p">;</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
 
-<span class="k">using</span> <span class="n">Plots</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">)</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Plots</span><span class="w"></span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -731,7 +736,7 @@ u''(x) = f(x)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">norm</span><span class="p">(</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span><span class="o">-</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">norm</span><span class="p">(</span><span class="n">Dxx</span><span class="o">*</span><span class="n">u</span><span class="o">-</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
