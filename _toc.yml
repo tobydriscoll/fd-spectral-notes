@@ -51,5 +51,6 @@ chapters:
     - file: smim/chebdm
     - file: smim/chebbvp
     - file: smim/chebfft
+    - file: smim/eigen
 
 
