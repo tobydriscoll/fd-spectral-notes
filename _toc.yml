@@ -52,5 +52,6 @@ chapters:
     - file: smim/chebbvp
     - file: smim/chebfft
     - file: smim/eigen
+    - file: smim/timestability
 
 
