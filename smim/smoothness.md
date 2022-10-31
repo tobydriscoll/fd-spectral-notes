@@ -13,7 +13,7 @@ kernelspec:
   name: julia-1.8
 ---
 
-# Smoothness effects
+# Convergence rates
 
 The most appealing aspect of spectral methods is the potential of error that decreases like $c^{-N}$ rather than $N^{-p}$. However, in order to fully realize that potential, the underlying function being approximated must have a high level of smoothness. In fact, as stated below, it has to be **analytic** in a region containing the interval of approximation, meaning extensible to a differentiable function of a complex variable. 
 
