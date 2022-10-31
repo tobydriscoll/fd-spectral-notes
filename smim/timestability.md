@@ -222,31 +222,31 @@ for i in 1:nsteps
     w[1] = w[N+1] = 0
     V[:,i+1] = 2V[:,i] - vold + Δt^2 * w
     vold = V[:,i]
-    if norm(V[:,i+1], Inf) > 2.5
+    if norm(V[:,i+1], Inf) > 12
         nsteps = i
         break 
     end
 end
 
-t = t[1:nsteps+1]
-V = V[:,1:nsteps+1];
+t = t[1:nsteps]
+V = V[:,1:nsteps];
 ```
 
 ```{code-cell}
 using PyFormattedStrings
 
-# Plot results:
-fig = Figure()
-Axis3(fig[1, 1],
-    xticks = MultiplesTicks(5, π, "π"),
-    xlabel="x", ylabel="t", zlabel="u", 
-    azimuth=4.5, elevation=1.44,
-)
-gap = max(1,round(Int, 0.075/(t[2]-t[1])) - 1)
-surface!(x, t, V, colorrange=(-1,1))
-[ lines!(x, fill(t[j], length(x)), V[:, j].+.01, color=:ivory) for j in 1:gap:size(V,2) ]
-fig
+fig = Figure(size=(480,360))
+index = Observable(1)
+ax = Axis(fig[1, 1],xlabel="x", ylabel="u" )
+lines!(x, @lift(V[:,$index]))
+record(fig, "p19u.mp4", 1:6:size(V,2)) do i
+    index[] = i
+    ax.title = f"t = {t[i]:.2f}"
+    limits!(-1.06,1.06,-1.5,1.5)
+end;
 ```
+
+<video autoplay controls><source src="p19u.mp4" type="video/mp4"></video>
 
 In two dimensions, one can show that $\lambda$ is twice as large, which means that $\tau$ must be $\sqrt{2}$ times smaller, or $\tau \le 6.5/N^2$. 
 
@@ -297,14 +297,14 @@ index = Observable(1)
 ax = Axis3(fig[1, 1], xlabel="x", ylabel="y")
 co = surface!(xx, yy, @lift(V[:,:,$index]), 
         colormap=:bluesreds, colorrange=[-1,1] )
-record(fig, "p19u.mp4", 1:nsteps) do i
+record(fig, "p20u.mp4", 1:nsteps) do i
     index[] = i
     ax.title = f"t = {t[i]:.2f}"
     limits!(ax,-1,1,-1,1,-1,1)
 end;
 ```
 
-<video autoplay controls><source src="p19u.mp4" type="video/mp4"></video>
+<video autoplay controls><source src="p20u.mp4" type="video/mp4"></video>
 
 ## Integrating factor
 
@@ -317,7 +317,7 @@ $$
 Unusually for a nonlinear equation, it admits solutions called *solitons* that maintain their shape:
 
 $$
-u(x,t) = 3a^2 \sech^2\bigl[ a(x-x_0)/2 - a^3t\bigr], 
+u(x,t) = 3a^2 \operatorname{sech}^2\bigl[ a(x-x_0)/2 - a^3t\bigr], 
 $$
 
 The amplitude and velocity of this soliton are $3a^2$ and $2a^2$, so taller solitons travel faster than shorter ones. 
@@ -327,13 +327,13 @@ Let's assume periodic conditions, since the soliton solutions decay rapidly. If 
 The term causing stiffness in KdV is linear, which creates an opportunity to use a hybrid approach. Consider the PDE transformed into Fourier space,
 
 $$
-\partial_t \hat{u} + \tfrac{1}{2} ik \hat{u^2} - ik^3 \hat{u} = 0, 
+\partial_t \hat{u} + \tfrac{1}{2} ik \widehat{u^2} - ik^3 \hat{u} = 0, 
 $$
 
 where we used $\partial_x (u^2)=uu_x$, although this is not important here. Borrowing from linear ODE tricks, we multiply the ODE through by the **integrating factor** $\exp(-ik^3t)$ and rewrite as
 
 $$
-\partial_t \left[ e^{-ik^3t} \hat{u} \right] + \tfrac{1}{2} ik e^{-ik^3t} \hat{u^2}  = 0. 
+\partial_t \left[ e^{-ik^3t} \hat{u} \right] + \tfrac{1}{2} ik e^{-ik^3t} \widehat{u^2}  = 0. 
 $$
 
 This suggests actually solving for $z = e^{-ik^3t} \hat{u}$ as the ODE unknown, because the stiff term has been absorbed. In order to calculate $\partial_t z$ for the IVP solver, we go through a few steps:
