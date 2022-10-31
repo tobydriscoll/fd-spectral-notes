@@ -306,6 +306,115 @@ end;
 
 <video autoplay controls><source src="p19u.mp4" type="video/mp4"></video>
 
-## Exponential time differencing
+## Integrating factor
 
 The **KdV equation** is
+
+$$
+\partial_t u + u \partial_x u + \partial_{xxx} u = 0. 
+$$
+
+Unusually for a nonlinear equation, it admits solutions called *solitons* that maintain their shape:
+
+$$
+u(x,t) = 3a^2 \sech^2\bigl[ a(x-x_0)/2 - a^3t\bigr], 
+$$
+
+The amplitude and velocity of this soliton are $3a^2$ and $2a^2$, so taller solitons travel faster than shorter ones. 
+
+Let's assume periodic conditions, since the soliton solutions decay rapidly. If we straightforwardly apply the method of lines in a Fourier discretization, then we have to deal with the eigenvalues of the third derivative operator, which are $\sim \pm i N^3/8$. Any regular explicit time stepping method will end up with a restriction $\tau = O(N^{-3})$. We could use trapezoid, which has no restriction but is limited to 2nd order. However, there is an alternative (actually, several) worth considering.
+
+The term causing stiffness in KdV is linear, which creates an opportunity to use a hybrid approach. Consider the PDE transformed into Fourier space,
+
+$$
+\partial_t \hat{u} + \tfrac{1}{2} ik \hat{u^2} - ik^3 \hat{u} = 0, 
+$$
+
+where we used $\partial_x (u^2)=uu_x$, although this is not important here. Borrowing from linear ODE tricks, we multiply the ODE through by the **integrating factor** $\exp(-ik^3t)$ and rewrite as
+
+$$
+\partial_t \left[ e^{-ik^3t} \hat{u} \right] + \tfrac{1}{2} ik e^{-ik^3t} \hat{u^2}  = 0. 
+$$
+
+This suggests actually solving for $z = e^{-ik^3t} \hat{u}$ as the ODE unknown, because the stiff term has been absorbed. In order to calculate $\partial_t z$ for the IVP solver, we go through a few steps:
+
+$$
+\hat{u} &= e^{ik^3t} z \\ 
+u &= \mathcal{F}_N^{-1}[\hat{u}] \\ 
+\partial_t z &= -\tfrac{1}{2} ik e^{-ik^3t} \mathcal{F}_N[u^2]. 
+$$
+
+Within the context of a Runge--Kutta method, we can restart the integrating factor at time zero at each step, which is more robust than using $t^3$ as $t\to\infty$.  
+
+### p27: Solve KdV eq.
+
+```{code-cell}
+using FFTW
+
+# Set up grid and two-soliton initial data:
+N = 256
+τ = 0.4 / N^2
+x = (2π / N) * (-N/2 : N/2-1)
+soliton(a,x) = 3a^2 * sech(0.5 * (a * x))^2
+A, B = 25, 16
+u = @. soliton(25, x+2) + soliton(16, x+1) 
+û = fft(u)
+k = [0:N/2-1; 0; -N/2+1:-1]
+ik3 = 1im * k .^ 3
+
+# Solve PDE and plot results:
+tmax = 0.006
+nsteps = ceil(Int, tmax / τ)
+τ = tmax / nsteps
+t = τ * (0:nsteps)
+U = zeros(N,nsteps+1)
+U[:,1] .= u
+
+g = -0.5im * τ * k          # for the nonlinear term
+E = exp.(τ * ik3 / 2)       # for the integrating factor   
+E² = E .^ 2
+nonlin(û) = fft( real(ifft(û)) .^ 2 )
+for n = 1:nsteps
+    a = g .* nonlin(û)
+    b = g .* nonlin(E .* (û+a/2))        # 4th-order
+    c = g .* nonlin(E.*û + b/2)          # Runge-Kutta
+    d = g .* nonlin(E².*û + E.*c)
+    û = @. E² * û + (E² * a + 2 * E * (b + c) + d) / 6
+    
+    U[:,n+1] = real( ifft(û) )      # only needed for plotting
+end
+```
+
+```{code-cell}
+fig = Figure()
+Axis3(fig[1, 1],
+    xticks = MultiplesTicks(5, π, "π"),
+    xlabel="x", ylabel="t", zlabel="u", 
+    azimuth=4.5, elevation=1.2,
+)
+gap = max(1,round(Int, 2e-4/(t[2]-t[1])) - 1)
+surface!(x, t, U)
+[ lines!(x, fill(t[j], length(x)), U[:, j].+.01, color=:ivory) for j in 1:gap:size(U,2) ]
+fig
+```
+
+```{code-cell}
+fig = Figure(size=(480,320))
+index = Observable(1)
+ax = Axis(fig[1, 1],
+    xticks = MultiplesTicks(5, π, "π"),
+    xlabel="x", ylabel="u"
+)
+lines!(x, @lift(U[:,$index]))
+record(fig, "p27.mp4", 1:6:size(U,2)) do i
+    index[] = i
+    ax.title = f"t = {t[i]:.5f}"
+end;
+```
+
+<video autoplay controls><source src="p27.mp4" type="video/mp4"></video>
+
+
+Note from the results above that the solitons pass through each other unchanged in shape, but phase-shifted in spacetime.
+
+The integrating factor trick is easy but not always the best choice among hybrid *implicit--explicit* solvers. 
