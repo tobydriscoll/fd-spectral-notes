@@ -22,40 +22,58 @@ function triginterp(v)
 end
 
 """
-    polyinterp(x, y)
+    polyinterp(x, v, w)
+    polyinterp(x, v)
+    polyinterp(v)
 
-Create a callable function that uses the barycentric formula to evaluates the polynomial interpolating the (x,y) points given in vectors `x` and `y`.
+Returns a callable function that applies the barycentric formula with weights in vector `w` to evaluate the interpolant with values given in vector `v` at the points in the vector `x`.
+
+If `w` is not given, it is computed from the defintition.
+
+If `x` and `w` are not given, then it is assumed that the values are given at Chebyshev 2nd-kind points.
 """
-function polyinterp(x,y)
-    C = 4/(maximum(x) - minimum(x))
-    weight(i) = 1 / prod(C*(x[i]-x[j]) for j in eachindex(x) if j != i) 
-    w = weight.(eachindex(x))
+function polyinterp(x, v, w)
     return function(t)
         denom = numer = 0
         for i in eachindex(x)
             if t==x[i]
-                return y[i]
+                return v[i]
             else
                 s = w[i] / (t-x[i])
                 denom += s 
-                numer = muladd(y[i],s,numer)
+                numer += v[i]*s
             end
         end
         return numer / denom
     end
 end
 
+# Weights not given:
+function polyinterp(x, v)
+    C = 4/(maximum(x) - minimum(x))
+    weight(i) = 1 / prod(C*(x[i]-x[j]) for j in eachindex(x) if j != i) 
+    w = weight.(eachindex(x))
+    return polyinterp(x,v,w)
+end
+
+# Values at the Chebyshev points:
+function polyinterp(v)
+    N = length(v) - 1
+    x = [ cos(j*π/N) for j in 0:N ]
+    w = [ float((-1)^j) for j in 0:N ]
+    w[[1,end]] .*= 0.5
+    return polyinterp(x, v, w)
+end
+
 function gridinterp(V,xx,yy)
     M,N = size(V) .- 1
-    x = @. cos(π*(0:M)/M)
-    y = @. cos(π*(0:N)/N)
     Vx = zeros(length(xx), N+1)
     for j in axes(V,2)
-        Vx[:,j] = polyinterp(x,V[:,j]).(xx)
+        Vx[:,j] = polyinterp(V[:,j]).(xx)
     end
     VV = zeros(length(xx),length(yy))
     for i in axes(Vx,1)
-        VV[i,:] = polyinterp(y,Vx[i,:]).(yy)
+        VV[i,:] = polyinterp(Vx[i,:]).(yy)
     end
     return VV
 end
@@ -66,15 +84,13 @@ end
 Chebyshev differentiation matrix and grid.
 """
 function cheb(N)
-    N==0 && return 0,1;
-    x = [ cos(pi*k/N) for k=0:N ];
-    c = [2;ones(N-1);2] .* (-1).^(0:N);
-    dX = x .- x';
-    D  = (c*(1.0./c)') ./ (dX+I(N+1));      # off-diagonal entries
+    x = [ cos(pi*j/N) for j  in 0:N ]
+    c(n) = (n==0) || (n==N) ? 2 : 1
+    entry(i,j) = i==j ? 0 : c(i)/c(j) * (-1)^(i+j) / (x[i+1] - x[j+1])
+    D = [ entry(i,j) for i in 0:N, j in 0:N ]
     D  = D - diagm(vec(sum(D,dims=2)));    # diagonal entries
-    return D,x
+    return D, x
 end
-
 
 """
     chebfft(v)

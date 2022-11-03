@@ -81,10 +81,45 @@ for all $x\in[-1,1]$ and all $N>0$. The same estimate holds, for a different con
 
 The theorem promises exponential/geometric convergence over $[-1,1]$ as a function of $N$, provided $u$ is analytic throughout some region in $\mathbb{C}$ that contains the interval. 
 
-```{code-cell} julia
-using Sugar, SpectralMethodsTrefethen
-Sugar.get_source(first(methods(p10))) |> last |> print
-p10()
+### p10: polynomials and corresponding equipotential curves
+
+```{code-cell}
+using Polynomials
+
+N = 16
+data = [
+    (@. -1 + 2*(0:N)/N, "equispaced points"),
+    (@. cospi((0:N)/N), "Chebyshev points"),
+]
+
+xx = -1:0.005:1
+xc = -1.4:0.02:1.4
+yc = -1.12:0.02:1.12
+results = []
+for (i,(x,label)) in enumerate(data)
+    p = fromroots(x)
+    pp = p.(xx)
+    pz = [p(x + 1im*y) for x in xc, y in yc]
+    push!(results, (;x,pp,pz,label))
+end
+```
+
+```{code-cell}
+using CairoMakie
+
+fig = Figure()
+levels = 10.0 .^ (-4:0)
+for (i,r) in enumerate(results)
+    Axis(fig[i, 1], xticks=-1:0.5:1, title=r.label)
+    scatter!(r.x, zero(r.x))
+    lines!(xx, r.pp)
+    
+    Axis(fig[i, 2], xticks=-1:0.5:1, title=r.label)
+    scatter!(r.x, zero(r.x))
+    contour!(xc, yc, abs.(r.pz); levels, color=:black)
+    limits!(-1.4, 1.4, -1.12, 1.12)
+end
+fig
 ```
 
 The left column of plots shows $\Phi(x)$, while the right column shows the level curves of $\phi$, for both equispaced and Chebyshev points.

@@ -109,14 +109,52 @@ $$
 
 Naturally, column 0 is the same as column $N$, and the rest of the columns are shifted versions of it. The result is again a circulant matrix. 
 
-```{code-cell} julia
-using Sugar, SpectralMethodsTrefethen
-Sugar.get_source(first(methods(p4))) |> last |> print
+### p4: periodic spectral differentiation
+
+```{code-cell}
+using LinearAlgebra
+N = 24
+
+# Set up grid and differentiation matrix:
+h = 2π / N
+x = h * (1:N)
+entry(k) = k==0 ? 0.0 : 0.5 * (-1)^k * cot(k * h / 2)
+D = [ entry(mod(i-j,N)) for i in 1:N, j in 1:N ]
+
+# Differentiation of a hat function:
+v = @. max(0, 1 - abs(x - π) / 2)
+w = D*v
+hat = (;v, w)
+
+# Differentiation of exp(sin(x)):
+v = @. exp(sin(x))
+vʹ = @. cos(x) * v
+w = D*v
+error = norm(w - vʹ, Inf)
+smooth = (;v, w, error);
 ```
 
-```{code-cell} julia
-p4()
+```{code-cell}
+using CairoMakie, PyFormattedStrings
+
+fig = Figure()
+ax = Axis(fig[1, 1], title="function")
+scatterlines!(x, hat.v)
+limits!(ax, 0, 2π, -0.5, 1.5)
+ax = Axis(fig[1, 2], title="spectral derivative")
+scatterlines!(x, hat.w)
+limits!(ax, 0, 2π, -1, 1)
+
+ax = Axis(fig[2, 1])
+scatterlines!(x, smooth.v)
+limits!(ax, 0, 2π, 0, 3)
+ax = Axis(fig[2, 2])
+scatterlines!(x, smooth.w)
+limits!(ax, 0, 2π, -2, 2)
+text!(2.2, 1.4, text=f"max error = {smooth.error:.5g}", textsize=20)
+fig
 ```
+
 
 The differentiation of the nonsmooth function is very poor, but for the smooth case, it's very accurate.
 
@@ -131,20 +169,69 @@ In the previous section, we observed that one can operate in wavenumber space ra
 
 For the $v$th derivative, the factor in passing from $\hat{v}$ to $\hat{w}$ is $(ik)^\nu$, except it must be set to zero if $v$ is odd.
 
-This pathway becomes acutely relevant because of the **Fast Fourier Transform**, credited to Cooley and Tukey in modern times but going back to Gauss. The FFT allows computation of the DFT and IDFT in $O(N\log N)$ operations, versus the $O(N^2)$ of a naive DFT implementation as well as for matrix-vector multiplication in physical space. Asymptotically, the FFT pathway should be the fastest by far, although the $N$ at which it begins to have an advantage is often larger than one wants to use in practice anyway.
+This pathway becomes acutely relevant because of the **Fast Fourier Transform**, credited to Cooley and Tukey in modern times but going back to Gauss. The FFT allows computation of the DFT and IDFT in $O(N\log N)$ operations, versus the $O(N^2)$ of a naive DFT implementation as well as for matrix-vector multiplication in physical space. Asymptotically, the FFT pathway should be the fastest by far, although the $N$ at which it begins to have an advantage is not clear in advance.
 
-```{code-cell} julia
-Sugar.get_source(first(methods(p5))) |> last |> print
+In the following code we show how to exploit the fact that a real function has a transform with conjugate symmetry, so that only the first half of the transform needs to be computed explicitly. 
+
+### p5: repetition of p4 via FFT
+
+```{code-cell}
+using FFTW 
+
+# real case
+function fderiv(v::Vector{T}) where T <: Real
+    N = length(v)
+    v̂ = rfft(v)
+    ŵ = 1im * [0:N/2-1; 0] .* v̂
+    return irfft(ŵ, N) 
+end
+
+# general case (2x slower)
+function fderiv(v)
+    N = length(v)
+    v̂ = fft(v)
+    ŵ = 1im * [0:N/2-1; 0; -N/2+1:-1] .* v̂
+    return ifft(ŵ)
+end
+
+N = 24
+
+# Set up grid and differentiation matrix:
+h = 2π / N
+x = h * (1:N)
+
+# Differentiation of a hat function:
+v = @. max(0, 1 - abs(x - π) / 2)
+w = fderiv(v)
+hat = (;v, w)
+
+# Differentiation of exp(sin(x)):
+v = @. exp(sin(x))
+vʹ = @. cos(x) * v
+w = fderiv(v)
+error = norm(w - vʹ, Inf)
+smooth = (;v, w, error);
 ```
 
-```{code-cell} julia
-p5()
-```
+```{code-cell}
+using CairoMakie, PyFormattedStrings
 
-There is some inefficiency in the use of the FFT above. When the original function is real, its transform has conjugate symmetry, and the transform can be simplified to find only the first half of the transform. Julia exposes this special form of the FFT for you to exploit:
+fig = Figure()
+ax = Axis(fig[1, 1], title="function")
+scatterlines!(x, hat.v)
+limits!(ax, 0, 2π, -0.5, 1.5)
+ax = Axis(fig[1, 2], title="spectral derivative")
+scatterlines!(x, hat.w)
+limits!(ax, 0, 2π, -1, 1)
 
-```{code-cell} julia
-Sugar.get_source(first(methods(p5r))) |> last |> print
+ax = Axis(fig[2, 1])
+scatterlines!(x, smooth.v)
+limits!(ax, 0, 2π, 0, 3)
+ax = Axis(fig[2, 2])
+scatterlines!(x, smooth.w)
+limits!(ax, 0, 2π, -2, 2)
+text!(2.2, 1.4, text=f"max error = {smooth.error:.5g}", textsize=20)
+fig
 ```
 
 ## Method of lines
@@ -159,14 +246,75 @@ Note that the velocity is $2\pi$-periodic, which is required for periodic bounda
 
 This function applies the midpoint/leapfrog method in time, with FFT-based spectral differentiation in space:
 
-```{code-cell} julia
-Sugar.get_source(first(methods(p6))) |> last |> print
+### p6: variable coefficient wave equation
+
+```{code-cell}
+using FFTW
+
+function p6(⍺ = 1.57)
+    # Grid, variable coefficient, and initial data:
+    N = 128;  h = 2π / N
+    x = h * (1:N)
+    t = 0;  Δt = ⍺ / N
+    c = @. 0.2 + sin(x - 1)^2
+    v = @. exp(-100 * (x - 1) .^ 2)
+    vold = @. exp(-100 * (x - 0.2Δt - 1) .^ 2)
+
+    # Time-stepping by leap frog formula:
+    tmax = 8
+    nsteps = ceil(Int, tmax / Δt)
+    Δt = tmax / nsteps
+    V = [v fill(NaN, N, nsteps)]
+    t = Δt*(0:nsteps)
+    for i in 1:nsteps
+        w = fderiv(V[:,i])
+        V[:,i+1] = vold - 2Δt * c .* w
+        vold = V[:,i]
+        if norm(V[:,i+1], Inf) > 2.5
+            nsteps = i
+            break 
+        end
+    end
+    return x,t[1:nsteps+1],V[:,1:nsteps+1]
+end
+
+x,t,V = p6(1.57);
 ```
 
-```{code-cell} julia
-p6()
+```{code-cell}
+using CairoMakie, PyFormattedStrings
+
+fig = Figure()
+Axis3(fig[1, 1],
+    xticks = MultiplesTicks(5, π, "π"),
+    xlabel="x", ylabel="t", zlabel="u", 
+    azimuth=4.5, elevation=1.3,
+)
+gap = max(1,round(Int, 0.15/(t[2]-t[1])) - 1)
+surface!(x, t, V, colorrange=(0,1))
+[ lines!(x, fill(t[j], length(x)), V[:, j].+.01, color=:ivory) for j in 1:gap:size(V,2) ]
+fig
 ```
 
+```{code-cell}
+fig = Figure(size=(480,320))
+index = Observable(1)
+ax = Axis(fig[1, 1],
+    xticks = MultiplesTicks(5, π, "π"),
+    xlabel="x", ylabel="u"
+)
+lines!(x, @lift(V[:,$index]))
+record(fig, "p6.mp4", 1:4:size(V,2)+1) do i
+    index[] = i
+    ax.title = f"t = {t[i]:.2f}"
+end;
+```
+
+<video autoplay controls><source src="p6.mp4" type="video/mp4"></video>
+
+In the simulation above, you can see a small artifact that travels the wrong direction. The accuracy of this simulation is limited by the second-order time stepping, and even more by the need to estimate the fictitious value $u(x,-\Delta t)$ that leap frog needs to get started. An automatic, self-starting IVP solver would do much better.
+
+<!-- 
 It's worth considering the absolute stability restriction that is implied by the spectral differentiation. First, we note that the stability region of the leapfrog scheme is $[-i,i]$ on the imaginary axis. 
 
 Multiplication by the DM in physical space is equivalent to operating in Fourier space, as described earlier. But in Fourier space, the operation is diagonal: $\hat{w}_k = g(k) \hat{v}_k$, where $g(k)=ik$ except for zero at the sawtooth mode. What this shows is that the discretized Fourier modes actually diagonalize the DM (which turns out to be true for any circulant matrix), and the eigenvalues are the discrete values of $g(k)$:
@@ -185,4 +333,5 @@ or roughly $\tau \le 5/3N$. This is a bit pessimistic; as shown in the next figu
 
 ```{code-cell} julia
 p6(1.9)
-```
+``` 
+-->

@@ -115,7 +115,7 @@ fig
 
 We can also use a generalized eigenproblem to easily impose boundary conditions of types other than Dirichlet. Note that any boundary condition of a linear eigenvalue problem is necessarily homogeneous.
 
-Suppose that $\bfA$ is the $(N+1)\times(N+1)$ discretization of an ODE over the entire grid. Let the boundary conditions be discretized as a $2\times(N+1)$ matrix $\bfB$, so that $\bfB \bfu = \bfzero$ must be imposed. Then
+Suppose that $\bfA$ is the $(N+1)\times(N+1)$ discretization of an ODE over the entire grid. Let the boundary conditions be discretized as a $2\times(N+1)$ matrix $\bfB$, so that $\bfB \bfu = \bfzero$ must be imposed in place of the boundary rows of $\bfA$.  Then
 
 $$
 \begin{bmatrix}
