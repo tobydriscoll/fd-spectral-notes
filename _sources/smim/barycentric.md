@@ -210,8 +210,9 @@ We have one last form of `polyinterp` that assumes the function values are given
 
 ```{code-cell} julia
 function polyinterp(v)
+    N = length(v) - 1
     x = [ cos(j*π/N) for j in 0:N ]
-    w = [ float((-1)^j) for j in 0:length(v)-1 ]
+    w = [ float((-1)^j) for j in 0:N ]
     w[[1,end]] .*= 0.5
     return polyinterp(x, v, w)
 end
