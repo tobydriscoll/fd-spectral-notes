@@ -13,7 +13,7 @@ kernelspec:
   name: julia-1.8
 ---
 
-# Eigenvalues and pseudospectra
+# Eigenvalues
 
 ```{code-cell} julia
 include("smij-functions.jl");

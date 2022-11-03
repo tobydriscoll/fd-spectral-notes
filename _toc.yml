@@ -53,5 +53,7 @@ chapters:
     - file: smim/chebfft
     - file: smim/eigen
     - file: smim/timestability
+    - file: smim/disk
+    
 
 
