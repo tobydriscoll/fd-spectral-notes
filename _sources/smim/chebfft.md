@@ -8,7 +8,7 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.14.1
 kernelspec:
-  display_name: Julia 1.8.0
+  display_name: Julia 1.8.2
   language: julia
   name: julia-1.8
 ---
@@ -49,7 +49,7 @@ $$
 
 Therefore, each $T_n$ is a polynomial of degree $n$ with leading coefficient $2^{n-1}$. Each Chebyshev polynomial represents even oscillation around the circle but projects down to oscillations pushed out toward the boundaries of $[-1,1]$:
 
-```{code-cell} julia
+```{code-cell}
 include("smij-functions.jl")
 using CairoMakie
 fig = Figure(); ax = Axis3(fig[1, 1])
@@ -95,21 +95,26 @@ when the three variables are related as we have set out. In the limit $N\to \inf
 
 We are interested in using the connections when all the versions of $p$ interpolate a given grid function. In particular, if $p$ interpolates a grid function defined at the Chebyshev points in $x$, then $\tilde{p}(\theta)$ interpolates a grid function around the unit circle, where each of the interior points defines two values:
 
-```{code-cell} julia
+```{code-cell}
+:tags: [hide-input]
 using LaTeXStrings
 q = π*(0:800)/400
-fig = Figure()
+fig = Figure(resolution=(340,340))
 ax = Axis(fig[1, 1], aspect=DataAspect())
 lines!(cos.(q),sin.(q),color=:black)
 lines!([-1,1],[0,0])
-θ = π*(0:7)/7
+θ = π*(0:6)/6
 z = cis.(θ)
 x = real(z)
 [scatterlines!([x,x],[-imag(z),imag(z)],color=:black,linestyle=:dash) for (x,z) in zip(x,z)]
 scatter!(x,0*x)
-labels = [ latexstring("v_$j") for j in 0:7 ]
-text!(x .+ 0.03, 0*x, text=labels, align=(:left,:bottom) )
+labels = [ latexstring("v_$j") for j in 0:6 ]
+text!(Point2(1.06, 0), text=labels[1], align=(:left,:center))
+text!(Point2(-1.06, 0), text=labels[7], align=(:right,:center))
+text!(x[2:6], sin.(θ[2:6]) .+ 0.08, text=labels[2:6], align=(:center,:bottom) )
+text!(x[2:6], -sin.(θ[2:6]) .- 0.05, text=labels[2:6], align=(:center,:top) )
 
+limits!(ax,-1.25, 1.25, -1.25, 1.25)
 hidedecorations!(ax)
 hidespines!(ax)
 fig
@@ -117,7 +122,7 @@ fig
 
 The function $[v_0,v_1,\dots,v_N,v_{N-1},\dots,v_1]$ is even in $\theta$, which is why a cosine series is sufficient for $\tilde{p}$. In fact, the DFT of this function gives us the $a_n$ coefficients directly.
 
-```{code-cell} julia
+```{code-cell}
 using FFTW
 N = 7;
 θ = π*(0:N)/N
@@ -129,7 +134,7 @@ fft(vv)/N
 
 The symmetries in both the data and the transform allow saving space and time by computing only the even (cosine) part by a special syntax. In the case of real data, we use:
 
-```{code-cell} julia
+```{code-cell}
 FFTW.r2r(v,FFTW.REDFT00) / N
 ```
 
@@ -222,7 +227,7 @@ $$
 \bfu_{j+1} = 2\bfu_j - \bfu_{j-1} + \tau^2 (\bfD_{xx} \bfu_j).
 $$
 
-Even though we have apparently used a differentiation matrix above, we can always replace its application to a vector by the FFT process. We're being lazy and wasteful here by just applying `chebfft` twice in a row, rather than properly coding the second derivative directly.
+Even though we have notationally used a differentiation matrix above, we can always replace its application to a vector by the FFT process. We're being lazy and wasteful here by just applying `chebfft` twice in a row, rather than properly coding the second derivative directly.
 
 ```{code-cell}
 # Time-stepping by leap frog formula:
@@ -255,8 +260,8 @@ using PyFormattedStrings
 fig = Figure()
 Axis3(fig[1, 1],
     xticks = MultiplesTicks(5, π, "π"),
-    xlabel="x", ylabel="t", zlabel="u", 
-    elevation=1.44,
+    xlabel="x", ylabel="t", zlabel="u", zticks=[-1,1],
+    elevation=1.25,
 )
 gap = max(1,round(Int, 0.075/(t[2]-t[1])) - 1)
 surface!(x, t, V, colorrange=(0,1))

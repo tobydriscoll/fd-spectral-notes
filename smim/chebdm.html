@@ -334,7 +334,7 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="smoothness.html">
-     6.4. Smoothness effects
+     6.4. Convergence rates
     </a>
    </li>
    <li class="toctree-l2">
@@ -360,6 +360,21 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="chebfft.html">
      6.9. Chebyshev and the FFT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eigen.html">
+     6.10. Eigenvalues
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="timestability.html">
+     6.11. Time stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="disk.html">
+     6.12. Polar coordinates
     </a>
    </li>
   </ul>
@@ -538,12 +553,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#p11-chebyshev-differentation-of-a-smooth-function">
+   p11: Chebyshev differentation of a smooth function
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#p12-accuracy-of-chebyshev-spectral-differentiation">
+   p12: accuracy of Chebyshev spectral differentiation
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -555,6 +599,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#p11-chebyshev-differentation-of-a-smooth-function">
+   p11: Chebyshev differentation of a smooth function
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#p12-accuracy-of-chebyshev-spectral-differentiation">
+   p12: accuracy of Chebyshev spectral differentiation
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -616,30 +678,24 @@ p'(x) = \frac{1}{2}(2x+1)v_0 -2x v_1 + \frac{1}{2}(2x-1)v_2,
 </div><p>Formulas for the entries of <span class="math notranslate nohighlight">\(\bfD_N\)</span> in the general case are given in the textbook on p. 53. Here is a code that implements them:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Sugar</span><span class="p">,</span><span class="w"> </span><span class="n">SpectralMethodsTrefethen</span><span class="w"></span>
-<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">cheb</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function cheb(N)
-    N==0 &amp;&amp; return 0,1;
-    x = [ cos(pi*k/N) for k=0:N ];
-    c = [2;ones(N-1);2] .* (-1).^(0:N);
-    dX = x .- x&#39;;
-    D  = (c*(1.0./c)&#39;) ./ (dX+I(N+1));      # off-diagonal entries
-    D  = D - diagm(vec(sum(D,dims=2)));    # diagonal entries
-    return D,x
-end
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="nb">pi</span><span class="o">*</span><span class="n">j</span><span class="o">/</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w">  </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">c</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="o">==</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">entry</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">==</span><span class="n">j</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">c</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="w"></span>
+<span class="w">    </span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">entry</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">D</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">vec</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">dims</span><span class="o">=</span><span class="mi">2</span><span class="p">)));</span><span class="w">    </span><span class="c"># diagonal entries</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>The code above does not use formulas for the diagonal entries. Instead, it uses the <em>negative sum trick</em>, which arises from the fact that the derivative of a constant function is exactly zero in a spectral method, and rewrites the condition <span class="math notranslate nohighlight">\(\sum_j (D_N){ij} = 0\)</span> as an equation for the diagonal term.</p>
-<p>Note that the differentiation matrix does have the antisymmetry property</p>
+<p>The code above does not use the formulas for the diagonal entries. Instead, it uses the <em>negative sum trick</em>, which arises from the fact that the derivative of a constant function is exactly zero in a spectral method, and rewrites the condition <span class="math notranslate nohighlight">\(\sum_j (D_N){ij} = 0\)</span> as an equation for the diagonal term.</p>
+<p>Note that the differentiation matrix has the antisymmetry property</p>
 <div class="math notranslate nohighlight">
 \[
-(D_N){N-i,N-j} = -(D_N)_{i,j}. 
+(D_N)_{N-i,N-j} = -(D_N)_{i,j}. 
 \]</div>
 <p>Otherwise, the matrices do not have much obvious structure:</p>
 <div class="cell docutils container">
@@ -651,11 +707,11 @@ end
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5×5 Matrix{Float64}:
-  5.5       -6.82843    2.0      -1.17157    0.5
-  1.70711   -0.707107  -1.41421   0.707107  -0.292893
- -0.5        1.41421    0.0      -1.41421    0.5
-  0.292893  -0.707107   1.41421   0.707107  -1.70711
- -0.5        1.17157   -2.0       6.82843   -5.5
+  5.5       -6.82843    2.0          -1.17157    0.5
+  1.70711   -0.707107  -1.41421       0.707107  -0.292893
+ -0.5        1.41421   -1.11022e-16  -1.41421    0.5
+  0.292893  -0.707107   1.41421       0.707107  -1.70711
+ -0.5        1.17157   -2.0           6.82843   -5.5
 </pre></div>
 </div>
 </div>
@@ -680,85 +736,108 @@ end
 </div>
 </div>
 <p>For the analytic, nonperiodic function <span class="math notranslate nohighlight">\(e^x\sin(5x)\)</span>, the spectral derivative has about 2 accurate digits at <span class="math notranslate nohighlight">\(N=10\)</span> and 9 at <span class="math notranslate nohighlight">\(N=20\)</span>:</p>
+<section id="p11-chebyshev-differentation-of-a-smooth-function">
+<h2>p11: Chebyshev differentation of a smooth function<a class="headerlink" href="#p11-chebyshev-differentation-of-a-smooth-function" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p11</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-<span class="n">p11</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;smij-functions.jl&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">)</span><span class="w"> </span>
+<span class="n">uʹ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="mi">5</span><span class="n">x</span><span class="p">))</span><span class="w"></span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="o">:</span><span class="mi">200</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="n">vv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span><span class="w"></span>
+<span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">])</span><span class="w"></span>
+<span class="w">    </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D</span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">uʹ</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ee</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polyinterp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="p">(;</span><span class="n">x</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">error</span><span class="p">,</span><span class="n">ee</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;u(x),  N=</span><span class="si">$N</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatter!</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">lines!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">vv</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;error in uʹ(x),  N=</span><span class="si">$N</span><span class="s">&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatter!</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">error</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">lines!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">ee</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p11()
-    u = x -&gt; exp(x) * sin(5x) 
-    uʹ = x -&gt; exp(x) * (sin(5x) + 5 * cos(5x))
-    xx = (-200:200) / 200
-    vv = @. u.(xx)
-    fig = Figure()
-    for (i,N) in enumerate([10, 20])
-        D, x = cheb(N)
-        v = u.(x)
-        Axis(fig[i, 1], title=&quot;u(x),  N=$N&quot;)
-        scatter!(x, v)
-        lines!(xx, vv)
-        error = D * v - uʹ.(x)
-        Axis(fig[i, 2], title=&quot;error in uʹ(x),  N=$N&quot;)
-        scatter!(x, error)
-        lines!(xx, polyinterp(x, error).(xx))
-    end
-    return fig
-end
-</pre></div>
-</div>
-<img alt="../_images/chebdm_6_1.png" src="../_images/chebdm_6_1.png" />
+<img alt="../_images/chebdm_8_0.png" src="../_images/chebdm_8_0.png" />
 </div>
 </div>
+</section>
+<section id="p12-accuracy-of-chebyshev-spectral-differentiation">
+<h2>p12: accuracy of Chebyshev spectral differentiation<a class="headerlink" href="#p12-accuracy-of-chebyshev-spectral-differentiation" title="Permalink to this headline">#</a></h2>
 <p>The effects of smoothness are illustrated more clearly here:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p12</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-<span class="n">p12</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">50</span><span class="w"></span>
+<span class="c"># Compute derivatives for various values of N:</span><span class="w"></span>
+<span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># uʹʹʹ in BV</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">3</span><span class="p">,</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">3</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;|x|^3&quot;</span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># C-infinity</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)),</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">2</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;\exp(-x^{-2})&quot;</span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># analytic in [-1,1]</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="n">x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;1/(1+x^2)&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="c"># polynomial </span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">10</span><span class="n">x</span><span class="o">^</span><span class="mi">9</span><span class="p">,</span><span class="w">  </span><span class="sa">L</span><span class="s">&quot;x^{10}&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="p">]</span><span class="w"></span>
+
+<span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">fun</span><span class="p">,</span><span class="n">deriv</span><span class="p">,</span><span class="n">title</span><span class="p">))</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">N</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">E</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">D</span><span class="o">*</span><span class="n">fun</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">deriv</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="p">(;</span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">yscale</span><span class="o">=</span><span class="n">log10</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">vec</span><span class="p">(</span><span class="n">ax</span><span class="p">),</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">title</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatterlines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">E</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">linkxaxes!</span><span class="p">(</span><span class="n">ax</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="n">linkyaxes!</span><span class="p">(</span><span class="n">ax</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="w"></span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;N&quot;</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p12(Nmax = 50)
-    # Compute derivatives for various values of N:
-    data = [ 
-        # uʹʹʹ in BV
-        (x -&gt; abs(x)^3,  x -&gt; 3x * abs(x), L&quot;|x|^3&quot;, (1,1)), 
-        # C-infinity
-        (x -&gt; exp(-x^(-2)), x -&gt; 2exp(-x^(-2)) / x^3, L&quot;\exp(-x^{-2})&quot;, (1,2)), 
-        # analytic in [-1,1]
-        (x -&gt; 1 / (1 + x^2), x -&gt; -2x / (1 + x^2)^2, L&quot;1/(1+x^2)&quot;, (2,1) ),
-        # polynomial 
-        (x -&gt; x^10, x -&gt; 10x^9,  L&quot;x^{10}&quot;, (2,2))
-    ]
-    fig = Figure()
-    E = zeros(Nmax)
-    ax = []
-    for (u,uʹ,title,pos) in data
-        for N in 1:Nmax
-            D, x = cheb(N)
-            E[N] = norm(D * u.(x) - uʹ.(x), Inf)
-        end
-        push!(
-            ax,
-            Axis(fig[pos[1], pos[2]];title, yscale=log10)
-        )
-        scatterlines!(1:Nmax, E)
-        (pos[1] == 2) &amp;&amp; (ax[end].xlabel = &quot;N&quot;)
-        (pos[2] == 1) &amp;&amp; (ax[end].ylabel = &quot;error&quot;)
-    end
-    linkxaxes!(ax...)
-    linkyaxes!(ax...)
-    return fig
-end
-</pre></div>
-</div>
-<img alt="../_images/chebdm_8_1.png" src="../_images/chebdm_8_1.png" />
+<img alt="../_images/chebdm_11_0.png" src="../_images/chebdm_11_0.png" />
 </div>
 </div>
 <p>The function <span class="math notranslate nohighlight">\(|x|^3\)</span> has only 2 continuous derivatives, so the convergence is algebraic. Next, <span class="math notranslate nohighlight">\(e^{-x^2}\)</span> is not analytic, and its convergence is between algebraic and exponential. The case <span class="math notranslate nohighlight">\(1/(1+x^2)\)</span> is analytic around the interval, showing spectral convergence, and the function <span class="math notranslate nohighlight">\(x^{10}\)</span> is the polynomial analog of “band-limited.”</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">

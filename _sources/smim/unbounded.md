@@ -39,7 +39,51 @@ $$
 \end{array}
 $$
 
-and so on. It's not (yet) clear that each column above is tending toward a simple limit:
+and so on.
+
+### p1: convergence of fourth-order finite differences
+
+```{code-cell} julia
+using LinearAlgebra, SparseArrays
+
+N = @. 2^(3:12)
+err = zeros(size(N))
+for (i,N) in enumerate(N)
+    h = 2π / N
+    x = @. -π + (1:N) * h
+    u = @. exp(sin(x)^2)
+    uʹ = @. 2 * sin(x) * cos(x) * u
+
+    # Construct sparse fourth-order differentiation matrix:
+    col1 = [ 0; -2/3h; 1/12h; zeros(N-5); -1/12h; 2/3h ]
+    D = sparse( [col1[mod(i-j,N) + 1] for i in 1:N, j in 1:N] )
+
+    # Plot max(abs(D*u-uʹ)):
+    err[i] = norm(D * u - uʹ, Inf)
+end
+```
+
+```{code-cell} julia
+using CairoMakie
+
+fig = Figure()
+Axis(
+    fig[1, 1],
+    xscale=log10, yscale=log10,
+    xlabel="N", ylabel="error",
+    title="Convergence of fourth-order finite differences",
+)
+
+scatter!(N, err)
+order4 = (N/N[1]) .^ (-4) * err[1] / 100
+lines!(N, order4, color=:black, linestyle=:dash)
+text!(105, 8e-8, text=L"N^{-4}")
+fig
+```
+
+## Beyond all orders
+
+It's not (yet) clear that each column in the numbers table above is tending toward a simple limit:
 
 $$
 \begin{array}{cccccc}
@@ -95,35 +139,37 @@ $$
 D_{ij} = (-1)^{k} \cot\left(k \tfrac{h}{2}\right), \qquad k = i-j \mod N. 
 $$
 
-When the $(i,j)$ entry depends only on $(i-j) \mod N$, we say the matrix is **circulant**.
+When the $(i,j)$ entry depends only on $(i-j) \mod N$, we say the matrix is **circulant**. We can use this property easily in a comprehension to construct the matrix.
+
+### p2: convergence of periodic spectral method (compare p1)
 
 ```{code-cell} julia
-using Sugar, SpectralMethodsTrefethen
-Sugar.get_source(first(methods(p2))) |> last |> print
-```
+N = 2:2:100
+@assert(all(iseven.(N)),"N must be even")
+err = zeros(size(N))
 
-```{code-cell} julia
-p2()
-```
-
-This use of periodic interpolants is the foundation of what are known as **Fourier spectral methods.**
-
-<!-- 
-for N in 2:2:100
+for (i,N) in enumerate(N)
     h = 2π / N
     x = [-π + i * h for i = 1:N]
     u = @. exp(sin(x))
-    uprime = @. cos(x) * u
+    uʹ = @. cos(x) * u
 
     # Construct spectral differentiation matrix:
-    entry(k) = k==0 ? 0 : (-1)^k * 0.5cot( k * h / 2 )
+    entry(k) = k==0 ? 0.0 : (-1)^k * 0.5cot( k * h / 2 )
     D = [ entry(mod(i-j,N)) for i in 1:N, j in 1:N ]
 
-    # Plot max(abs(D*u-uprime)):
-    error = norm(D * u - uprime, Inf)
-    loglog(N, error, "k.", markersize=6)
+    # Plot max(abs(D*u - uʹ)):
+    err[i] = norm(D*u - uʹ, Inf)
 end
-grid(true)
-xlabel("N")
-ylabel("error")
-title("Convergence of spectral differentiation") -->
+```
+
+```{code-cell} julia
+scatter(N, err, axis = (
+    xlabel="N", xscale=log10, 
+    ylabel="error", yscale=log10,
+    title="Convergence of spectral differentiation"
+))
+```
+
+
+This use of periodic interpolants is the foundation of **Fourier spectral methods.**

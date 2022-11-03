@@ -334,7 +334,7 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="smoothness.html">
-     6.4. Smoothness effects
+     6.4. Convergence rates
     </a>
    </li>
    <li class="toctree-l2">
@@ -360,6 +360,21 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="chebfft.html">
      6.9. Chebyshev and the FFT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eigen.html">
+     6.10. Eigenvalues
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="timestability.html">
+     6.11. Time stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="disk.html">
+     6.12. Polar coordinates
     </a>
    </li>
   </ul>
@@ -566,9 +581,68 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#d-poisson-and-helmholtz">
-   2D Poisson and Helmholtz
+  <a class="reference internal nav-link" href="#linear-bvp">
+   Linear BVP
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p13-solve-linear-bvp">
+     p13: solve linear BVP
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nonlinear-bvp">
+   Nonlinear BVP
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p14-solve-nonlinear-bvp">
+     p14: solve nonlinear BVP
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eigenvalues">
+   Eigenvalues
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p15-solve-eigenvalue-bvp">
+     p15: solve eigenvalue BVP
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#d-poisson">
+   2D Poisson
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p16-poisson-eq-on-1-1-1-1-with-u-0-on-boundary">
+     p16: Poisson eq. on [-1,1]×[-1,1] with
+     <span class="math notranslate nohighlight">
+      \(u=0\)
+     </span>
+     on boundary
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#d-helmholtz">
+   2D Helmholtz
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p17-helmholtz-eq">
+     p17: Helmholtz eq.
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -595,9 +669,68 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#d-poisson-and-helmholtz">
-   2D Poisson and Helmholtz
+  <a class="reference internal nav-link" href="#linear-bvp">
+   Linear BVP
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p13-solve-linear-bvp">
+     p13: solve linear BVP
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nonlinear-bvp">
+   Nonlinear BVP
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p14-solve-nonlinear-bvp">
+     p14: solve nonlinear BVP
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eigenvalues">
+   Eigenvalues
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p15-solve-eigenvalue-bvp">
+     p15: solve eigenvalue BVP
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#d-poisson">
+   2D Poisson
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p16-poisson-eq-on-1-1-1-1-with-u-0-on-boundary">
+     p16: Poisson eq. on [-1,1]×[-1,1] with
+     <span class="math notranslate nohighlight">
+      \(u=0\)
+     </span>
+     on boundary
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#d-helmholtz">
+   2D Helmholtz
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p17-helmholtz-eq">
+     p17: Helmholtz eq.
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -611,6 +744,13 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="chebyshev-for-bvps">
 <h1><span class="section-number">6.8. </span>Chebyshev for BVPs<a class="headerlink" href="#chebyshev-for-bvps" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;smij-functions.jl&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
 <p>For the most part, we can drop in a Chebyshev differentiation matrix where we previously used finite differences, but there are some important differences to keep in mind.</p>
 <section id="d-bvp">
 <h2>1D BVP<a class="headerlink" href="#d-bvp" title="Permalink to this headline">#</a></h2>
@@ -621,77 +761,102 @@ title="Print to PDF"
 \]</div>
 <p>Unlike FD methods, a reasonable way to get the matrix <span class="math notranslate nohighlight">\(\bfD_{xx}\)</span> is by squaring <span class="math notranslate nohighlight">\(\bfD_x\)</span>. (We drop the <span class="math notranslate nohighlight">\(N\)</span> subscript for notational sanity.) Mathematically, both reduce to evaluation of the 2nd derivative of the global polynomial interpolant. For the homogeneous Dirichlet conditions in this example, the numerical solution satisfies <span class="math notranslate nohighlight">\(v_0=v_N=0\)</span>, so we can remove both them and the columns of <span class="math notranslate nohighlight">\(\bfD_{xx}\)</span> that they multiply from the linear system <span class="math notranslate nohighlight">\(\bfD_{xx} = \exp(4\bfx)\)</span>.</p>
 <p>The solution of the linear system produces the grid function <span class="math notranslate nohighlight">\(v\)</span> at Chebyshev points. Unlike FD methods, however, these values also imply a global interpolant over the solution domain. In fact, it would be a crime to use linear interpolation or a cubic spline for off-grid points, as those methods would erase the advantage of spectral accuracy (though you would be unlikely to notice much on a plot of the solution for any smooth method). We use the <code class="docutils literal notranslate"><span class="pre">polyinterp</span></code> function defined earlier to evaluate the solution anywhere; in principle, we should specialize it to Chebyshev points, for which the barycentric weights are known in closed form, but the performance issue is not meaningful to us for these demonstrations.</p>
+</section>
+<section id="linear-bvp">
+<h2>Linear BVP<a class="headerlink" href="#linear-bvp" title="Permalink to this headline">#</a></h2>
+<div class="math notranslate nohighlight">
+\[u_{xx} = \exp(4x),\; u(-1)=u(1)=0\]</div>
+<section id="p13-solve-linear-bvp">
+<h3>p13: solve linear BVP<a class="headerlink" href="#p13-solve-linear-bvp" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Sugar</span><span class="p">,</span><span class="w"> </span><span class="n">SpectralMethodsTrefethen</span><span class="w"></span>
-<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p13</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-<span class="n">p13</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="w"></span>
+<span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">D²</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="o">^</span><span class="mi">2</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w">                   </span><span class="c"># boundary conditions</span><span class="w"></span>
+<span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="mi">4</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">])</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D²</span><span class="w"> </span><span class="o">\</span><span class="w"> </span><span class="n">f</span><span class="w">                           </span><span class="c"># Poisson eq. solved here</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">u</span><span class="p">;</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"></span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mf">0.01</span><span class="o">:</span><span class="mi">1</span><span class="w"></span>
+<span class="n">uu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polyinterp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span><span class="w">      </span><span class="c"># interpolate grid data</span><span class="w"></span>
+<span class="n">exact</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="mi">4</span><span class="n">xx</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sinh</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xx</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">cosh</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">16</span><span class="w"></span>
+<span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">uu</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">exact</span><span class="p">,</span><span class="nb">Inf</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p13(N = 16)
-    D, x = cheb(N)
-    D² = (D^2)[2:N, 2:N]                   # boundary conditions
-    f = @. exp(4x[2:N])
-    u = D² \ f                           # Poisson eq. solved here
-    u = [0; u; 0]
-    xx = -1:0.01:1
-    uu = polyinterp(x, u).(xx)      # interpolate grid data
-    exact = @. (exp(4xx) - sinh(4) * xx - cosh(4)) / 16
-    err = norm(uu - exact,Inf)
-    fig = Figure()
-    Axis( fig[1, 1], title=f&quot;max err = {norm(uu-exact,Inf):.4g}&quot; )
-    scatter!(x, u)
-    lines!(xx, uu)
-    return fig
-end
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.2609646660166618e-10
 </pre></div>
 </div>
-<img alt="../_images/chebbvp_1_1.png" src="../_images/chebbvp_1_1.png" />
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="p">,</span><span class="w"> </span><span class="n">PyFormattedStrings</span><span class="w"></span>
+
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">Axis</span><span class="p">(</span><span class="w"> </span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s">&quot;max err = {norm(uu-exact,Inf):.4g}&quot;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">uu</span><span class="p">)</span><span class="w"> </span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/chebbvp_4_0.png" src="../_images/chebbvp_4_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="nonlinear-bvp">
+<h2>Nonlinear BVP<a class="headerlink" href="#nonlinear-bvp" title="Permalink to this headline">#</a></h2>
 <p>For the nonlinear variant</p>
 <div class="math notranslate nohighlight">
 \[
 \partial_{xx} u = e^{u}, \qquad u(\pm 1) = 0, 
 \]</div>
 <p>we again derive a nonlinear algebraic system by discretization. Here is a code that uses a fixed-point iteration to approximately solve the nonlinear system:</p>
+<section id="p14-solve-nonlinear-bvp">
+<h3>p14: solve nonlinear BVP<a class="headerlink" href="#p14-solve-nonlinear-bvp" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p14</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-<span class="n">p14</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="w"></span>
+<span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">D²</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="o">^</span><span class="mi">2</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">change</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="k">while</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1e-15</span><span class="w">                   </span><span class="c"># fixed-point iteration</span><span class="w"></span>
+<span class="w">    </span><span class="n">unew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D²</span><span class="w"> </span><span class="o">\</span><span class="w"> </span><span class="n">exp</span><span class="o">.</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">change</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">unew</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unew</span><span class="w"></span>
+<span class="w">    </span><span class="n">it</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">u</span><span class="p">;</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"></span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mf">0.01</span><span class="o">:</span><span class="mi">1</span><span class="w"></span>
+<span class="n">uu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polyinterp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">xx</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">Axis</span><span class="p">(</span><span class="w"> </span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;no. steps = </span><span class="si">$it</span><span class="s">      u(0) = </span><span class="si">$</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">N÷2</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="s">&quot;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">)</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">uu</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p14(N = 16)
-    D, x = cheb(N)
-    D² = (D^2)[2:N, 2:N]
-    u = zeros(N - 1)
-    change = 1
-    it = 0
-    while change &gt; 1e-15                   # fixed-point iteration
-        unew = D² \ exp.(u)
-        change = norm(unew - u, Inf)
-        u = unew
-        it += 1
-    end
-    u = [0; u; 0]
-    xx = -1:0.01:1
-    uu = polyinterp(x,u).(xx)
-    fig = Figure()
-    Axis( fig[1, 1], title=&quot;no. steps = $it      u(0) = $(u[N÷2+1])&quot; )
-    scatter!(x, u)
-    lines!(xx, uu)
-    return fig
-end
-</pre></div>
-</div>
-<img alt="../_images/chebbvp_3_1.png" src="../_images/chebbvp_3_1.png" />
+<img alt="../_images/chebbvp_7_0.png" src="../_images/chebbvp_7_0.png" />
 </div>
 </div>
 <p>Recall that there are two senses of convergence here: convergence of the iteration as a solution of the discrete equations, and convergence of the discretization to the underlying solution function.</p>
+</section>
+</section>
+<section id="eigenvalues">
+<h2>Eigenvalues<a class="headerlink" href="#eigenvalues" title="Permalink to this headline">#</a></h2>
 <p>We can also solve the Laplacian eigenvalue problem</p>
 <div class="math notranslate nohighlight">
 \[
@@ -702,35 +867,46 @@ end
 \[
 \lambda_n = -\frac{n^2\pi^2}{4}, \qquad u_n(x) = \sin[n\pi(x+1)/2], \qquad n = 1,2,\dots. 
 \]</div>
+<section id="p15-solve-eigenvalue-bvp">
+<h3>p15: solve eigenvalue BVP<a class="headerlink" href="#p15-solve-eigenvalue-bvp" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p15</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-<span class="n">p15</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">36</span><span class="w"></span>
+<span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">D²</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="o">^</span><span class="mi">2</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"></span>
+<span class="n">λ</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eigen</span><span class="p">(</span><span class="n">D²</span><span class="p">,</span><span class="w"> </span><span class="n">sortby</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="p">)</span><span class="o">∘</span><span class="n">real</span><span class="p">)</span><span class="w"></span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mf">0.01</span><span class="o">:</span><span class="mi">1</span><span class="w"></span>
+<span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">5</span><span class="o">:</span><span class="mi">5</span><span class="o">:</span><span class="mi">30</span><span class="w">                  </span><span class="c"># plot 6 eigenvectors</span><span class="w"></span>
+<span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">];</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">uu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polyinterp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="p">(;</span><span class="n">j</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">uu</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Makie</span><span class="o">.</span><span class="n">Colors</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lines!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">uu</span><span class="p">,</span><span class="w"> </span><span class="n">linealpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">line</span><span class="o">.</span><span class="n">color</span><span class="p">[]</span><span class="w"></span>
+<span class="w">    </span><span class="n">line</span><span class="o">.</span><span class="n">color</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Colors</span><span class="o">.</span><span class="n">RGBA</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">r</span><span class="p">,</span><span class="n">color</span><span class="o">.</span><span class="n">g</span><span class="p">,</span><span class="n">color</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="mf">0.4</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">hidespines!</span><span class="p">(</span><span class="n">ax</span><span class="p">);</span><span class="w"> </span><span class="n">hidedecorations!</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">j</span><span class="w"></span>
+<span class="w">    </span><span class="n">text!</span><span class="p">(</span><span class="o">-</span><span class="mf">0.4</span><span class="p">,</span><span class="w"> </span><span class="mf">0.12</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s">&quot;eig {j} = {λ[j]*4/π^2:#.14g} π^2/4&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">textsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">text!</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="w"> </span><span class="mf">0.12</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s">&quot;{4*N/(π*j):.2g} ppw&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">textsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p15(N = 36)
-    D, x = cheb(N)
-    D² = (D^2)[2:N, 2:N]
-    λ, V = eigen(D², sortby = (-)∘real)
-    fig = Figure()
-    xx = -1:0.01:1
-    for j in 5:5:30                  # plot 6 eigenvectors
-        u = [0; V[:, j]; 0]
-        ax = Axis( fig[j÷5, 1] )
-        scatter!(x, u)
-        uu = polyinterp(x,u).(xx)
-        lines!(xx, uu)
-        hidespines!(ax); hidedecorations!(ax)
-        text!(-0.4, 0.12, text=f&quot;eig {j} = {λ[j]*4/π^2:#.14g} π^2/4&quot;, textsize=20)
-        text!(0.7, 0.12, text=f&quot;{4*N/(π*j):.2g} ppw&quot;, textsize=20)
-    end
-    return fig
-end
-</pre></div>
-</div>
-<img alt="../_images/chebbvp_5_1.png" src="../_images/chebbvp_5_1.png" />
+<img alt="../_images/chebbvp_10_0.png" src="../_images/chebbvp_10_0.png" />
 </div>
 </div>
 <p>Observe above that the results become increasingly inaccurate as the eigenfunction wavenumber increases. The resolution of a method is often expressed in terms of <strong>points per wavelength (PPW)</strong>, which is the wavelength divided by the grid spacing. As a reference, in Fourier methods the highest wavenumber that can be resolved is <span class="math notranslate nohighlight">\(k=N/2\)</span>, and the PPW in this case is</p>
@@ -742,138 +918,149 @@ end
 <p>For a Chebyshev method, the points are coarsest in the center of the grid, where the node density is <span class="math notranslate nohighlight">\(1/\pi\)</span>. This compares to an equispaced node density (on <span class="math notranslate nohighlight">\([-1,1]\)</span>) of <span class="math notranslate nohighlight">\(1/2\)</span>, so we lose a factor of <span class="math notranslate nohighlight">\(\pi/2\)</span> in resolution at the center by comparison. It’s therefore reasonable to state that Chebyshev methods have a <span class="math notranslate nohighlight">\(\pi\)</span> PPW minimum resolution requirement.</p>
 <p>In the example above, the wavelength of the <span class="math notranslate nohighlight">\(n\)</span>th mode is <span class="math notranslate nohighlight">\(4/n\)</span>. Compared to <span class="math notranslate nohighlight">\(h=\pi/N\)</span> at the center, the effective PPW is therefore <span class="math notranslate nohighlight">\(4N/(n\pi)\)</span> at mode <span class="math notranslate nohighlight">\(n\)</span>. The figure shows that about 7 digits are correct at PPW 3.1, but the accuracy falls off quickly beyond that.</p>
 </section>
-<section id="d-poisson-and-helmholtz">
-<h2>2D Poisson and Helmholtz<a class="headerlink" href="#d-poisson-and-helmholtz" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="d-poisson">
+<h2>2D Poisson<a class="headerlink" href="#d-poisson" title="Permalink to this headline">#</a></h2>
 <p>For problems over a rectangle, we can use Kronecker products on a tensor product of Chebyshev grids. The resulting discrete approximation to, say, the Laplacian operator is less sparse than we see with finite differences, the idea is that a much smaller matrix will suffice for equivalent accuracy. If the matrix is truly too large to handle with dense linear algebra, then one can turn to iterative methods with a fast evaluation alternative to be presented in the next section.</p>
 <p>One new wrinkle in 2D is that the interpolant must also be evaluated in a tensor-product fashion. For example, suppose a grid function has <span class="math notranslate nohighlight">\(U_{ij}\)</span> given at all <span class="math notranslate nohighlight">\((x_i,y_j)\)</span> for independent Chebyshev grids in <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. To evaluate the interpolant at <span class="math notranslate nohighlight">\((\xi,\eta)\)</span>, we first evaluate 1D interpolants at <span class="math notranslate nohighlight">\((\xi,y_j)\)</span> for all <span class="math notranslate nohighlight">\(j\)</span>, and then do one more 1D evaluation at <span class="math notranslate nohighlight">\((\xi,\eta)\)</span>. This can be visualized as collapsing each column of data down to the point <span class="math notranslate nohighlight">\(\xi\)</span>, then collapsing the remaining row to a single point. In practice we can do this reasonably efficiently on a grid of <span class="math notranslate nohighlight">\((\xi,\eta)\)</span> values, and we implement that as <code class="docutils literal notranslate"><span class="pre">gridinterp</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">gridinterp</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function gridinterp(V,xx,yy)
-    M,N = size(V) .- 1
-    x = @. cos(π*(0:M)/M)
-    y = @. cos(π*(0:N)/N)
-    Vx = zeros(length(xx), N+1)
-    for j in axes(V,2)
-        Vx[:,j] = polyinterp(x,V[:,j]).(xx)
-    end
-    VV = zeros(length(xx),length(yy))
-    for i in axes(Vx,1)
-        VV[i,:] = polyinterp(y,Vx[i,:]).(yy)
-    end
-    return VV
-end
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">gridinterp</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">M</span><span class="p">,</span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">V</span><span class="p">)</span><span class="w"> </span><span class="o">.-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">    </span><span class="n">Vx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="w"> </span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">axes</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">Vx</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polyinterp</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="n">VV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="n">length</span><span class="p">(</span><span class="n">yy</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">axes</span><span class="p">(</span><span class="n">Vx</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">VV</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polyinterp</span><span class="p">(</span><span class="n">Vx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">])</span><span class="o">.</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">VV</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 </div>
 <p>Here is a solution of <span class="math notranslate nohighlight">\(\Delta u = 10\sin(8x(y-1))\)</span> over <span class="math notranslate nohighlight">\([-1,1]^2\)</span> with homogeneous Dirichlet conditions:</p>
+<section id="p16-poisson-eq-on-1-1-1-1-with-u-0-on-boundary">
+<h3>p16: Poisson eq. on [-1,1]×[-1,1] with <span class="math notranslate nohighlight">\(u=0\)</span> on boundary<a class="headerlink" href="#p16-poisson-eq-on-1-1-1-1-with-u-0-on-boundary" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p16</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-<span class="n">fig1</span><span class="p">,</span><span class="n">fig2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p16</span><span class="p">();</span><span class="w"></span>
-<span class="n">fig1</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="w"></span>
+<span class="c"># Set up grids and tensor product Laplacian and solve for u:</span><span class="w"></span>
+<span class="o">⊗</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kron</span><span class="w"></span>
+<span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mi">10</span><span class="n">sin</span><span class="p">(</span><span class="mi">8</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">],</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="n">D²</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="o">^</span><span class="mi">2</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"></span>
+<span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">⊗</span><span class="w"> </span><span class="n">D²</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">D²</span><span class="w"> </span><span class="o">⊗</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">                     </span><span class="c"># Laplacian</span><span class="w"></span>
+
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">\</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">F</span><span class="p">)</span><span class="w">           </span><span class="c"># solve problem </span><span class="w"></span>
+
+<span class="c"># Reshape long 1D results onto 2D grid (flipping orientation):</span><span class="w"></span>
+<span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">U</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">U</span><span class="p">[</span><span class="n">N÷4</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">N÷4</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
+
+<span class="c"># Interpolate to finer grid:</span><span class="w"></span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mf">0.04</span><span class="o">:</span><span class="mi">1</span><span class="w"></span>
+<span class="n">UU</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gridinterp</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p16(N = 24)
-    # Set up grids and tensor product Laplacian and solve for u:
-    ⊗ = kron
-    D, x = D, y = cheb(N)
-    F = [ 10sin(8x * (y - 1)) for x in x[2:N], y in y[2:N] ]
-    D² = (D^2)[2:N, 2:N]
-    L = I(N-1) ⊗ D² + D² ⊗ I(N-1)                     # Laplacian
-
-    fig1 = Figure()
-    Axis(fig1[1, 1], title=&quot;Matrix nonzeros&quot;, aspect=DataAspect())
-    spy!(sparse(L), markersize=4)
-    ylims!((N-1)^2, 1)
-
-    @elapsed u = L \ vec(F)           # solve problem and watch the clock
-    
-    # Reshape long 1D results onto 2D grid (flipping orientation):
-    U = zeros(N+1, N+1)
-    U[2:N, 2:N] = reshape(u, N-1, N-1)
-    value = U[N÷4 + 1, N÷4 + 1]
-
-    # Interpolate to finer grid and plot:
-    xx = yy = -1:0.04:1
-    UU = gridinterp(U,xx,yy)
- 
-    fig2 = Figure()
-    ax3 = Axis3(fig2[1, 1], xlabel=&quot;x&quot;, ylabel=&quot;y&quot;, zlabel=&quot;u&quot;)
-    surface!(xx, yy, UU)
-    ax3.azimuth = 6π / 5; ax3.elevation = π / 6
-    val = f&quot;{value:.11g}&quot;
-    text!(0.4, -0.3, 0.3, text=latexstring(&quot;u(2^{-1/2},\\,2^{-1/2}) = &quot;*val))
-    return fig1,fig2
-end
-</pre></div>
-</div>
-<img alt="../_images/chebbvp_9_1.png" src="../_images/chebbvp_9_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig2</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">SparseArrays</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Matrix nonzeros&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">aspect</span><span class="o">=</span><span class="n">DataAspect</span><span class="p">())</span><span class="w"></span>
+<span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">,</span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findnz</span><span class="p">(</span><span class="n">sparse</span><span class="p">(</span><span class="n">L</span><span class="p">))</span><span class="w"></span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="p">,</span><span class="w"> </span><span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="n">ylims!</span><span class="p">((</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/chebbvp_10_0.png" src="../_images/chebbvp_10_0.png" />
+<img alt="../_images/chebbvp_15_0.png" src="../_images/chebbvp_15_0.png" />
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LaTeXStrings</span><span class="w"></span>
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis3</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;y&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">zlabel</span><span class="o">=</span><span class="s">&quot;u&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">surface!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">yy</span><span class="p">,</span><span class="w"> </span><span class="n">UU</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">azimuth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="nb">π</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">ax3</span><span class="o">.</span><span class="n">elevation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">π</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">6</span><span class="w"></span>
+<span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s">&quot;{value:.11g}&quot;</span><span class="w"></span>
+<span class="n">text!</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="o">=</span><span class="n">latexstring</span><span class="p">(</span><span class="s">&quot;u(2^{-1/2},</span><span class="se">\\</span><span class="s">,2^{-1/2}) = &quot;</span><span class="o">*</span><span class="n">val</span><span class="p">))</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/chebbvp_16_0.png" src="../_images/chebbvp_16_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="d-helmholtz">
+<h2>2D Helmholtz<a class="headerlink" href="#d-helmholtz" title="Permalink to this headline">#</a></h2>
 <p>An important variation on the Poisson equation is the <strong>Helmholtz equation</strong>, which plays a major role in wave propagation:</p>
 <div class="math notranslate nohighlight">
 \[
 \Delta u + k^2 u = f(x,y),
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(k\)</span> is a real parameter. Here is an example solution:</p>
+<section id="p17-helmholtz-eq">
+<h3>p17: Helmholtz eq.<a class="headerlink" href="#p17-helmholtz-eq" title="Permalink to this headline">#</a></h3>
+<div class="math notranslate nohighlight">
+\[u_{xx} + u_{yy} + k^2 u = f\]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p17</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-<span class="n">p17</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="w"></span>
+<span class="c"># Set up spectral grid and tensor product Helmholtz operator:</span><span class="w"></span>
+<span class="o">⊗</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kron</span><span class="w"></span>
+<span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.5</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">],</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]]</span><span class="w"></span>
+<span class="n">D²</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="o">^</span><span class="mi">2</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"></span>
+<span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="w"></span>
+<span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">⊗</span><span class="w"> </span><span class="n">D²</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">D²</span><span class="w"> </span><span class="o">⊗</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">k</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">I</span><span class="w"></span>
+
+<span class="c"># Solve for u, reshape to 2D grid, and plot:</span><span class="w"></span>
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">\</span><span class="w"> </span><span class="n">vec</span><span class="p">(</span><span class="n">F</span><span class="p">)</span><span class="w"></span>
+<span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">U</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">1</span><span class="o">/</span><span class="mi">50</span><span class="o">:</span><span class="mi">1</span><span class="w"></span>
+<span class="n">UU</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gridinterp</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">yy</span><span class="p">)</span><span class="w"></span>
+<span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">U</span><span class="p">[</span><span class="n">N÷2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">N÷2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p17(N = 24)
-    # Set up spectral grid and tensor product Helmholtz operator:
-    ⊗ = kron
-    D, x = D, y = cheb(N)
-    F = [exp(-10 * ((y - 1)^2 + (x - 0.5)^2)) for x in x[2:N], y in y[2:N]]
-    D² = (D^2)[2:N, 2:N]
-    k = 9
-    L = I(N-1) ⊗ D² + D² ⊗ I(N-1) + k^2 * I
-
-    # Solve for u, reshape to 2D grid, and plot:
-    u = L \ vec(F)
-    U = zeros(N+1, N+1)
-    U[2:N, 2:N] = reshape(u, N-1, N-1)
-    xx = yy = -1:1/50:1
-    UU = gridinterp(U, xx, yy)
-    value = U[N÷2 + 1, N÷2 + 1]
- 
-    fig = Figure()
-    Axis(
-        fig[1, 1], 
-        aspect = DataAspect(), xlabel=&quot;x&quot;, ylabel=&quot;y&quot;, 
-        title = f&quot;u(0,0) = {value:.10f}&quot;
-    )
-    co = contourf!(xx, yy, UU)
-    Colorbar(fig[1,2], co)
-    return fig
-end
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.011722570002652808
 </pre></div>
 </div>
-<img alt="../_images/chebbvp_12_1.png" src="../_images/chebbvp_12_1.png" />
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">Axis</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span>
+<span class="w">    </span><span class="n">aspect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DataAspect</span><span class="p">(),</span><span class="w"> </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;y&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s">&quot;u(0,0) = {value:.10f}&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">co</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">contourf!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">yy</span><span class="p">,</span><span class="w"> </span><span class="n">UU</span><span class="p">)</span><span class="w"></span>
+<span class="n">Colorbar</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="n">co</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/chebbvp_19_0.png" src="../_images/chebbvp_19_0.png" />
+</div>
+</div>
+</section>
 </section>
 </section>
 

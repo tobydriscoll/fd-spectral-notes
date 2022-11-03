@@ -55,7 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="6.4. Smoothness effects" href="smoothness.html" />
+    <link rel="next" title="6.4. Convergence rates" href="smoothness.html" />
     <link rel="prev" title="6.2. Unbounded spectral" href="sft.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -334,7 +334,7 @@ const thebe_selector_output = ".output, .cell_output"
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="smoothness.html">
-     6.4. Smoothness effects
+     6.4. Convergence rates
     </a>
    </li>
    <li class="toctree-l2">
@@ -360,6 +360,21 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="chebfft.html">
      6.9. Chebyshev and the FFT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eigen.html">
+     6.10. Eigenvalues
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="timestability.html">
+     6.11. Time stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="disk.html">
+     6.12. Polar coordinates
     </a>
    </li>
   </ul>
@@ -574,16 +589,37 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#differentiation-matrix">
    Differentiation matrix
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p4-periodic-spectral-differentiation">
+     p4: periodic spectral differentiation
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fft">
    FFT
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p5-repetition-of-p4-via-fft">
+     p5: repetition of p4 via FFT
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#method-of-lines">
    Method of lines
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p6-variable-coefficient-wave-equation">
+     p6: variable coefficient wave equation
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -618,16 +654,37 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#differentiation-matrix">
    Differentiation matrix
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p4-periodic-spectral-differentiation">
+     p4: periodic spectral differentiation
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fft">
    FFT
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p5-repetition-of-p4-via-fft">
+     p5: repetition of p4 via FFT
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#method-of-lines">
    Method of lines
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p6-variable-coefficient-wave-equation">
+     p6: variable coefficient wave equation
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -721,51 +778,54 @@ S'_N(x_j) = \begin{cases}
   \end{cases}
 \end{split}\]</div>
 <p>Naturally, column 0 is the same as column <span class="math notranslate nohighlight">\(N\)</span>, and the rest of the columns are shifted versions of it. The result is again a circulant matrix.</p>
+<section id="p4-periodic-spectral-differentiation">
+<h3>p4: periodic spectral differentiation<a class="headerlink" href="#p4-periodic-spectral-differentiation" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Sugar</span><span class="p">,</span><span class="w"> </span><span class="n">SpectralMethodsTrefethen</span><span class="w"></span>
-<span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p4</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p4(N = 24)
-    # Set up grid and differentiation matrix:
-    h = 2π / N
-    x = h * (1:N)
-    entry(k) = k==0 ? 0.0 : 0.5 * (-1)^k * cot(k * h / 2)
-    D = [ entry(mod(i-j,N)) for i in 1:N, j in 1:N ]
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span><span class="w"></span>
+<span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="w"></span>
 
-    # Differentiation of a hat function:
-    v = @. max(0, 1 - abs(x - π) / 2)
-    fig = Figure()
-    ax = Axis(fig[1, 1], title=&quot;function&quot;)
-    scatterlines!(x, v)
-    limits!(ax, 0, 2π, -0.5, 1.5)
-    ax = Axis(fig[1, 2], title=&quot;spectral derivative&quot;)
-    scatterlines!(x, D * v)
-    limits!(ax, 0, 2π, -1, 1)
+<span class="c"># Set up grid and differentiation matrix:</span><span class="w"></span>
+<span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">entry</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="o">==</span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">^</span><span class="n">k</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cot</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">entry</span><span class="p">(</span><span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">,</span><span class="n">N</span><span class="p">))</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
 
-    # Differentiation of exp(sin(x)):
-    v = @. exp(sin(x))
-    vʹ = @. cos(x) * v
-    ax = Axis(fig[2, 1])
-    scatterlines!(x, v)
-    limits!(ax, 0, 2π, 0, 3)
-    ax = Axis(fig[2, 2])
-    scatterlines!(x, D * v)
-    limits!(ax, 0, 2π, -2, 2)
-    error = norm(D * v - vʹ, Inf)
-    text!(2.2, 1.4, text=f&quot;max error = {error:.5g}&quot;, textsize=20)
-    return fig
-end
+<span class="c"># Differentiation of a hat function:</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">π</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D</span><span class="o">*</span><span class="n">v</span><span class="w"></span>
+<span class="n">hat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(;</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">)</span><span class="w"></span>
+
+<span class="c"># Differentiation of exp(sin(x)):</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"></span>
+<span class="n">vʹ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">v</span><span class="w"></span>
+<span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D</span><span class="o">*</span><span class="n">v</span><span class="w"></span>
+<span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">vʹ</span><span class="p">,</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span><span class="w"></span>
+<span class="n">smooth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(;</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p4</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="p">,</span><span class="w"> </span><span class="n">PyFormattedStrings</span><span class="w"></span>
+
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;function&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">scatterlines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">hat</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">1.5</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;spectral derivative&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">scatterlines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">hat</span><span class="o">.</span><span class="n">w</span><span class="p">)</span><span class="w"></span>
+<span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w"></span>
+<span class="n">scatterlines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">smooth</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">])</span><span class="w"></span>
+<span class="n">scatterlines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">smooth</span><span class="o">.</span><span class="n">w</span><span class="p">)</span><span class="w"></span>
+<span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">text!</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span><span class="w"> </span><span class="mf">1.4</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s">&quot;max error = {smooth.error:.5g}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">textsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -776,6 +836,7 @@ end
 <p>The differentiation of the nonsmooth function is very poor, but for the smooth case, it’s very accurate.</p>
 <p>As before, we can differentiate <span class="math notranslate nohighlight">\(S_N\)</span> twice to get a differentiation matrix for the second derivative. (See textbook.)</p>
 </section>
+</section>
 <section id="fft">
 <h2>FFT<a class="headerlink" href="#fft" title="Permalink to this headline">#</a></h2>
 <p>In the previous section, we observed that one can operate in wavenumber space rather than physical space in order to compute the derivative of a grid function. The same applies in the periodic context:</p>
@@ -784,65 +845,71 @@ end
 <li><p>Let <span class="math notranslate nohighlight">\(w = \mathcal{F}_N^{-1}[\hat{w}]\)</span>.</p></li>
 </ol>
 <p>For the <span class="math notranslate nohighlight">\(v\)</span>th derivative, the factor in passing from <span class="math notranslate nohighlight">\(\hat{v}\)</span> to <span class="math notranslate nohighlight">\(\hat{w}\)</span> is <span class="math notranslate nohighlight">\((ik)^\nu\)</span>, except it must be set to zero if <span class="math notranslate nohighlight">\(v\)</span> is odd.</p>
-<p>This pathway becomes acutely relevant because of the <strong>Fast Fourier Transform</strong>, credited to Cooley and Tukey in modern times but going back to Gauss. The FFT allows computation of the DFT and IDFT in <span class="math notranslate nohighlight">\(O(N\log N)\)</span> operations, versus the <span class="math notranslate nohighlight">\(O(N^2)\)</span> of a naive DFT implementation as well as for matrix-vector multiplication in physical space. Asymptotically, the FFT pathway should be the fastest by far, although the <span class="math notranslate nohighlight">\(N\)</span> at which it begins to have an advantage is often larger than one wants to use in practice anyway.</p>
+<p>This pathway becomes acutely relevant because of the <strong>Fast Fourier Transform</strong>, credited to Cooley and Tukey in modern times but going back to Gauss. The FFT allows computation of the DFT and IDFT in <span class="math notranslate nohighlight">\(O(N\log N)\)</span> operations, versus the <span class="math notranslate nohighlight">\(O(N^2)\)</span> of a naive DFT implementation as well as for matrix-vector multiplication in physical space. Asymptotically, the FFT pathway should be the fastest by far, although the <span class="math notranslate nohighlight">\(N\)</span> at which it begins to have an advantage is not clear in advance.</p>
+<p>In the following code we show how to exploit the fact that a real function has a transform with conjugate symmetry, so that only the first half of the transform needs to be computed explicitly.</p>
+<section id="p5-repetition-of-p4-via-fft">
+<h3>p5: repetition of p4 via FFT<a class="headerlink" href="#p5-repetition-of-p4-via-fft" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p5</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p5(N = 24)
-    function fderiv(v::Vector{T}) where T &lt;: Real
-        v̂ = rfft(v)
-        ŵ = 1im * [0:N/2-1; 0] .* v̂
-        return irfft(ŵ, N) 
-    end
-    function fderiv(v)
-        v̂ = fft(v)
-        ŵ = 1im * [0:N/2-1; 0; -N/2+1:-1] .* v̂
-        return ifft(ŵ)
-    end
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">FFTW</span><span class="w"> </span>
 
-    # Differentiation of a hat function:
-    h = 2π / N
-    x = h * (1:N)
-    v = @. max(0, 1 - abs(x - π) / 2)
-    w = fderiv(v)
-    fig = Figure()
-    ax = Axis(fig[1, 1],
-        xticks = MultiplesTicks(5, π, &quot;π&quot;), 
-        title=&quot;function&quot;
-    )
-    scatterlines!(x, v)
-    
-    ax = Axis(fig[1, 2], 
-        xticks = MultiplesTicks(5, π, &quot;π&quot;),
-        title=&quot;spectral derivative&quot;
-    )
-    scatterlines!(x, w)
+<span class="c"># real case</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">fderiv</span><span class="p">(</span><span class="n">v</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">T</span><span class="p">})</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="kt">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Real</span><span class="w"></span>
+<span class="w">    </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">v̂</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rfft</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ŵ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="nb">im</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">v̂</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">irfft</span><span class="p">(</span><span class="n">ŵ</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"> </span>
+<span class="k">end</span><span class="w"></span>
 
-    # Differentiation of exp(sin(x)):
-    v = @. exp(sin(x))
-    vʹ = @. cos(x) * v
-    w = fderiv(v)
-    ax = Axis(fig[2, 1], xticks = MultiplesTicks(5, π, &quot;π&quot;))
-    scatterlines!(x, v)
-    limits!(ax, 0, 2π, 0, 3)
-    ax = Axis(fig[2, 2], xticks = MultiplesTicks(5, π, &quot;π&quot;))
-    scatterlines!(x, w)
-    limits!(ax, 0, 2π, -2, 2)
-    error = norm(w - vʹ, Inf)
-    text!(2.2, 1.4, text=f&quot;max error = {error:.5g}&quot;, textsize=20)
-    return fig
-end
+<span class="c"># general case (2x slower)</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">fderiv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">v̂</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fft</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ŵ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="nb">im</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="o">-</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">:-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">v̂</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ifft</span><span class="p">(</span><span class="n">ŵ</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="w"></span>
+
+<span class="c"># Set up grid and differentiation matrix:</span><span class="w"></span>
+<span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+
+<span class="c"># Differentiation of a hat function:</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">π</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fderiv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="n">hat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(;</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">)</span><span class="w"></span>
+
+<span class="c"># Differentiation of exp(sin(x)):</span><span class="w"></span>
+<span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"></span>
+<span class="n">vʹ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">v</span><span class="w"></span>
+<span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fderiv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">vʹ</span><span class="p">,</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span><span class="w"></span>
+<span class="n">smooth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(;</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">error</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p5</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="p">,</span><span class="w"> </span><span class="n">PyFormattedStrings</span><span class="w"></span>
+
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;function&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">scatterlines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">hat</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">1.5</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;spectral derivative&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">scatterlines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">hat</span><span class="o">.</span><span class="n">w</span><span class="p">)</span><span class="w"></span>
+<span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w"></span>
+<span class="n">scatterlines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">smooth</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="w"></span>
+<span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">])</span><span class="w"></span>
+<span class="n">scatterlines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">smooth</span><span class="o">.</span><span class="n">w</span><span class="p">)</span><span class="w"></span>
+<span class="n">limits!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">text!</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span><span class="w"> </span><span class="mf">1.4</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s">&quot;max error = {smooth.error:.5g}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">textsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -850,27 +917,7 @@ end
 <img alt="../_images/dft_5_0.png" src="../_images/dft_5_0.png" />
 </div>
 </div>
-<p>There is some inefficiency in the use of the FFT above. When the original function is real, its transform has conjugate symmetry, and the transform can be simplified to find only the first half of the transform. Julia exposes this special form of the FFT for you to exploit:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p5r</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">UndefVarError</span>: p5r not defined
-
-<span class="ne">Stacktrace</span>:
- <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">top</span><span class="o">-</span><span class="n">level</span> <span class="n">scope</span>
-   <span class="o">@</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span><span class="mi">1</span>
- <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="nb">eval</span>
-   <span class="o">@</span> <span class="o">./</span><span class="n">boot</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">368</span> <span class="p">[</span><span class="n">inlined</span><span class="p">]</span>
- <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="n">include_string</span><span class="p">(</span><span class="n">mapexpr</span><span class="p">::</span><span class="n">typeof</span><span class="p">(</span><span class="n">REPL</span><span class="o">.</span><span class="n">softscope</span><span class="p">),</span> <span class="n">mod</span><span class="p">::</span><span class="n">Module</span><span class="p">,</span> <span class="n">code</span><span class="p">::</span><span class="n">String</span><span class="p">,</span> <span class="n">filename</span><span class="p">::</span><span class="n">String</span><span class="p">)</span>
-   <span class="o">@</span> <span class="n">Base</span> <span class="o">./</span><span class="n">loading</span><span class="o">.</span><span class="n">jl</span><span class="p">:</span><span class="mi">1428</span>
-</pre></div>
-</div>
-</div>
-</div>
+</section>
 </section>
 <section id="method-of-lines">
 <h2>Method of lines<a class="headerlink" href="#method-of-lines" title="Permalink to this headline">#</a></h2>
@@ -881,86 +928,105 @@ end
 \]</div>
 <p>Note that the velocity is <span class="math notranslate nohighlight">\(2\pi\)</span>-periodic, which is required for periodic boundary conditions to work as intended.</p>
 <p>This function applies the midpoint/leapfrog method in time, with FFT-based spectral differentiation in space:</p>
+<section id="p6-variable-coefficient-wave-equation">
+<h3>p6: variable coefficient wave equation<a class="headerlink" href="#p6-variable-coefficient-wave-equation" title="Permalink to this headline">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Sugar</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">first</span><span class="p">(</span><span class="n">methods</span><span class="p">(</span><span class="n">p6</span><span class="p">)))</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">print</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>function p6(⍺ = 1.5)
-    # Grid, variable coefficient, and initial data:
-    N = 128;  h = 2π / N
-    x = h * (1:N)
-    t = 0;  Δt = ⍺ / N
-    c = @. 0.2 + sin(x - 1)^2
-    v = @. exp(-100 * (x - 1) .^ 2)
-    vold = @. exp(-100 * (x - 0.2Δt - 1) .^ 2)
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">FFTW</span><span class="w"></span>
 
-    # Time-stepping by leap frog formula:
-    tmax = 8
-    nsteps = ceil(Int, tmax / Δt)
-    Δt = tmax / nsteps
-    V = [v fill(NaN, N, nsteps)]
-    t = Δt*(0:nsteps)
-    for i in 1:nsteps
-        v̂ = rfft( V[:,i] )
-        ŵ = 1im * [0:N/2-1; 0] .* v̂
-        w = irfft(ŵ, N)
-        V[:,i+1] = vold - 2Δt * c .* w
-        vold = V[:,i]
-        if norm(V[:,i+1], Inf) &gt; 2.5
-            break 
-        end
-    end
+<span class="k">function</span><span class="w"> </span><span class="n">p6</span><span class="p">(</span><span class="n">⍺</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.57</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c"># Grid, variable coefficient, and initial data:</span><span class="w"></span>
+<span class="w">    </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">;</span><span class="w">  </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="n">Δt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">⍺</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="w"></span>
+<span class="w">    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="mf">0.2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">.^</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">vold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.2</span><span class="n">Δt</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">.^</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
 
-    fig = Figure()
-    Axis3(fig[1, 1],
-        xticks = MultiplesTicks(5, π, &quot;π&quot;),
-        xlabel=&quot;x&quot;, ylabel=&quot;t&quot;, zlabel=&quot;u&quot;, 
-        azimuth=4.5, elevation=1.44,
-    )
-    gap = max(1,round(Int, 0.15/Δt) - 1)
-    surface!(x, t, V, colorrange=(0,1))
-    [ lines!(x, fill(t[j], N), V[:, j].+.01, color=:ivory) for j in 1:gap:nsteps+1 ]
-    return fig
-end
+<span class="w">    </span><span class="c"># Time-stepping by leap frog formula:</span><span class="w"></span>
+<span class="w">    </span><span class="n">tmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"></span>
+<span class="w">    </span><span class="n">nsteps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ceil</span><span class="p">(</span><span class="kt">Int</span><span class="p">,</span><span class="w"> </span><span class="n">tmax</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Δt</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Δt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tmax</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">nsteps</span><span class="w"></span>
+<span class="w">    </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">v</span><span class="w"> </span><span class="n">fill</span><span class="p">(</span><span class="nb">NaN</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">nsteps</span><span class="p">)]</span><span class="w"></span>
+<span class="w">    </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Δt</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">nsteps</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">nsteps</span><span class="w"></span>
+<span class="w">        </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fderiv</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="p">])</span><span class="w"></span>
+<span class="w">        </span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vold</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="n">Δt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">w</span><span class="w"></span>
+<span class="w">        </span><span class="n">vold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">2.5</span><span class="w"></span>
+<span class="w">            </span><span class="n">nsteps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="w"> </span>
+<span class="w">        </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="n">nsteps</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="mi">1</span><span class="o">:</span><span class="n">nsteps</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p6</span><span class="p">(</span><span class="mf">1.57</span><span class="p">);</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">()</span><span class="w"></span>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="p">,</span><span class="w"> </span><span class="n">PyFormattedStrings</span><span class="w"></span>
+
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">Axis3</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="n">xticks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MultiplesTicks</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;π&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">zlabel</span><span class="o">=</span><span class="s">&quot;u&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">azimuth</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span><span class="w"> </span><span class="n">elevation</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">gap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">round</span><span class="p">(</span><span class="kt">Int</span><span class="p">,</span><span class="w"> </span><span class="mf">0.15</span><span class="o">/</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">surface!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="p">,</span><span class="w"> </span><span class="n">colorrange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="p">[</span><span class="w"> </span><span class="n">lines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">]</span><span class="o">.+</span><span class="mf">.01</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:ivory</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">gap</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/dft_10_0.png" src="../_images/dft_10_0.png" />
+<img alt="../_images/dft_8_0.png" src="../_images/dft_8_0.png" />
 </div>
 </div>
-<p>It’s worth considering the absolute stability restriction that is implied by the spectral differentiation. First, we note that the stability region of the leapfrog scheme is <span class="math notranslate nohighlight">\([-i,i]\)</span> on the imaginary axis.</p>
-<p>Multiplication by the DM in physical space is equivalent to operating in Fourier space, as described earlier. But in Fourier space, the operation is diagonal: <span class="math notranslate nohighlight">\(\hat{w}_k = g(k) \hat{v}_k\)</span>, where <span class="math notranslate nohighlight">\(g(k)=ik\)</span> except for zero at the sawtooth mode. What this shows is that the discretized Fourier modes actually diagonalize the DM (which turns out to be true for any circulant matrix), and the eigenvalues are the discrete values of <span class="math notranslate nohighlight">\(g(k)\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">480</span><span class="p">,</span><span class="mi">320</span><span class="p">))</span><span class="w"></span>
+<span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Observable</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="n">xticks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MultiplesTicks</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nb">π</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;π&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;u&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+<span class="n">lines!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nd">@lift</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="o">$</span><span class="n">index</span><span class="p">]))</span><span class="w"></span>
+<span class="n">record</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p6.mp4&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">4</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">    </span><span class="n">index</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">f</span><span class="s">&quot;t = {t[i]:.2f}&quot;</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><video autoplay controls><source src="p6.mp4" type="video/mp4"></video></p>
+<p>In the simulation above, you can see a small artifact that travels the wrong direction. The accuracy of this simulation is limited by the second-order time stepping, and even more by the need to estimate the fictitious value <span class="math notranslate nohighlight">\(u(x,-\Delta t)\)</span> that leap frog needs to get started. An automatic, self-starting IVP solver would do much better.</p>
+<!-- 
+It's worth considering the absolute stability restriction that is implied by the spectral differentiation. First, we note that the stability region of the leapfrog scheme is $[-i,i]$ on the imaginary axis. 
+
+Multiplication by the DM in physical space is equivalent to operating in Fourier space, as described earlier. But in Fourier space, the operation is diagonal: $\hat{w}_k = g(k) \hat{v}_k$, where $g(k)=ik$ except for zero at the sawtooth mode. What this shows is that the discretized Fourier modes actually diagonalize the DM (which turns out to be true for any circulant matrix), and the eigenvalues are the discrete values of $g(k)$:
+
+$$
 \lambda_k = ik, \qquad k=1-\tfrac{N}{2},\dots,\tfrac{N}{2}-1. 
-\]</div>
-<p>The tricky bit in this example is the pointwise multiplication of <span class="math notranslate nohighlight">\(\partial_x u\)</span> by <span class="math notranslate nohighlight">\(c(x)\)</span>, which corresponds to left-multiplication of <span class="math notranslate nohighlight">\(\bfD_x\)</span> by a diagonal matrix. It’s hard to say precisely what happens to the eigenvalues, but as an estimate, we should suppose that they are scaled by no more than the maximum value of <span class="math notranslate nohighlight">\(c\)</span>, which is <span class="math notranslate nohighlight">\(6/5\)</span>. The consequent stability restriction is</p>
-<div class="math notranslate nohighlight">
-\[
+$$ 
+
+The tricky bit in this example is the pointwise multiplication of $\partial_x u$ by $c(x)$, which corresponds to left-multiplication of $\bfD_x$ by a diagonal matrix. It's hard to say precisely what happens to the eigenvalues, but as an estimate, we should suppose that they are scaled by no more than the maximum value of $c$, which is $6/5$. The consequent stability restriction is
+
+$$
 \tfrac{6}{5} \tau \left(\tfrac{N}{2}-1 \right) \le 1,
-\]</div>
-<p>or roughly <span class="math notranslate nohighlight">\(\tau \le 5/3N\)</span>. This is a bit pessimistic; as shown in the next figure, the critical value appears to be closer to 1.9 than 1.67:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p6</span><span class="p">(</span><span class="mf">1.9</span><span class="p">)</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/dft_12_0.png" src="../_images/dft_12_0.png" />
-</div>
-</div>
+$$
+
+or roughly $\tau \le 5/3N$. This is a bit pessimistic; as shown in the next figure, the critical value appears to be closer to 1.9 than 1.67:
+
+```{code-cell} julia
+p6(1.9)
+``` 
+--></section>
 </section>
 </section>
 
@@ -1001,7 +1067,7 @@ end
     <a class='right-next' id="next-link" href="smoothness.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">6.4. </span>Smoothness effects</p>
+        <p class="prev-next-title"><span class="section-number">6.4. </span>Convergence rates</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
