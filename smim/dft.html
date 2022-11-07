@@ -51,7 +51,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfE": "\\mathbf{E}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -375,6 +375,16 @@ const thebe_selector_output = ".output, .cell_output"
    <li class="toctree-l2">
     <a class="reference internal" href="disk.html">
      6.12. Polar coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="integration.html">
+     6.13. Spectral integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="bc.html">
+     6.14. Boundary conditions
     </a>
    </li>
   </ul>
@@ -1005,28 +1015,8 @@ S'_N(x_j) = \begin{cases}
 </div>
 </div>
 <p><video autoplay controls><source src="p6.mp4" type="video/mp4"></video></p>
-<p>In the simulation above, you can see a small artifact that travels the wrong direction. The accuracy of this simulation is limited by the second-order time stepping, and even more by the need to estimate the fictitious value <span class="math notranslate nohighlight">\(u(x,-\Delta t)\)</span> that leap frog needs to get started. An automatic, self-starting IVP solver would do much better.</p>
-<!-- 
-It's worth considering the absolute stability restriction that is implied by the spectral differentiation. First, we note that the stability region of the leapfrog scheme is $[-i,i]$ on the imaginary axis. 
-
-Multiplication by the DM in physical space is equivalent to operating in Fourier space, as described earlier. But in Fourier space, the operation is diagonal: $\hat{w}_k = g(k) \hat{v}_k$, where $g(k)=ik$ except for zero at the sawtooth mode. What this shows is that the discretized Fourier modes actually diagonalize the DM (which turns out to be true for any circulant matrix), and the eigenvalues are the discrete values of $g(k)$:
-
-$$
-\lambda_k = ik, \qquad k=1-\tfrac{N}{2},\dots,\tfrac{N}{2}-1. 
-$$ 
-
-The tricky bit in this example is the pointwise multiplication of $\partial_x u$ by $c(x)$, which corresponds to left-multiplication of $\bfD_x$ by a diagonal matrix. It's hard to say precisely what happens to the eigenvalues, but as an estimate, we should suppose that they are scaled by no more than the maximum value of $c$, which is $6/5$. The consequent stability restriction is
-
-$$
-\tfrac{6}{5} \tau \left(\tfrac{N}{2}-1 \right) \le 1,
-$$
-
-or roughly $\tau \le 5/3N$. This is a bit pessimistic; as shown in the next figure, the critical value appears to be closer to 1.9 than 1.67:
-
-```{code-cell} julia
-p6(1.9)
-``` 
---></section>
+<p>In the simulation above, you can see a small artifact that travels in the wrong direction. The accuracy of this simulation is limited by the second-order time stepping, and even more by the need to estimate the fictitious value <span class="math notranslate nohighlight">\(u(x,-\Delta t)\)</span> that leap frog needs to get started. An automatic, self-starting IVP solver would do much better.</p>
+</section>
 </section>
 </section>
 

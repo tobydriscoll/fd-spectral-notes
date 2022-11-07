@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>6.13. Spectral integration &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfE": "\\mathbf{E}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.14. Boundary conditions" href="bc.html" />
+    <link rel="prev" title="6.12. Polar coordinates" href="disk.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tpbvp/overview.html">
+   2. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bootstrap.html">
+     2.5. Bootstrapping methods
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../elliptic/overview.html">
+   3. Elliptic PDE
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/tensorproduct.html">
+     3.1. Tensor-product grids
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/poisson.html">
+     3.2. Solving the Poisson equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/disk.html">
+     3.3. Discretizing the disk
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/iterative.html">
+     3.4. Iterative linear algebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/decomp.html">
+     3.5. Domain decomposition
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mol/overview.html">
+   4. Method of lines
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/ivp.html">
+     4.1. Multistep and RK methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/stability.html">
+     4.2. Absolute stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/semidiscretization.html">
+     4.3. Semidiscretization
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/theory.html">
+     4.4. Convergence theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/beyond.html">
+     4.5. Beyond the basics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/multidim.html">
+     4.6. Multiple space dimensions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection/overview.html">
+   5. Advection
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/cfl.html">
+     5.1. The CFL condition
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection_fourier.html">
+     5.2. von Neumann analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/groupvel.html">
+     5.3. Group velocity and dispersion
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/boundaries.html">
+     5.4. Boundaries and interfaces
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/systems.html">
+     5.5. Hyperbolic systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   6. Spectral methods
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="unbounded.html">
+     6.1. Unbounded finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sft.html">
+     6.2. Unbounded spectral
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="dft.html">
+     6.3. Periodic discrete functions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="smoothness.html">
+     6.4. Convergence rates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="barycentric.html">
+     6.5. Barycentric formula
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="potential.html">
+     6.6. Potential theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebdm.html">
+     6.7. Chebyshev differentiation matrix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebbvp.html">
+     6.8. Chebyshev for BVPs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="chebfft.html">
+     6.9. Chebyshev and the FFT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eigen.html">
+     6.10. Eigenvalues
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="timestability.html">
+     6.11. Time stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="disk.html">
+     6.12. Polar coordinates
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     6.13. Spectral integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="bc.html">
+     6.14. Boundary conditions
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/smim/integration.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/smim/integration.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/smim/integration.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#p30-spectral-integration-ode-style-compare-p12">
+   p30: spectral integration, ODE style (compare p12)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#clenshaw-curtis">
+   Clenshaw–Curtis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p30b-spectral-integration-clenshaw-curtis">
+     p30b: spectral integration, Clenshaw–Curtis
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gaussian-integration">
+   Gaussian integration
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p30c-spectral-integration-gauss">
+     p30c: spectral integration, Gauss
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#periodic-integrands">
+   Periodic integrands
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p31-gamma-function-via-complex-integral-trapezoid-rule">
+     p31 - gamma function via complex integral, trapezoid rule
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Spectral integration</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#p30-spectral-integration-ode-style-compare-p12">
+   p30: spectral integration, ODE style (compare p12)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#clenshaw-curtis">
+   Clenshaw–Curtis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p30b-spectral-integration-clenshaw-curtis">
+     p30b: spectral integration, Clenshaw–Curtis
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gaussian-integration">
+   Gaussian integration
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p30c-spectral-integration-gauss">
+     p30c: spectral integration, Gauss
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#periodic-integrands">
+   Periodic integrands
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#p31-gamma-function-via-complex-integral-trapezoid-rule">
+     p31 - gamma function via complex integral, trapezoid rule
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="spectral-integration">
+<h1><span class="section-number">6.13. </span>Spectral integration<a class="headerlink" href="#spectral-integration" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;smij-functions.jl&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>A simpler variation of solving ODEs is to perform definite integration. For example, we can find the value</p>
+<div class="math notranslate nohighlight">
+\[
+I = \int_{-1}^1 f(x)\, dx
+\]</div>
+<p>by solving the IVP</p>
+<div class="math notranslate nohighlight">
+\[
+u'=f, \quad -1 \le x \le 1, \quad u(-1)=0, 
+\]</div>
+<p>and set <span class="math notranslate nohighlight">\(I=u(1)\)</span>.</p>
+<section id="p30-spectral-integration-ode-style-compare-p12">
+<h2>p30: spectral integration, ODE style (compare p12)<a class="headerlink" href="#p30-spectral-integration-ode-style-compare-p12" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">SpecialFunctions</span><span class="p">,</span><span class="w"> </span><span class="n">LaTeXStrings</span><span class="w"></span>
+<span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">50</span><span class="w"></span>
+<span class="c"># Compute derivatives for various values of N:</span><span class="w"></span>
+<span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># uʹʹʹ in BV</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;|x|^3&quot;</span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># C-infinity</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)),</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="nb">π</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">erf</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)),</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;\exp(-x^{-2})&quot;</span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="c"># analytic in [-1,1]</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="nb">π</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;1/(1+x^2)&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="c"># polynomial </span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">/</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;x^{10}&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="p">]</span><span class="w"></span>
+
+<span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">title</span><span class="p">))</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">N</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cheb</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"> </span><span class="o">\</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">])</span><span class="w"></span>
+<span class="w">        </span><span class="n">E</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">I</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="p">(;</span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="w"></span>
+
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">yscale</span><span class="o">=</span><span class="n">log10</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">vec</span><span class="p">(</span><span class="n">ax</span><span class="p">),</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">title</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatterlines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">max</span><span class="o">.</span><span class="p">(</span><span class="n">eps</span><span class="p">(),</span><span class="n">r</span><span class="o">.</span><span class="n">E</span><span class="p">),</span><span class="w"> </span><span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">linkxaxes!</span><span class="p">(</span><span class="n">ax</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="n">linkyaxes!</span><span class="p">(</span><span class="n">ax</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;N&quot;</span><span class="w"></span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/integration_4_0.png" src="../_images/integration_4_0.png" />
+</div>
+</div>
+</section>
+<section id="clenshaw-curtis">
+<h2>Clenshaw–Curtis<a class="headerlink" href="#clenshaw-curtis" title="Permalink to this headline">#</a></h2>
+<p>Instead, we will return to and adapt the derivation of spectral collocation:</p>
+<ol class="simple">
+<li><p>Interpolate <span class="math notranslate nohighlight">\(f\)</span> by a polynomial <span class="math notranslate nohighlight">\(p\)</span> of degree at most <span class="math notranslate nohighlight">\(N\)</span> at <span class="math notranslate nohighlight">\(N+1\)</span> nodes.</p></li>
+<li><p>Use <span class="math notranslate nohighlight">\(I\approx \int_{-1}^1 p(x)\, dx\)</span>.</p></li>
+</ol>
+<p>This does not give quite the same result as solving the IVP above; there, we interpolate <span class="math notranslate nohighlight">\(u\)</span> on <span class="math notranslate nohighlight">\(N+1\)</span> points and therefore represent <span class="math notranslate nohighlight">\(u'=f\)</span> by a polynomial of degree less than <span class="math notranslate nohighlight">\(N\)</span>. Due to the linearity of polynomial interpolation, it yields a formula in the form</p>
+<div class="math notranslate nohighlight">
+\[
+I \approx \bfw^T \bff, 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\bff\)</span> is the vector of <span class="math notranslate nohighlight">\(N+1\)</span> values of <span class="math notranslate nohighlight">\(\bff\)</span>, and <span class="math notranslate nohighlight">\(\bfw\)</span> is a constant vector that, along with the interpolation nodes, characterizes the method.</p>
+<p>If we use Chebyshev nodes to interpolate <span class="math notranslate nohighlight">\(f\)</span>, we get <strong>Clenshaw–Curtis</strong> integration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">clencurt</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">j</span><span class="o">*</span><span class="nb">π</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">θ</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">iseven</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">N</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">div</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">            </span><span class="nd">@.</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">2</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="n">k</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">θ</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="n">k</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">end</span><span class="w"></span>
+<span class="w">        </span><span class="nd">@.</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">θ</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">N</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"></span>
+<span class="w">        </span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="o">^</span><span class="mi">2</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">div</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="nd">@.</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">2</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="n">k</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">θ</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">k</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@.</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="n">N</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="n">v</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="p30b-spectral-integration-clenshaw-curtis">
+<h3>p30b: spectral integration, Clenshaw–Curtis<a class="headerlink" href="#p30b-spectral-integration-clenshaw-curtis" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">title</span><span class="p">))</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">N</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clencurt</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">E</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">I</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="p">(;</span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">yscale</span><span class="o">=</span><span class="n">log10</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">vec</span><span class="p">(</span><span class="n">ax</span><span class="p">),</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">title</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatterlines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">max</span><span class="o">.</span><span class="p">(</span><span class="n">eps</span><span class="p">(),</span><span class="n">r</span><span class="o">.</span><span class="n">E</span><span class="p">),</span><span class="w"> </span><span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">linkxaxes!</span><span class="p">(</span><span class="n">ax</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="n">linkyaxes!</span><span class="p">(</span><span class="n">ax</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;N&quot;</span><span class="w"></span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/integration_9_0.png" src="../_images/integration_9_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="gaussian-integration">
+<h2>Gaussian integration<a class="headerlink" href="#gaussian-integration" title="Permalink to this headline">#</a></h2>
+<p>Somewhat surprisingly, we can do even better than the spectral convergence of Clenshaw–Curtis. By taking the nodes to be roots of Legendre polynomials rather than extreme points of Chebyshev polynomials, we get a <strong>Gaussian integration</strong> formula. As long as we don’t need hundreds of nodes, this is easy to accomplish in practice.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">gauss</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">β</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">.5</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="mi">1</span><span class="o">=&gt;</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="o">=&gt;</span><span class="n">β</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eigen</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="n">V</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="o">.^</span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Gaussian integration on <span class="math notranslate nohighlight">\(N+1\)</span> nodes is exact for integrands of degree up to <span class="math notranslate nohighlight">\(2N-1\)</span>, not just <span class="math notranslate nohighlight">\(N\)</span>.</p>
+<section id="p30c-spectral-integration-gauss">
+<h3>p30c: spectral integration, Gauss<a class="headerlink" href="#p30c-spectral-integration-gauss" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">title</span><span class="p">))</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">N</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gauss</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">E</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">abs</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">I</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="n">push!</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="p">(;</span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">yscale</span><span class="o">=</span><span class="n">log10</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">vec</span><span class="p">(</span><span class="n">ax</span><span class="p">),</span><span class="n">results</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="o">.</span><span class="n">title</span><span class="w"></span>
+<span class="w">    </span><span class="n">scatterlines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">max</span><span class="o">.</span><span class="p">(</span><span class="n">eps</span><span class="p">(),</span><span class="n">r</span><span class="o">.</span><span class="n">E</span><span class="p">),</span><span class="w"> </span><span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="n">linkxaxes!</span><span class="p">(</span><span class="n">ax</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="n">linkyaxes!</span><span class="p">(</span><span class="n">ax</span><span class="o">...</span><span class="p">)</span><span class="w"></span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">L</span><span class="s">&quot;N&quot;</span><span class="w"></span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/integration_14_0.png" src="../_images/integration_14_0.png" />
+</div>
+</div>
+<p>Gaussian integration is important in applications that rely heavily on integrals, notably Galerkin methods based on weak formulations of PDEs. For collocation, though, Chebyshev points perform as well and are more convenient, particularly for their connection to the FFT.</p>
+</section>
+</section>
+<section id="periodic-integrands">
+<h2>Periodic integrands<a class="headerlink" href="#periodic-integrands" title="Permalink to this headline">#</a></h2>
+<p>If <span class="math notranslate nohighlight">\(f\)</span> is <span class="math notranslate nohighlight">\(2\pi\)</span>-periodic, then we can represent it as a Fourier series, and the integral over one period cancels out all but the constant term,</p>
+<div class="math notranslate nohighlight">
+\[
+I \approx 2\pi \left( \frac{1}{2\pi} \hat{f}_0 \right) = h \sum_{j=1}^N f_j. 
+\]</div>
+<p>This is the same value we get if we apply the standard (composite) trapezoid formula to <span class="math notranslate nohighlight">\(f\)</span> over <span class="math notranslate nohighlight">\([0,2\pi]\)</span>, keeping in mind that <span class="math notranslate nohighlight">\(f_0=f_N\)</span>. Thus, the trapezoid formula is spectrally accurate on smooth, periodic integrands!</p>
+<p>For example, the perimeter of an ellipse with axes 2 and 1 can be computed as an arc-length integral,</p>
+<div class="math notranslate nohighlight">
+\[
+\int_0^{2\pi} \sqrt{ \cos^2 \theta + \tfrac{1}{4}\sin^2\theta }\, d\theta. 
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">perim</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="o">/</span><span class="n">N</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">θ</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">2</span><span class="nb">π</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="p">[</span><span class="w"> </span><span class="n">perim</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">19</span><span class="o">:</span><span class="mi">2</span><span class="o">:</span><span class="mi">29</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6-element Vector{Float64}:
+ 4.84422411030053
+ 4.844224110276384
+ 4.844224110274085
+ 4.844224110273863
+ 4.844224110273839
+ 4.844224110273838
+</pre></div>
+</div>
+</div>
+</div>
+<p>One application is integrals over smooth, closed contours of the complex plane. For example, the gamma function satisfies</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{\Gamma(z)} \approx \frac{1}{2\pi} \int_0^{2\pi} e^t t^{-z} (t-c) \, d\theta,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(t = c + re^{i\theta}\)</span> is chosen to intersect the real axis far from the origin.</p>
+<section id="p31-gamma-function-via-complex-integral-trapezoid-rule">
+<h3>p31 - gamma function via complex integral, trapezoid rule<a class="headerlink" href="#p31-gamma-function-via-complex-integral-trapezoid-rule" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">70</span><span class="w"></span>
+<span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="w"></span>
+<span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="o">-</span><span class="nb">π</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="nb">π</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p">)</span><span class="w"></span>
+<span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"></span>
+<span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span><span class="o">*</span><span class="n">cis</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span><span class="w"></span>
+<span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">t</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="nb">im</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="n">Γ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">./</span><span class="w"> </span><span class="n">G</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following plot uses contours equally spaced in <span class="math notranslate nohighlight">\(\log |\Gamma(z)|\)</span> and a cyclic color map to indicate the argument of <span class="math notranslate nohighlight">\(\Gamma(z)\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Makie</span><span class="o">.</span><span class="n">Colors</span><span class="w"></span>
+
+<span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">aspect</span><span class="o">=</span><span class="n">DataAspect</span><span class="p">(),</span><span class="w"> </span>
+<span class="w">    </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;Re(z)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;Im(z)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Γ(z)&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="n">heatmap!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">angle</span><span class="o">.</span><span class="p">(</span><span class="n">Γ</span><span class="p">),</span><span class="n">colormap</span><span class="o">=</span><span class="ss">:cyclic_mrybm_35_75_c68_n256</span><span class="p">,</span><span class="n">interpolate</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span><span class="w"></span>
+<span class="n">blacks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gray</span><span class="o">.</span><span class="p">(</span><span class="n">range</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">))</span><span class="w"></span>
+<span class="n">contour!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">log10</span><span class="o">.</span><span class="p">(</span><span class="n">abs</span><span class="o">.</span><span class="p">(</span><span class="n">Γ</span><span class="p">)),</span><span class="w"> </span><span class="n">levels</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="n">blacks</span><span class="p">,</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">fig</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/integration_20_0.png" src="../_images/integration_20_0.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./smim"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="disk.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">6.12. </span>Polar coordinates</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="bc.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6.14. </span>Boundary conditions</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

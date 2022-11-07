@@ -126,6 +126,66 @@ $$
 
 This is more restrictive than the FD case by a factor of $\pi$, but the restriction is due entirely to a more accurate representation of the derivative operator on the grid. 
 
+Revisiting the [variable-speed equation](dft) with $c(x) = 0.2 + \sin^2(x-1)$, the eigenvalues of $\operatorname{diagm}(c(\bfx)) \bfD$ are not exactly values of $c$ times the eigenvalues of $\bfD$, but we can estimate that they will be bounded by a scaling of $\max |c(x)| = 6/5$. This suggests a restriction
+
+$$
+\tau \le \frac{5}{3N} = 1.67 N^{-1}. 
+$$
+
+This proves to be a bit pessimistic; in the following simulation, the instability becomes evident when $\tau N \approx 1.9$. 
+
+```{code-cell} julia
+:tags: [hide-input]
+using FFTW
+
+function p6(⍺ = 1.57)
+    # Grid, variable coefficient, and initial data:
+    N = 128;  h = 2π / N
+    x = h * (1:N)
+    t = 0;  Δt = ⍺ / N
+    c = @. 0.2 + sin(x - 1)^2
+    v = @. exp(-100 * (x - 1) .^ 2)
+    vold = @. exp(-100 * (x - 0.2Δt - 1) .^ 2)
+
+    # Time-stepping by leap frog formula:
+    tmax = 8
+    nsteps = ceil(Int, tmax / Δt)
+    Δt = tmax / nsteps
+    V = [v fill(NaN, N, nsteps)]
+    t = Δt*(0:nsteps)
+    for i in 1:nsteps
+        w = fderiv(V[:,i])
+        V[:,i+1] = vold - 2Δt * c .* w
+        vold = V[:,i]
+        if norm(V[:,i+1], Inf) > 2.5
+            nsteps = i
+            break 
+        end
+    end
+    return x,t[1:nsteps+1],V[:,1:nsteps+1]
+end
+
+x,t,V = p6(1.9);
+
+using CairoMakie, PyFormattedStrings
+
+fig = Figure(size=(480,320))
+index = Observable(1)
+ax = Axis(fig[1, 1],
+    xticks = MultiplesTicks(5, π, "π"),
+    xlabel="x", ylabel="u"
+)
+lines!(x, @lift(V[:,$index]))
+record(fig, "p6unstable.mp4", 1:4:size(V,2)+1) do i
+    index[] = i
+    ax.title = f"t = {t[i]:.2f}"
+end;
+```
+
+<video autoplay controls><source src="p6unstable.mp4" type="video/mp4"></video>
+
+Observe above that the failure becomes visible first in the sawtooth mode, which lies at the edges of the spectrum.
+
 ### Second derivative
 
 Now consider the wave equation, $\partial_{tt} u = \partial_{xx} u$ on a bounded domain with homogeneous Dirichlet conditions. If $\bfD_{xx}$ is the second-derivative matrix on a Chebyshev grid, then we can impose the boundary conditions by deleting the endpoint values, resulting in
@@ -201,10 +261,13 @@ $$
 
 If this criterion is not met, the most affected modes are the outliers which, according to the output above, are small away from the boundaries.
 
+Here is a reprise of [p19](chebfft) using $\tau = 9.2/N^2$.
+
 
 ### p19u: UNSTABLE wave eq.
 
 ```{code-cell}
+:tags: [hide-input]
 # Time-stepping by leap frog formula:
 N = 80
 _, x = cheb(N)
@@ -230,10 +293,6 @@ end
 
 t = t[1:nsteps]
 V = V[:,1:nsteps];
-```
-
-```{code-cell}
-using PyFormattedStrings
 
 fig = Figure(size=(480,360))
 index = Observable(1)
@@ -248,11 +307,12 @@ end;
 
 <video autoplay controls><source src="p19u.mp4" type="video/mp4"></video>
 
-In two dimensions, one can show that $\lambda$ is twice as large, which means that $\tau$ must be $\sqrt{2}$ times smaller, or $\tau \le 6.5/N^2$. 
+In two dimensions, one can show that $\lambda$ is twice as large, which means that $\tau$ must be $\sqrt{2}$ times smaller, or $\tau \le 6.5/N^2$. Here is a repeat of p20 using $\tau = 6.6/N^2$.
 
 ### p20u: UNSTABLE wave eq. in 2D
 
 ```{code-cell}
+:tags: [hide-input]
 # Grid and initial data:
 N = 32
 x = y = cheb(N)[2]
@@ -289,9 +349,7 @@ for n in 1:nsteps
 end
 
 V = V[:,:,1:nsteps];
-```
 
-```{code-cell}
 fig = Figure(size=(480,320))
 index = Observable(1)
 ax = Axis3(fig[1, 1], xlabel="x", ylabel="y")
