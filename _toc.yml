@@ -54,6 +54,7 @@ chapters:
     - file: smim/eigen
     - file: smim/timestability
     - file: smim/disk
+    - file: smim/integration
+    - file: smim/bc
+
     
-
-
