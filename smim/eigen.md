@@ -32,7 +32,7 @@ where $q$ is a real parameter. The behavior of the eigenvalues as a function of 
 Using Fourier differentiation, the natural discretization of the operator on the left-hand side is
 
 $$
-\bfD_{xx} + 2q \operatorname{diagm}(\cos(2x_1),\ldots,\cos(2x_N)). 
+-\bfD_{xx} + 2q \operatorname{diagm}(\cos(2x_1),\ldots,\cos(2x_N)). 
 $$
 
 Everything is straightforward.
@@ -73,7 +73,9 @@ $$
 The obvious discretization of the ODE is
 
 $$
-\bfD_{xx} \bfu = \lambda \operatorname{diagm}(x_0,\ldots,x_N) \bfu. 
+\bfD_{xx} \bfu = \lambda \begin{bmatrix}
+  x_0 & & & \\ & x_1 & & \\ & & \ddots & \\ & & & x_N
+\end{bmatrix} \bfu. 
 $$
 
 Given the boundary conditions, we should lop off the first and last row and column from the above. What's left is a **generalized eigenproblem** of the form $\bfA \bfu = \lambda \mathbf{M} \bfu$. If $\mathbf{M}$ is invertible, we can just look for ordinary eigenvalues of $\mathbf{M}^{-1}\bfA$, but since $0$ might be a grid point, it's best to solve it as posed above.
@@ -120,9 +122,9 @@ Suppose that $\bfA$ is the $(N+1)\times(N+1)$ discretization of an ODE over the 
 $$
 \begin{bmatrix}
   \bfC \bfA \\ \bfB
-\end{bmatrix} \bfu = 
+\end{bmatrix} \bfu = \lambda 
 \lambda \begin{bmatrix}
-  \bfC \bfI \\ \bfB
+  \bfC \\ \bfzero
 \end{bmatrix} \bfu = \mathbf{M} \bfu, 
 $$
 

@@ -281,7 +281,7 @@ record(fig, "p19.mp4", 1:10:size(V,2)+1) do i
 end;
 ```
 
-<video autoplay controls><source src="p19.mp4" type="video/mp4"></video>
+<video autoplay controls width=480><source src="p19.mp4" type="video/mp4"></video>
 
 
 ### p20: 2nd-order wave eq. in 2D via FFT (compare p19)
@@ -356,4 +356,4 @@ record(fig, "p20.mp4", 1:size(V,3)) do i
 end;
 ```
 
-<video autoplay controls><source src="p20.mp4" type="video/mp4"></video>
+<video autoplay width=480 controls><source src="p20.mp4" type="video/mp4"></video>

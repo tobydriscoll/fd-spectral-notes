@@ -21,6 +21,22 @@ function triginterp(v)
     end
 end
 
+# real case
+function fderiv(v::Vector{T}) where T <: Real
+    N = length(v)
+    v̂ = rfft(v)
+    ŵ = 1im * [0:N/2-1; 0] .* v̂
+    return irfft(ŵ, N) 
+end
+
+# general case (2x slower)
+function fderiv(v)
+    N = length(v)
+    v̂ = fft(v)
+    ŵ = 1im * [0:N/2-1; 0; -N/2+1:-1] .* v̂
+    return ifft(ŵ)
+end
+
 """
     polyinterp(x, v, w)
     polyinterp(x, v)
@@ -138,25 +154,25 @@ end
 Nodes and weights for Clenshaw-Curtis quadrature
 """
 function clencurt(N)
-    θ = [ pi*i/N for i=0:N ];
-    x = cos.(θ);
-    w = zeros(N+1);
-    ii = 2:N;
-    v = ones(N-1);
-    if mod(N,2)==0
-        w[1] = w[N+1] = 1/(N^2-1);
-        for k = 1:N/2-1
-            v = v - 2*cos.(2*k*θ[ii]) / (4*k^2-1);
+    θ = [ j*π / N for j in 0:N ]
+    x = cos.(θ)
+    w = zeros(N+1)
+    θ = θ[2:N]
+    v = ones(N-1)
+    if iseven(N)
+        w[1] = w[N+1] = 1 / (N^2 - 1)
+        for k in 1:div(N,2)-1
+            @. v -= 2cos(2k * θ) / (4k^2 - 1)
         end
-        v = v - cos.(N*θ[ii]) / (N^2-1);
+        @. v -= cos(N*θ) / (N^2 - 1)
     else
-        w[1] = w[N+1] = 1/N^2;
-        for k = 1:(N-1)/2
-            v = v - 2*cos.(2*k*θ[ii]) / (4*k^2-1);
+        w[1] = w[N+1] = 1 / N^2
+        for k in 1:div(N-1,2)
+            @. v -= 2cos(2k * θ) / (4*k^2 - 1)
         end
     end
-    w[ii] = 2*v/N;
-    return x,w
+    @. w[2:N] = 2v / N
+    return x, w
 end
 
 """
@@ -165,10 +181,9 @@ end
 Nodes and weights for Gauss quadrature
 """
 function gauss(N)
-    β = [ .5/sqrt(1-1/(2*i)^2) for i = 1:N-1 ];
-    T = diagm(1=>β) + diagm(-1=>β);
-    x,V = eigen(T);
-    i = sortperm(x);
-    w = 2*V[1,i].^2;
-    return x[i],w
+    β = [ .5 / sqrt(1 - 1/(2*i)^2) for i in 1:N-1 ]
+    T = diagm(1=>β, -1=>β)
+    x, V = eigen(T)
+    w = 2V[1,:].^2
+    return x, w
 end

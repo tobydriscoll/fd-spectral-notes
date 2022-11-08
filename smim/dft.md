@@ -310,28 +310,7 @@ record(fig, "p6.mp4", 1:4:size(V,2)+1) do i
 end;
 ```
 
-<video autoplay controls><source src="p6.mp4" type="video/mp4"></video>
+<video autoplay width=480 controls><source src="p6.mp4" type="video/mp4"></video>
 
-In the simulation above, you can see a small artifact that travels the wrong direction. The accuracy of this simulation is limited by the second-order time stepping, and even more by the need to estimate the fictitious value $u(x,-\Delta t)$ that leap frog needs to get started. An automatic, self-starting IVP solver would do much better.
+In the simulation above, you can see a small artifact that travels in the wrong direction. The accuracy of this simulation is limited by the second-order time stepping, and even more by the need to estimate the fictitious value $u(x,-\Delta t)$ that leap frog needs to get started. An automatic, self-starting IVP solver would do much better.
 
-<!-- 
-It's worth considering the absolute stability restriction that is implied by the spectral differentiation. First, we note that the stability region of the leapfrog scheme is $[-i,i]$ on the imaginary axis. 
-
-Multiplication by the DM in physical space is equivalent to operating in Fourier space, as described earlier. But in Fourier space, the operation is diagonal: $\hat{w}_k = g(k) \hat{v}_k$, where $g(k)=ik$ except for zero at the sawtooth mode. What this shows is that the discretized Fourier modes actually diagonalize the DM (which turns out to be true for any circulant matrix), and the eigenvalues are the discrete values of $g(k)$:
-
-$$
-\lambda_k = ik, \qquad k=1-\tfrac{N}{2},\dots,\tfrac{N}{2}-1. 
-$$ 
-
-The tricky bit in this example is the pointwise multiplication of $\partial_x u$ by $c(x)$, which corresponds to left-multiplication of $\bfD_x$ by a diagonal matrix. It's hard to say precisely what happens to the eigenvalues, but as an estimate, we should suppose that they are scaled by no more than the maximum value of $c$, which is $6/5$. The consequent stability restriction is
-
-$$
-\tfrac{6}{5} \tau \left(\tfrac{N}{2}-1 \right) \le 1,
-$$
-
-or roughly $\tau \le 5/3N$. This is a bit pessimistic; as shown in the next figure, the critical value appears to be closer to 1.9 than 1.67:
-
-```{code-cell} julia
-p6(1.9)
-``` 
--->
