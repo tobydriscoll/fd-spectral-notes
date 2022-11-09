@@ -96,6 +96,7 @@ sphinx:
           "inprod" : ["\\langle #1,#2 \\rangle",2]
           "pr" : ["^{(#1)}",1]
           "diag": ["\\operatorname{diag}"]
+          "diagm": ["\\operatorname{diagm}"]
           "sign": ["\\operatorname{sign}"]
           "mtx": ["\\operatorname{mtx}"]
           "dist": ["\\operatorname{dist}"]

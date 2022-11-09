@@ -56,5 +56,6 @@ chapters:
     - file: smim/disk
     - file: smim/integration
     - file: smim/bc
+    - file: smim/uxxxx
 
     
