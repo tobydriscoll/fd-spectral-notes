@@ -128,6 +128,42 @@ function chebfft(v)
     return w
 end
 
+function chebfft1(N)
+    # Simple, not optimal. If v is complex, delete "real" commands.
+    x = [ cos(π*k/N) for k in 0:N ]
+    DCT = plan_rfft([x; x[N:-1:2]])
+    IDST = plan_irfft(complex(x), 2N)
+    return function(v)
+        V = [v; v[N:-1:2]]              # transform x -> theta
+        U = real(DCT*V)
+        W = IDST*(1im*[0:N-1; 0] .* U)
+        w = zeros(N+1)
+        @. w[2:N] = -W[2:N]/sqrt(1-x[2:N]^2)    # transform theta -> x
+        w[1] = sum( n^2 * U[n+1] for n in 0:N-1 )/N + 0.5N*U[N+1];
+        w[N+1] = sum( (-1)^(n+1) * n^2 * U[n+1] for n in 0:N-1 )/N + 0.5N*(-1)^(N+1)*U[N+1];
+    return w
+    end
+end
+
+function chebfft2(N)
+    x = [ cos(π*k/N) for k in 0:N ]
+    DCT = FFTW.plan_r2r(x, FFTW.REDFT00)
+    IDST = FFTW.plan_r2r(x[2:N], FFTW.RODFT00)
+    n = [0:N-1;0] 
+    return function(v)
+        a = DCT*v / N    # Cheb series cofficients 
+        a[N+1] *= 0.5
+        b = @. -(1:N-1) * a[2:N]  # deriv sine series coefficients (leaving out zeros)
+        W = IDST*b / 2
+        w = similar(x)
+        @. w[2:N] = -W / sqrt(1-x[2:N]^2)    # transform theta -> x
+        odds, evens = sum(n^2 * a[n+1] for n in 1:2:N ), sum(n^2 * a[n+1] for n in 2:2:N ) 
+        w[1] = odds + evens
+        w[N+1] = odds - evens
+        return w
+    end
+end
+
 
 """
     chebdct(v)

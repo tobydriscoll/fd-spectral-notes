@@ -6,7 +6,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.0
 kernelspec:
   display_name: Julia 1.8.2
   language: julia
@@ -96,7 +96,6 @@ when the three variables are related as we have set out. In the limit $N\to \inf
 We are interested in using the connections when all the versions of $p$ interpolate a given grid function. In particular, if $p$ interpolates a grid function defined at the Chebyshev points in $x$, then $\tilde{p}(\theta)$ interpolates a grid function around the unit circle, where each of the interior points defines two values:
 
 ```{code-cell}
-:tags: [hide-input]
 using LaTeXStrings
 q = π*(0:800)/400
 fig = Figure(resolution=(340,340))
@@ -328,13 +327,13 @@ end
 ```
 
 ```{code-cell}
-inc = div(nsteps,3)
 fig = Figure()
 ax = [ Axis3(fig[j,i], zticks=[0,0.5,1]) for i in 1:2, j in 1:2 ]
+inc = div(nsteps,3)
 for (i,n) in enumerate(1:inc:nsteps+1) 
-    surface!(ax[i],xx,yy,V[:,:,n])
+    surface!(ax[i], xx, yy, V[:,:,n], colormap=:blues, colorrange=[-0.3,1.0])
     ax[i].title = f"t = {t[n]:.3f}"
-    limits!(ax[i],-1,1,-1,1,-0.3,1)
+    limits!(ax[i], -1, 1, -1, 1, -0.3, 1)
     ax[i].elevation = π/5
 end
 fig
@@ -343,13 +342,9 @@ fig
 ```{code-cell}
 fig = Figure(size=(480,320))
 index = Observable(1)
-# ax = Axis(fig[1, 1], xlabel="x", ylabel="y", aspect=DataAspect())
-ax = Axis3(fig[1, 1], xlabel="x", ylabel="y", azimuth=-π/2, elevation=π/2)
-# co = contourf!(ax,xx, yy, @lift(V[:,:,$index]), 
-#     levels=range(-0.3,1,24),
-#     colormap=:bluesreds )
-co = surface!(xx, yy, @lift(V[:,:,$index]), 
-        colormap=:bluesreds, colorrange=[-0.8,0.8] )
+ax = Axis(fig[1, 1], xlabel="x", ylabel="y", aspect=DataAspect())
+co = heatmap!(xx, yy, @lift(V[:,:,$index]), 
+        interpolate=true, colormap=:bluesreds, colorrange=[-0.8,0.8] )
 record(fig, "p20.mp4", 1:size(V,3)) do i
     index[] = i
     ax.title = f"t = {t[i]:.2f}"
