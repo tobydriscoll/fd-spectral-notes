@@ -310,7 +310,7 @@ record(fig, "p6.mp4", 1:4:size(V,2)+1) do i
 end;
 ```
 
-<video autoplay controls><source src="p6.mp4" type="video/mp4"></video>
+<video autoplay width=480 controls><source src="p6.mp4" type="video/mp4"></video>
 
 In the simulation above, you can see a small artifact that travels in the wrong direction. The accuracy of this simulation is limited by the second-order time stepping, and even more by the need to estimate the fictitious value $u(x,-\Delta t)$ that leap frog needs to get started. An automatic, self-starting IVP solver would do much better.
 

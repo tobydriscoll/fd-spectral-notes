@@ -182,7 +182,7 @@ record(fig, "p6unstable.mp4", 1:4:size(V,2)+1) do i
 end;
 ```
 
-<video autoplay controls><source src="p6unstable.mp4" type="video/mp4"></video>
+<video autoplay width=480 controls><source src="p6unstable.mp4" type="video/mp4"></video>
 
 Observe above that the failure becomes visible first in the sawtooth mode, which lies at the edges of the spectrum.
 
@@ -305,7 +305,7 @@ record(fig, "p19u.mp4", 1:6:size(V,2)) do i
 end;
 ```
 
-<video autoplay controls><source src="p19u.mp4" type="video/mp4"></video>
+<video autoplay width=480 controls><source src="p19u.mp4" type="video/mp4"></video>
 
 In two dimensions, one can show that $\lambda$ is twice as large, which means that $\tau$ must be $\sqrt{2}$ times smaller, or $\tau \le 6.5/N^2$. Here is a repeat of p20 using $\tau = 6.6/N^2$.
 
@@ -362,7 +362,7 @@ record(fig, "p20u.mp4", 1:nsteps) do i
 end;
 ```
 
-<video autoplay controls><source src="p20u.mp4" type="video/mp4"></video>
+<video autoplay width=480 controls><source src="p20u.mp4" type="video/mp4"></video>
 
 ## Integrating factor
 
@@ -470,7 +470,7 @@ record(fig, "p27.mp4", 1:6:size(U,2)) do i
 end;
 ```
 
-<video autoplay controls><source src="p27.mp4" type="video/mp4"></video>
+<video autoplay width=480 controls><source src="p27.mp4" type="video/mp4"></video>
 
 
 Note from the results above that the solitons pass through each other unchanged in shape, but phase-shifted in spacetime.

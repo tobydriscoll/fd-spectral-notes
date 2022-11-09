@@ -78,10 +78,6 @@ fig
 ```
 
 ```{code-cell}
-isreal(U)
-```
-
-```{code-cell}
 
 ```
 

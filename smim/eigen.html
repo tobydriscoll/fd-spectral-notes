@@ -51,7 +51,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfE": "\\mathbf{E}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfE": "\\mathbf{E}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "diagm": ["\\operatorname{diagm}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -387,6 +387,11 @@ const thebe_selector_output = ".output, .cell_output"
      6.14. Boundary conditions
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="uxxxx.html">
+     6.16. Fourth-order PDEs
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -677,7 +682,7 @@ title="Print to PDF"
 <p>Using Fourier differentiation, the natural discretization of the operator on the left-hand side is</p>
 <div class="math notranslate nohighlight">
 \[
-\bfD_{xx} + 2q \operatorname{diagm}(\cos(2x_1),\ldots,\cos(2x_N)). 
+-\bfD_{xx} + 2q \operatorname{diagm}(\cos(2x_1),\ldots,\cos(2x_N)). 
 \]</div>
 <p>Everything is straightforward.</p>
 <section id="p21-eigenvalues-of-mathieu-operator">
@@ -724,9 +729,11 @@ title="Print to PDF"
 \]</div>
 <p>The obvious discretization of the ODE is</p>
 <div class="math notranslate nohighlight">
-\[
-\bfD_{xx} \bfu = \lambda \operatorname{diagm}(x_0,\ldots,x_N) \bfu. 
-\]</div>
+\[\begin{split}
+\bfD_{xx} \bfu = \lambda \begin{bmatrix}
+  x_0 &amp; &amp; &amp; \\ &amp; x_1 &amp; &amp; \\ &amp; &amp; \ddots &amp; \\ &amp; &amp; &amp; x_N
+\end{bmatrix} \bfu. 
+\end{split}\]</div>
 <p>Given the boundary conditions, we should lop off the first and last row and column from the above. What’s left is a <strong>generalized eigenproblem</strong> of the form <span class="math notranslate nohighlight">\(\bfA \bfu = \lambda \mathbf{M} \bfu\)</span>. If <span class="math notranslate nohighlight">\(\mathbf{M}\)</span> is invertible, we can just look for ordinary eigenvalues of <span class="math notranslate nohighlight">\(\mathbf{M}^{-1}\bfA\)</span>, but since <span class="math notranslate nohighlight">\(0\)</span> might be a grid point, it’s best to solve it as posed above.</p>
 <section id="p22-5th-eigenvector-of-airy-equation">
 <h3>p22: 5th eigenvector of Airy equation<a class="headerlink" href="#p22-5th-eigenvector-of-airy-equation" title="Permalink to this headline">#</a></h3>
@@ -780,9 +787,9 @@ title="Print to PDF"
 \[\begin{split}
 \begin{bmatrix}
   \bfC \bfA \\ \bfB
-\end{bmatrix} \bfu = 
+\end{bmatrix} \bfu = \lambda 
 \lambda \begin{bmatrix}
-  \bfC \bfI \\ \bfB
+  \bfC \\ \bfzero
 \end{bmatrix} \bfu = \mathbf{M} \bfu, 
 \end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\bfC\)</span> is the <span class="math notranslate nohighlight">\((N-1)\times (N+1)\)</span> matrix that chops off the first and last rows. We use this below to solve the eigenvalue problem</p>
