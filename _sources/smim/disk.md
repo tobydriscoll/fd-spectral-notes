@@ -6,7 +6,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.0
 kernelspec:
   display_name: Julia 1.8.2
   language: julia
@@ -16,7 +16,7 @@ kernelspec:
 # Polar coordinates
 
 ```{code-cell}
-include("smij-functions.jl");
+include("/Users/driscoll/817/notes/smim/smij-functions.jl");
 ```
 
 We already discussed how to discretize polar coordinates using finite differences. Trefethen chooses to use $r>0$ and $\theta\in[0,2π]$, while we used $-1<r<1$ and $\theta\in[0,\pi]$, and we have $r$ varying down rows, while he puts $r$ varying along columns. The resulting details are different, but similar.
@@ -75,10 +75,6 @@ end
 hidespines!.(ax)
 hidedecorations!.(ax)
 fig
-```
-
-```{code-cell}
-
 ```
 
 Or we can solve boundary-value problems. To avoid a crude-looking plot that belies the true underlying accuracy, we can interpolate from the solution grid to a finer one. This entails trig interpolation along the rows, where the row at $r$ is continued by the row at $-r$ in order to create a periodic function of $\theta$, along with ordinary Chebyshev interpolation along the columns. 

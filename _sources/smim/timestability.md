@@ -6,7 +6,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.0
 kernelspec:
   display_name: Julia 1.8.2
   language: julia
@@ -16,7 +16,7 @@ kernelspec:
 # Time stability
 
 ```{code-cell}
-include("smij-functions.jl");
+include("/Users/driscoll/817/notes/smim/smij-functions.jl");
 ```
 
 ## Stability regions
@@ -132,10 +132,9 @@ $$
 \tau \le \frac{5}{3N} = 1.67 N^{-1}. 
 $$
 
-This proves to be a bit pessimistic; in the following simulation, the instability becomes evident when $\tau N \approx 1.9$. 
+This proves to be a bit pessimistic; in the following simulation, the instability becomes evident when $\tau N \approx 1.9$.
 
-```{code-cell} julia
-:tags: [hide-input]
+```{code-cell}
 using FFTW
 
 function p6(⍺ = 1.57)
@@ -191,7 +190,7 @@ Observe above that the failure becomes visible first in the sawtooth mode, which
 Now consider the wave equation, $\partial_{tt} u = \partial_{xx} u$ on a bounded domain with homogeneous Dirichlet conditions. If $\bfD_{xx}$ is the second-derivative matrix on a Chebyshev grid, then we can impose the boundary conditions by deleting the endpoint values, resulting in
 
 $$
-\partial_t \bfu = \bfC^T \bfD_{xx} \bfC \bfu,
+\partial_{tt} \bfC^T \bfu = \bfC^T \bfD_{xx} \bfC (\bfC^T \bfu),
 $$
 
 where $\bfC$ is the $(N+1)\times (N-1)$ matrix that chops off the first and last columns. Hence the eigenvalues of $\bfC^T \bfD_{xx} \bfC$ determine the stability restriction. They turn out to be negative and real.
@@ -267,7 +266,6 @@ Here is a reprise of [p19](chebfft) using $\tau = 9.2/N^2$.
 ### p19u: UNSTABLE wave eq.
 
 ```{code-cell}
-:tags: [hide-input]
 # Time-stepping by leap frog formula:
 N = 80
 _, x = cheb(N)
@@ -312,7 +310,6 @@ In two dimensions, one can show that $\lambda$ is twice as large, which means th
 ### p20u: UNSTABLE wave eq. in 2D
 
 ```{code-cell}
-:tags: [hide-input]
 # Grid and initial data:
 N = 32
 x = y = cheb(N)[2]
@@ -475,4 +472,4 @@ end;
 
 Note from the results above that the solitons pass through each other unchanged in shape, but phase-shifted in spacetime.
 
-The integrating factor trick is easy but not always the best choice among hybrid *implicit--explicit* solvers. 
+The integrating factor trick is easy but not always the best choice among hybrid *implicit--explicit* solvers.

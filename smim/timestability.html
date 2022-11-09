@@ -914,7 +914,7 @@ title="Print to PDF"
 <p>Now consider the wave equation, <span class="math notranslate nohighlight">\(\partial_{tt} u = \partial_{xx} u\)</span> on a bounded domain with homogeneous Dirichlet conditions. If <span class="math notranslate nohighlight">\(\bfD_{xx}\)</span> is the second-derivative matrix on a Chebyshev grid, then we can impose the boundary conditions by deleting the endpoint values, resulting in</p>
 <div class="math notranslate nohighlight">
 \[
-\partial_t \bfu = \bfC^T \bfD_{xx} \bfC \bfu,
+\partial_{tt} \bfC^T \bfu = \bfC^T \bfD_{xx} \bfC (\bfC^T \bfu),
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(\bfC\)</span> is the <span class="math notranslate nohighlight">\((N+1)\times (N-1)\)</span> matrix that chops off the first and last columns. Hence the eigenvalues of <span class="math notranslate nohighlight">\(\bfC^T \bfD_{xx} \bfC\)</span> determine the stability restriction. They turn out to be negative and real.</p>
 </section>
