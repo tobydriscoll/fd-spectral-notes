@@ -191,7 +191,7 @@ Observe above that the failure becomes visible first in the sawtooth mode, which
 Now consider the wave equation, $\partial_{tt} u = \partial_{xx} u$ on a bounded domain with homogeneous Dirichlet conditions. If $\bfD_{xx}$ is the second-derivative matrix on a Chebyshev grid, then we can impose the boundary conditions by deleting the endpoint values, resulting in
 
 $$
-\partial_t \bfu = \bfC^T \bfD_{xx} \bfC \bfu,
+\partial_{tt} \bfC^T \bfu = \bfC^T \bfD_{xx} \bfC (\bfC^T \bfu),
 $$
 
 where $\bfC$ is the $(N+1)\times (N-1)$ matrix that chops off the first and last columns. Hence the eigenvalues of $\bfC^T \bfD_{xx} \bfC$ determine the stability restriction. They turn out to be negative and real.

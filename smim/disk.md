@@ -30,8 +30,8 @@ function polarlap(nr,nθ)
     Dr, r = cheb(nr)
     Drr = Dr^2
     S = spdiagm(1 ./r)
-    θ,Dθ,Dθθ = trig(2nθ)
-    Q₁₁,Q₁₂ = Dθθ[1:nθ,1:nθ], Dθθ[nθ+1:2nθ,1:nθ]
+    θ, Dθ, Dθθ = trig(2nθ)
+    Q₁₁, Q₁₂ = Dθθ[1:nθ,1:nθ], Dθθ[nθ+1:2nθ,1:nθ]
     return r, θ[1:nθ], I(nθ)⊗(Drr + S*Dr) + Q₁₁⊗S.^2 + Q₁₂⊗reverse(S.^2,dims=2)
 end
 ```
