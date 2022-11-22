@@ -57,5 +57,8 @@ chapters:
     - file: smim/integration
     - file: smim/bc
     - file: smim/uxxxx
+  - file: etc/overview
+    sections:
+    - file: etc/splitting
 
     
