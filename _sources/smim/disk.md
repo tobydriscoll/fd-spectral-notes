@@ -6,7 +6,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.0
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Julia 1.8.2
   language: julia
@@ -16,7 +16,7 @@ kernelspec:
 # Polar coordinates
 
 ```{code-cell}
-include("/Users/driscoll/817/notes/smim/smij-functions.jl");
+include("smij-functions.jl");
 ```
 
 We already discussed how to discretize polar coordinates using finite differences. Trefethen chooses to use $r>0$ and $\theta\in[0,2π]$, while we used $-1<r<1$ and $\theta\in[0,\pi]$, and we have $r$ varying down rows, while he puts $r$ varying along columns. The resulting details are different, but similar.
@@ -30,8 +30,8 @@ function polarlap(nr,nθ)
     Dr, r = cheb(nr)
     Drr = Dr^2
     S = spdiagm(1 ./r)
-    θ,Dθ,Dθθ = trig(2nθ)
-    Q₁₁,Q₁₂ = Dθθ[1:nθ,1:nθ], Dθθ[nθ+1:2nθ,1:nθ]
+    θ, Dθ, Dθθ = trig(2nθ)
+    Q₁₁, Q₁₂ = Dθθ[1:nθ,1:nθ], Dθθ[nθ+1:2nθ,1:nθ]
     return r, θ[1:nθ], I(nθ)⊗(Drr + S*Dr) + Q₁₁⊗S.^2 + Q₁₂⊗reverse(S.^2,dims=2)
 end
 ```
@@ -75,6 +75,10 @@ end
 hidespines!.(ax)
 hidedecorations!.(ax)
 fig
+```
+
+```{code-cell}
+
 ```
 
 Or we can solve boundary-value problems. To avoid a crude-looking plot that belies the true underlying accuracy, we can interpolate from the solution grid to a finer one. This entails trig interpolation along the rows, where the row at $r$ is continued by the row at $-r$ in order to create a periodic function of $\theta$, along with ordinary Chebyshev interpolation along the columns. 

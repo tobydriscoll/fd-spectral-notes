@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>7.1. Operator splitting &#8212; FD and Spectral methods for PDE</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"float": ["\\mathbb{F}"], "real": ["\\mathbb{R}"], "complex": ["\\mathbb{C}"], "nat": ["\\mathbb{N}"], "integer": ["\\mathbb{Z}"], "bfa": "\\mathbf{a}", "bfb": "\\mathbf{b}", "bfd": "\\mathbf{d}", "bfe": "\\mathbf{e}", "bff": "\\mathbf{f}", "bfx": "\\mathbf{x}", "bfX": "\\mathbf{X}", "bfA": "\\mathbf{A}", "bfB": "\\mathbf{B}", "bfJ": "\\mathbf{J}", "bfD": "\\mathbf{D}", "bfE": "\\mathbf{E}", "bfI": "\\mathbf{I}", "bfC": "\\mathbf{C}", "bfF": "\\mathbf{F}", "bfP": "\\mathbf{P}", "bfQ": "\\mathbf{Q}", "bfS": "\\mathbf{S}", "bfW": "\\mathbf{W}", "bfU": "\\mathbf{U}", "bfp": "\\mathbf{p}", "bfs": "\\mathbf{s}", "bfu": "\\mathbf{u}", "bfv": "\\mathbf{v}", "bfw": "\\mathbf{w}", "bfy": "\\mathbf{y}", "bfz": "\\mathbf{z}", "bfzero": "\\boldsymbol{0}", "bfmu": "\\boldsymbol{\\mu}", "bftau": "\\boldsymbol{\\tau}", "TP": "\\text{TP}", "TN": "\\text{TN}", "FP": "\\text{FP}", "FN": "\\text{FN}", "rmn": ["\\mathbb{R}^{#1 \\times #2}", 2], "dd": ["\\frac{d #1}{d #2}", 2], "pp": ["\\frac{\\partial #1}{\\partial #2}", 2], "norm": ["\\left\\lVert \\mathstrut #1 \\right\\rVert", 1], "abs": ["\\left\\lvert \\mathstrut #1 \\right\\rvert", 1], "twonorm": ["\\norm{#1}_2", 1], "onenorm": ["\\norm{#1}_1", 1], "infnorm": ["\\norm{#1}_\\infty", 1], "inprod": ["\\langle #1,#2 \\rangle", 2], "pr": ["^{(#1)}", 1], "diag": ["\\operatorname{diag}"], "diagm": ["\\operatorname{diagm}"], "sign": ["\\operatorname{sign}"], "mtx": ["\\operatorname{mtx}"], "dist": ["\\operatorname{dist}"], "myvec": ["\\operatorname{vec}"], "simil": ["\\operatorname{sim}"], "ee": ["\\times 10^"], "floor": ["\\lfloor#1\\rfloor", 1], "argmin": ["\\operatorname{argmin}"], "epsm": ["\\epsilon_{\\text{mach}}"], "logit": ["\\operatorname{logit}"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="7. Advanced" href="overview.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">FD and Spectral methods for PDE</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Finite differences and spectral methods for PDEs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../finite-diffs/overview.html">
+   1. Finite differences
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/integration.html">
+     1.1. Indefinite integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/series.html">
+     1.2. Power series and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/roundoff.html">
+     1.3. Roundoff error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/fourier.html">
+     1.4. Fourier analysis of finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/interpolation.html">
+     1.5. Interpolation and finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../finite-diffs/diffmats.html">
+     1.6. Differentiation matrices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tpbvp/overview.html">
+   2. TPBVP
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/linear.html">
+     2.1. Two-point boundary-value problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bc.html">
+     2.2. Boundary conditions for the TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/nonlinear.html">
+     2.3. Nonlinear TPBVP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/layers.html">
+     2.4. Resolving layers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tpbvp/bootstrap.html">
+     2.5. Bootstrapping methods
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../elliptic/overview.html">
+   3. Elliptic PDE
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/tensorproduct.html">
+     3.1. Tensor-product grids
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/poisson.html">
+     3.2. Solving the Poisson equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/disk.html">
+     3.3. Discretizing the disk
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/iterative.html">
+     3.4. Iterative linear algebra
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../elliptic/decomp.html">
+     3.5. Domain decomposition
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mol/overview.html">
+   4. Method of lines
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/ivp.html">
+     4.1. Multistep and RK methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/stability.html">
+     4.2. Absolute stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/semidiscretization.html">
+     4.3. Semidiscretization
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/theory.html">
+     4.4. Convergence theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/beyond.html">
+     4.5. Beyond the basics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mol/multidim.html">
+     4.6. Multiple space dimensions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection/overview.html">
+   5. Advection
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/cfl.html">
+     5.1. The CFL condition
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection_fourier.html">
+     5.2. von Neumann analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/groupvel.html">
+     5.3. Group velocity and dispersion
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/boundaries.html">
+     5.4. Boundaries and interfaces
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/systems.html">
+     5.5. Hyperbolic systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../smim/overview.html">
+   6. Spectral methods
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/unbounded.html">
+     6.1. Unbounded finite differences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/sft.html">
+     6.2. Unbounded spectral
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/dft.html">
+     6.3. Periodic discrete functions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/smoothness.html">
+     6.4. Convergence rates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/barycentric.html">
+     6.5. Barycentric formula
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/potential.html">
+     6.6. Potential theory
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebdm.html">
+     6.7. Chebyshev differentiation matrix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebbvp.html">
+     6.8. Chebyshev for BVPs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/chebfft.html">
+     6.9. Chebyshev and the FFT
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/eigen.html">
+     6.10. Eigenvalues
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/timestability.html">
+     6.11. Time stability
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/disk.html">
+     6.12. Polar coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/integration.html">
+     6.13. Spectral integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/bc.html">
+     6.14. Boundary conditions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../smim/uxxxx.html">
+     6.16. Fourth-order PDEs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   7. Advanced
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     7.1. Operator splitting
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/tobydriscoll/fd-spectral-notes/main?urlpath=tree/etc/splitting.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/etc/splitting.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/etc/splitting.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#integrating-factor">
+   Integrating factor
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#split-step-integration">
+   Split-step integration
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#imex-methods">
+   IMEX methods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exponential-time-differencing">
+   Exponential time differencing
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Operator splitting</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#integrating-factor">
+   Integrating factor
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#split-step-integration">
+   Split-step integration
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#imex-methods">
+   IMEX methods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exponential-time-differencing">
+   Exponential time differencing
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="operator-splitting">
+<h1><span class="section-number">7.1. </span>Operator splitting<a class="headerlink" href="#operator-splitting" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="p">(</span><span class="s">&quot;../smim/smij-functions.jl&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>A common trick for solving a difficult time-dependent PDE is to split the equation according to</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t u = A(u) + B(u), 
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> might both include spatial derivatives. Often the motivation is that one of the partial operators is linear or easy to handle for some other reason.</p>
+<p>We demonstrate these methods on the <em>Kuramoto–Sivashinsky equation</em>,</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t u = - \partial_x(u^2) - \partial_x^2 u - \partial_x^4 u. 
+\]</div>
+<p>With periodic conditions, the last term in the PDE has eigenvalues that are <span class="math notranslate nohighlight">\(O(N^4)\)</span>, making the problem quite stiff. However, we can solve in Fourier space via the splitting</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t \hat{u} = A\hat{u} = (\xi^2 - \xi^4)\hat{u},
+\]</div>
+<p>which is linear and diagonal, and</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t \hat{u} = B\hat{u} = -i\xi \mathcal{F}[ (\mathcal{F}^{-1}[\hat{u}])^2 ],
+\]</div>
+<p>which is nonlinear but also nonstiff.</p>
+<section id="integrating-factor">
+<h2>Integrating factor<a class="headerlink" href="#integrating-factor" title="Permalink to this headline">#</a></h2>
+<p>Recall that in this case, the splitting is</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t u = Lu + G(u),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(L\)</span> is linear and responsible for the stiff terms. We multiply this through by <span class="math notranslate nohighlight">\(e^{-tL}\)</span> and define the new variable</p>
+<div class="math notranslate nohighlight">
+\[
+z = e^{-tL} u,
+\]</div>
+<p>so that</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t z = e^{-tL} G\bigl( e^{tL}z \bigr). 
+\]</div>
+<p>This is easy to apply in Fourier space, where <span class="math notranslate nohighlight">\(L\)</span> is typically diagonal. Here again is the IF method, applied to the KS equation at second order in time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">140</span><span class="w"></span>
+<span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trig</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">.-</span><span class="w"> </span><span class="nb">π</span><span class="w"></span>
+<span class="n">x</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">20</span><span class="o">/</span><span class="nb">π</span><span class="w"></span>
+
+<span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1500</span><span class="w"></span>
+<span class="n">Tfin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"></span>
+<span class="n">τ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tfin</span><span class="o">/</span><span class="n">m</span><span class="w"></span>
+
+<span class="n">u₀</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plan_rfft</span><span class="p">(</span><span class="n">u₀</span><span class="p">)</span><span class="w"></span>
+<span class="n">F⁻¹</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plan_irfft</span><span class="p">(</span><span class="n">F</span><span class="o">*</span><span class="n">u₀</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">ξ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">π</span><span class="o">/</span><span class="mi">20</span><span class="w"></span>
+<span class="n">iξ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="nb">im</span><span class="o">*</span><span class="p">[</span><span class="n">ξ</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="n">div</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">2</span><span class="p">)];</span><span class="mi">0</span><span class="p">]</span><span class="w"></span>
+<span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">ξ</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ξ</span><span class="o">^</span><span class="mi">4</span><span class="w"></span>
+<span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">û</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">iξ</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="p">(</span><span class="n">F</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">F⁻¹</span><span class="o">*</span><span class="n">û</span><span class="p">)</span><span class="o">.^</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>#61 (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">u₀</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">m</span><span class="p">)]</span><span class="w"></span>
+<span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="o">*</span><span class="n">u₀</span><span class="w"></span>
+<span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exp</span><span class="o">.</span><span class="p">(</span><span class="n">τ</span><span class="o">*</span><span class="n">L</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">       </span><span class="c"># half of the integrating factor   </span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">m</span><span class="w"></span>
+<span class="w">    </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">τ</span><span class="o">*</span><span class="n">G</span><span class="p">(</span><span class="n">û</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">τ</span><span class="o">*</span><span class="n">G</span><span class="p">(</span><span class="n">E</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="p">(</span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">E</span><span class="o">*</span><span class="p">(</span><span class="n">E</span><span class="o">*</span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">U</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F⁻¹</span><span class="o">*</span><span class="n">û</span><span class="w">       </span><span class="c"># only needed for plotting</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span><span class="w"></span>
+<span class="k">function</span><span class="w"> </span><span class="n">animate</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">U</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Observable</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">fig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;u&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">lines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nd">@lift</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="o">$</span><span class="n">index</span><span class="p">]))</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">record</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;</span><span class="si">$name</span><span class="s">.mp4&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">5</span><span class="o">:</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">        </span><span class="n">index</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span>
+<span class="w">        </span><span class="n">ylims!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">nothing</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="n">animate</span><span class="p">(</span><span class="s">&quot;if2&quot;</span><span class="p">,</span><span class="n">U</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><video autoplay width=480 controls><source src="if2.mp4" type="video/mp4"></video></p>
+</section>
+<section id="split-step-integration">
+<h2>Split-step integration<a class="headerlink" href="#split-step-integration" title="Permalink to this headline">#</a></h2>
+<p>We suppose here that both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are autonomous (time-invariant). Consider first</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t u = A(u), \qquad u(t_0,x) = u_0(x). 
+\]</div>
+<p>Without worrying about it too much, let’s define the exponential of the operator <span class="math notranslate nohighlight">\(A\)</span> via propagation of the initial condition in this problem:</p>
+<div class="math notranslate nohighlight">
+\[
+e^{(t-t_0)A} u_0 = u(t). 
+\]</div>
+<p>We can do the same for <span class="math notranslate nohighlight">\(B\)</span>. The simplest <strong>split-step solver</strong> of the original PDE is then</p>
+<div class="math notranslate nohighlight">
+\[
+u(t+\tau) = e^{\tau B} e^{\tau A} u(t). 
+\]</div>
+<p>If the subproblems are solved exactly, then this method is <span class="math notranslate nohighlight">\(O(\tau)\)</span>, i.e., first order. The more symmetric <strong>Strang splitting</strong></p>
+<div class="math notranslate nohighlight">
+\[
+u(t+\tau) = \exp( \tfrac{1}{2} \tau A) \exp( \tau B) \exp( \tfrac{1}{2} \tau A) u(t)
+\]</div>
+<p>is second-order in time. It’s normally used by combining the half-step operators in consecutive steps, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[
+u(t+n\tau) = \exp( \tfrac{1}{2} \tau A) \exp( \tau B) \exp( \tau A)  \exp( \tau B)  \cdots  \exp( \tau B)\exp( \tfrac{1}{2} \tau A)  u(t), 
+\]</div>
+<p>which is more efficient but does not allow knowing the solution accurately at any time between the start and the end.</p>
+<p>We demonstrate split-step on the KS equation by pairing exact advancement of <span class="math notranslate nohighlight">\(e^A\)</span> with a 2nd-order RK method for approximating <span class="math notranslate nohighlight">\(e^B\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">expA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">û</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">exp</span><span class="o">.</span><span class="p">(</span><span class="n">τ</span><span class="o">*</span><span class="n">L</span><span class="p">)</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">û</span><span class="w"></span>
+<span class="n">expA2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">û</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">exp</span><span class="o">.</span><span class="p">(</span><span class="mf">0.5</span><span class="n">τ</span><span class="o">*</span><span class="n">L</span><span class="p">)</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">û</span><span class="w"></span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">expB</span><span class="p">(</span><span class="n">û</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">s₁</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">τ</span><span class="o">*</span><span class="n">G</span><span class="p">(</span><span class="n">û</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">τ</span><span class="o">*</span><span class="n">G</span><span class="p">(</span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s₁</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In order to make the animation easily, we are not merging the half-steps on the <span class="math notranslate nohighlight">\(A\)</span> operator here:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="o">*</span><span class="n">u₀</span><span class="w"></span>
+<span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">u₀</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">m</span><span class="p">)]</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">m</span><span class="w"></span>
+<span class="w">    </span><span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">expA2</span><span class="p">(</span><span class="w"> </span><span class="n">expB</span><span class="p">(</span><span class="w"> </span><span class="n">expA2</span><span class="p">(</span><span class="n">û</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">U</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F⁻¹</span><span class="o">*</span><span class="n">û</span><span class="w">    </span>
+<span class="k">end</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">animate</span><span class="p">(</span><span class="s">&quot;splitstep&quot;</span><span class="p">,</span><span class="n">U</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><video autoplay width=480 controls><source src="splitstep.mp4" type="video/mp4"></video></p>
+<p>Thanks to the <em>Baker–Campbell–Hausdorff formula</em>, there exist split-step methods of any even order. They aren’t often used, though, because they require longer sequences of substeps to advance one full time step, and some of the substep increments are necessarily negative, raising issues with stability (e.g., backward diffusion).</p>
+</section>
+<section id="imex-methods">
+<h2>IMEX methods<a class="headerlink" href="#imex-methods" title="Permalink to this headline">#</a></h2>
+<p>In the event of a linear/nonlinear splitting in the form</p>
+<div class="math notranslate nohighlight">
+\[
+\partial_t u = Lu + G(u), 
+\]</div>
+<p>a simple idea is to use a hybrid <strong>IMEX</strong> formula for time-stepping. If the linear part is responsible for the stiffness, then we can simultaneously use an implicit method on the linear part and an explicit one on the nonlinear term. For example, we could combine AM2 (Trapezoid) with AB2 via</p>
+<div class="math notranslate nohighlight">
+\[
+u_{n+1} = u_n + \tfrac{1}{2} \tau\bigl[ Lu_{n+1} + Lu_n + 3G(u_n) - G(u_{n-1})  \bigr]. 
+\]</div>
+<p>Thus, there is only a linear problem to solve for <span class="math notranslate nohighlight">\(u_{n+1}\)</span>. We can investigate the absolute stability of this method via the assumptions <span class="math notranslate nohighlight">\(Lu=\lambda u\)</span>, <span class="math notranslate nohighlight">\(G(u)=\mu u\)</span>, and <span class="math notranslate nohighlight">\(u_k=z^k\)</span>, which leads to</p>
+<div class="math notranslate nohighlight">
+\[
+\left(1-\tfrac{1}{2} \tau \lambda\right) z = 1 + \tfrac{1}{2} (\tau\lambda) + \tfrac{3}{2} (\tau \mu) - \tfrac{1}{2}(\tau \mu) z^{-1}. 
+\]</div>
+<p>For the KS equation, we could set <span class="math notranslate nohighlight">\(\lambda \tau = \alpha\)</span> for <span class="math notranslate nohighlight">\(\alpha&lt;0\)</span> and <span class="math notranslate nohighlight">\(\mu\tau= i\beta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+(2-\alpha)z^2 - (2 +\alpha + 3i\beta)z + i\beta = 0. 
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Polynomials</span><span class="w"></span>
+<span class="n">⍺</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="o">-</span><span class="mi">31</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span><span class="w"></span>
+<span class="n">β</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span><span class="w"></span>
+<span class="n">zpoly</span><span class="p">(</span><span class="n">⍺</span><span class="p">,</span><span class="n">β</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Polynomial</span><span class="p">([</span><span class="mi">1</span><span class="nb">im</span><span class="o">*</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">⍺</span><span class="o">+</span><span class="mi">3</span><span class="nb">im</span><span class="o">*</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">-</span><span class="n">⍺</span><span class="p">])</span><span class="w"></span>
+<span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="n">maximum</span><span class="p">(</span><span class="w"> </span><span class="n">abs</span><span class="p">,</span><span class="w"> </span><span class="n">roots</span><span class="p">(</span><span class="n">zpoly</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)))</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">⍺</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<span class="n">contour</span><span class="p">(</span><span class="n">⍺</span><span class="p">,</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="p">,</span><span class="w"> </span><span class="n">levels</span><span class="o">=</span><span class="mf">0.2</span><span class="o">:</span><span class="mf">0.1</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">colorrange</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">),</span><span class="w"> </span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;⍺&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;β&quot;</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/splitting_10_0.png" src="../_images/splitting_10_0.png" />
+</div>
+</div>
+<p>As you can see from the yellow curve above, it appears that we can maintain stability if <span class="math notranslate nohighlight">\(|\beta| &lt; |\alpha|/4\)</span>. For the KS equation we might expect <span class="math notranslate nohighlight">\(|\alpha/\beta| = O(N^3)\)</span>, so this should not be an issue.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">u₀</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">m</span><span class="p">)]</span><span class="w"></span>
+<span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="o">*</span><span class="n">u₀</span><span class="w"></span>
+
+<span class="c"># one step of BE/Euler to get starting value</span><span class="w"></span>
+<span class="n">G_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">G</span><span class="p">(</span><span class="n">û</span><span class="p">)</span><span class="w"></span>
+<span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="p">(</span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">τ</span><span class="o">*</span><span class="n">G_old</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">τ</span><span class="o">*</span><span class="n">L</span><span class="p">)</span><span class="w"></span>
+<span class="n">U</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F⁻¹</span><span class="o">*</span><span class="n">û</span><span class="w"></span>
+
+<span class="c"># TR/AB method</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">m</span><span class="w"></span>
+<span class="w">    </span><span class="n">Gu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">G</span><span class="p">(</span><span class="n">û</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@.</span><span class="w"> </span><span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="n">τ</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="n">Gu</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">G_old</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.5</span><span class="n">τ</span><span class="o">*</span><span class="n">L</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">G_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gu</span><span class="w"></span>
+<span class="w">    </span><span class="n">U</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="n">F⁻¹</span><span class="o">*</span><span class="n">û</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="n">animate</span><span class="p">(</span><span class="s">&quot;imex&quot;</span><span class="p">,</span><span class="n">U</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><video autoplay width=480 controls><source src="imex.mp4" type="video/mp4"></video></p>
+</section>
+<section id="exponential-time-differencing">
+<h2>Exponential time differencing<a class="headerlink" href="#exponential-time-differencing" title="Permalink to this headline">#</a></h2>
+<p>If we integrate the IF equation over a time step, we get</p>
+<div class="math notranslate nohighlight">
+\[
+z(\tau) = z(0) + \int_0^\tau e^{-tL} G\bigl( e^{tL}z \bigr)\, dt. 
+\]</div>
+<p>Returning to the original variable, we get</p>
+<div class="math notranslate nohighlight">
+\[
+u(\tau) = e^{\tau L}u(0) + e^{\tau L} \int_0^\tau e^{-tL} G(u(t)) \, dt.
+\]</div>
+<p>If we apply, say, a traditional Adams method to solve this equation, we would replace the integrand by a polynomial interpolating it at <span class="math notranslate nohighlight">\(0, -\tau,\ldots.\)</span> However, we might do better approximating the integral via a specialized formula,</p>
+<div class="math notranslate nohighlight">
+\[
+\int_0^\tau e^{-tL} P(t) \, dt,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(P\)</span> interpolates <em>only <span class="math notranslate nohighlight">\(G\)</span> values</em> at the previous time steps. For example, if we use a linear interpolant through <span class="math notranslate nohighlight">\(G_0\)</span> and <span class="math notranslate nohighlight">\(G_{-1}\)</span>, we get</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\int_0^\tau e^{-tL} P(t) \, dt &amp; = \int_0^\tau \frac{e^{-tL}}{\tau} [-t G_{-1} + (\tau + t)G_0 ] \, dt \\ 
+&amp;= L^{-1}(I-e^{-\tau L}) G_0 + L^{-2} \left[ I - (I+\tau L)e^{-\tau L} \right] (G_0-G_{-1}),
+\end{split}\]</div>
+<p>where we have used notation that allows <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(G\)</span> to be operators as well as scalars. Hence, a 2nd order method is</p>
+<div class="math notranslate nohighlight">
+\[
+u(\tau) = e^{\tau L}u(0) + L^{-1}(e^{\tau L}-I) G_0 + L^{-2} \left[ e^{\tau L} - I - \tau L \right] (G_0-G_{-1}). 
+\]</div>
+<p>This type of method is known as <strong>exponential time differencing</strong> (ETD). There are corresponding formulas based on RK methods, but they are not as easy to describe or derive.</p>
+<p>Clearly, we need the ability to evaluate <span class="math notranslate nohighlight">\(e^{\tau L}v\)</span>; i.e., to advance the linear part of the PDE one time step. In the KS example, this operator is diagonal in Fourier space, so there is no difficulty, but in other cases, more advanced techniques (e.g., Krylov subspaces) may be used.</p>
+<p>More subtly, the method needs a careful implementation to avoid numerical instability. In scalar form, the above formulas are</p>
+<div class="math notranslate nohighlight">
+\[
+u(\tau) = e^{\tau \lambda}u(0) + \frac{e^{\tau \lambda}-1}{\lambda} g_0 + \frac{e^{\tau \lambda} - 1 - \tau \lambda}{\lambda^2}(g_0-g_{-1}), 
+\]</div>
+<p>and it’s clear that we will be up against subtractive cancellation. Cox and Matthews, who first published these methods, suggested using series expansions for small <span class="math notranslate nohighlight">\(\lambda\)</span>, which requires diagonalization. However, Kassam and Trefethen showed that one can use contour integrals</p>
+<div class="math notranslate nohighlight">
+\[
+f(L) = \frac{1}{2\pi i}\oint_C f(t)(tI-L)^{-1}\, dt,
+\]</div>
+<p>as approximated by (wait for it) the trapezoid formula on a closed contour enclosing the eigenvalues.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">f₁</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">z</span><span class="w"></span>
+<span class="n">f₂</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">z</span><span class="o">^</span><span class="mi">2</span><span class="w"></span>
+<span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">L</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="n">circ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">cis</span><span class="p">(</span><span class="mi">2</span><span class="nb">π</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">M</span><span class="p">)</span><span class="o">/</span><span class="n">M</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">τ</span><span class="o">*</span><span class="n">L</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="n">abs</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="n">p</span><span class="p">))</span><span class="w">  </span><span class="c"># radius of contour</span><span class="w"></span>
+<span class="w">    </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">R</span><span class="o">*</span><span class="n">circ</span><span class="w">        </span><span class="c"># points on contour</span><span class="w"></span>
+<span class="w">    </span><span class="n">dz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="mi">1</span><span class="nb">im</span><span class="o">*</span><span class="n">R</span><span class="o">*</span><span class="n">circ</span><span class="w">       </span><span class="c"># dz/dθ</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">τ</span><span class="o">/</span><span class="n">M</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">imag</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">f₁</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">z</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">dz</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">dz</span><span class="p">)))</span><span class="w"></span>
+<span class="w">    </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">τ</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="n">M</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">imag</span><span class="p">(</span><span class="n">sum</span><span class="p">(</span><span class="n">f₂</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">z</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">dz</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">zip</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">dz</span><span class="p">)))</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="n">U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">u₀</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">m</span><span class="p">)]</span><span class="w"></span>
+<span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="o">*</span><span class="n">u₀</span><span class="w"></span>
+
+<span class="c"># one step of BE/Euler to get starting value</span><span class="w"></span>
+<span class="n">G₀</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">G</span><span class="p">(</span><span class="n">û</span><span class="p">)</span><span class="w"></span>
+<span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="p">(</span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">τ</span><span class="o">*</span><span class="n">G₀</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">τ</span><span class="o">*</span><span class="n">L</span><span class="p">)</span><span class="w"></span>
+<span class="n">U</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F⁻¹</span><span class="o">*</span><span class="n">û</span><span class="w"></span>
+
+<span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exp</span><span class="o">.</span><span class="p">(</span><span class="n">τ</span><span class="o">*</span><span class="n">L</span><span class="p">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">m</span><span class="w"></span>
+<span class="w">    </span><span class="n">G₋₁</span><span class="p">,</span><span class="n">G₀</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">G₀</span><span class="p">,</span><span class="n">G</span><span class="p">(</span><span class="n">û</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">û</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">E</span><span class="o">.*</span><span class="n">û</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.*</span><span class="n">G₀</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.*</span><span class="p">(</span><span class="n">G₀</span><span class="o">-</span><span class="n">G₋₁</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">U</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F⁻¹</span><span class="o">*</span><span class="n">û</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="n">animate</span><span class="p">(</span><span class="s">&quot;etd&quot;</span><span class="p">,</span><span class="n">U</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><video autoplay width=480 controls><source src="etd.mp4" type="video/mp4"></video></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "tobydriscoll/fd-spectral-notes",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.8"
+        },
+        kernelOptions: {
+            kernelName: "julia-1.8",
+            path: "./etc"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.8'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">7. </span>Advanced</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tobin A. Driscoll<br/>
+  
+      &copy; Copyright 2022.<br/>
+    <div class="extra_footer">
+      <img alt='UD logo' src='_static/UDlogo-small.png'>
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
