@@ -16,7 +16,7 @@ kernelspec:
 # Time stability
 
 ```{code-cell}
-include("smij-functions.jl");
+include("/Users/driscoll/817/notes/smim/smij-functions.jl");
 ```
 
 ## Stability regions
@@ -107,6 +107,10 @@ Legend(fig[1,3], ax[3], "order", framevisible=false)
 fig
 ```
 
+```{code-cell}
+plot(abs.(RKregion(4)))
+```
+
 ## Eigenvalues of spectral differentiation
 
 
@@ -132,10 +136,9 @@ $$
 \tau \le \frac{5}{3N} = 1.67 N^{-1}. 
 $$
 
-This proves to be a bit pessimistic; in the following simulation, the instability becomes evident when $\tau N \approx 1.9$. 
+This proves to be a bit pessimistic; in the following simulation, the instability becomes evident when $\tau N \approx 1.9$.
 
-```{code-cell} julia
-:tags: [hide-input]
+```{code-cell}
 using FFTW
 
 function p6(⍺ = 1.57)
@@ -267,7 +270,6 @@ Here is a reprise of [p19](chebfft) using $\tau = 9.2/N^2$.
 ### p19u: UNSTABLE wave eq.
 
 ```{code-cell}
-:tags: [hide-input]
 # Time-stepping by leap frog formula:
 N = 80
 _, x = cheb(N)
@@ -312,7 +314,6 @@ In two dimensions, one can show that $\lambda$ is twice as large, which means th
 ### p20u: UNSTABLE wave eq. in 2D
 
 ```{code-cell}
-:tags: [hide-input]
 # Grid and initial data:
 N = 32
 x = y = cheb(N)[2]
@@ -411,24 +412,24 @@ using FFTW
 
 # Set up grid and two-soliton initial data:
 N = 256
-τ = 0.4 / N^2
+τ = .4 / N^2
 x = (2π / N) * (-N/2 : N/2-1)
 soliton(a,x) = 3a^2 * sech(0.5 * (a * x))^2
 A, B = 25, 16
 u = @. soliton(25, x+2) + soliton(16, x+1) 
 û = fft(u)
 k = [0:N/2-1; 0; -N/2+1:-1]
-ik3 = 1im * k .^ 3
+ik3 = -k .^ 2
 
 # Solve PDE and plot results:
-tmax = 0.006
+tmax = 0.5
 nsteps = ceil(Int, tmax / τ)
 τ = tmax / nsteps
 t = τ * (0:nsteps)
 U = zeros(N,nsteps+1)
 U[:,1] .= u
 
-g = -0.5im * τ * k          # for the nonlinear term
+g = -1im * τ * k          # for the nonlinear term
 E = exp.(τ * ik3 / 2)       # for the integrating factor   
 E² = E .^ 2
 nonlin(û) = fft( real(ifft(û)) .^ 2 )
@@ -441,6 +442,10 @@ for n = 1:nsteps
     
     U[:,n+1] = real( ifft(û) )      # only needed for plotting
 end
+```
+
+```{code-cell}
+2.6/(2000*128)
 ```
 
 ```{code-cell}
@@ -475,4 +480,4 @@ end;
 
 Note from the results above that the solitons pass through each other unchanged in shape, but phase-shifted in spacetime.
 
-The integrating factor trick is easy but not always the best choice among hybrid *implicit--explicit* solvers. 
+The integrating factor trick is easy but not always the best choice among hybrid *implicit--explicit* solvers.

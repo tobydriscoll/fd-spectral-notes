@@ -67,7 +67,36 @@ $$
 \partial_t z = e^{-tL} G\bigl( e^{tL}z \bigr). 
 $$
 
-This is easy to apply in Fourier space, where $L$ is typically diagonal. Here again is the IF method, applied to the KS equation at second order in time.
+For example, if we apply the 2nd-order AB method to this equation, we get
+
+$$
+z_{n+1} = z_n + \frac{\tau}{2} \left[ 3 e^{-t_nL} G\bigl( e^{t_nL}z_n \bigr) - e^{-t_{n-1}L} G\bigl( e^{t_{n-1}L}z_{n-1} \bigr) \right]. 
+$$
+
+Returning to $u$ leads to
+
+$$
+e^{-t_{n+1}L} u_{n+1} & = e^{-t_{n}L} u_n + e^{-t_n L} \frac{\tau}{2} \left[ 3  G(u_n) -  e^{\tau L} G(u_{n-1}) \right] \\ 
+u_{n+1} & = e^{\tau L} u_n + \frac{\tau}{2} \left[ 3 e^{\tau L}  G(u_n) -  e^{2 \tau L} G(u_{n-1}) \right]. 
+$$
+
+Or, if we want to use a midpoint RK method, the first stage is
+
+$$
+s_1 &=  τe^{-t_n L} G\bigl( e^{t_n L}z_n \bigr) \\ 
+s_2 &= τe^{-(t_n+\tau/2) L} G\bigl( e^{(t_n+\tau/2) L} (z_n + \tfrac{1}{2} s_1 ) \bigr) \\ 
+z_{n+1} &= z_n + \tau s_2. 
+$$
+
+When we translate back to the original variable, and use new stage variables, this becomes
+
+$$
+\sigma_1 &= e^{t_n L}s_1 = G( u_n ) \\ 
+\sigma_2 &= e^{(t_n+\tau/2) L}s_2 =  G\bigl(e^{(\tau/2) L} u_n + \tfrac{1}{2} e^{(\tau/2) L} \sigma_1 \bigr) \\ 
+u_{n+1} &= e^{\tau L}u_n + e^{(\tau/2) L} \sigma_2. 
+$$
+
+These methods are often applied in Fourier space, where $L$ is diagonal in most cases. Here again is the IF method, this time applied to the KS equation at second order in time.
 
 ```{code-cell}
 N = 140
@@ -121,6 +150,65 @@ animate("if2",U)
 
 <video autoplay width=480 controls><source src="if2.mp4" type="video/mp4"></video>
 
+## IMEX methods
+
+In the event of a linear/nonlinear splitting in the form
+
+$$
+\partial_t u = Lu + G(u), 
+$$
+
+a simple idea is to use a hybrid **IMEX** formula for time-stepping. If the linear part is responsible for the stiffness, then we can simultaneously use an implicit method on the linear part and an explicit one on the nonlinear term. For example, we could combine AM2 (Trapezoid) with AB2 via
+
+$$
+u_{n+1} = u_n + \tfrac{1}{2} \tau\bigl[ Lu_{n+1} + Lu_n + 3G(u_n) - G(u_{n-1})  \bigr]. 
+$$
+
+Thus, there is only a linear problem to solve for $u_{n+1}$. We can investigate the absolute stability of this method via the assumptions $Lu=\lambda u$, $G(u)=\mu u$, and $u_k=z^k$, which leads to
+
+$$
+\left(1-\tfrac{1}{2} \tau \lambda\right) z = 1 + \tfrac{1}{2} (\tau\lambda) + \tfrac{3}{2} (\tau \mu) - \tfrac{1}{2}(\tau \mu) z^{-1}. 
+$$
+
+For the KS equation, we could set $\lambda \tau = \alpha$ for $\alpha<0$ and $\mu\tau= i\beta$:
+
+$$
+(2-\alpha)z^2 - (2 +\alpha + 3i\beta)z + i\beta = 0. 
+$$
+
+```{code-cell}
+using Polynomials
+⍺ = range(-31,1,90)
+β = range(0,12,90)
+zpoly(⍺,β) = Polynomial([1im*β, -2-⍺+3im*β, 2-⍺])
+R = [ maximum( abs, roots(zpoly(x,y))) for x in ⍺, y in β ]
+contour(⍺, β, R, levels=0.2:0.1:1, 
+    colorrange=(0.,1.), axis=(xlabel="⍺", ylabel="β"))
+```
+
+As you can see from the yellow curve above, it appears that we can maintain stability if $|\beta| < |\alpha|/4$. For the KS equation we might expect $|\alpha/\beta| = O(N^3)$, so this should not be an issue.
+
+```{code-cell}
+U = [u₀ zeros(N,m)]
+û = F*u₀
+
+# one step of BE/Euler to get starting value
+G_old = G(û)
+û = @. (û + τ*G_old) / (1 - τ*L)
+U[:,2] = F⁻¹*û
+
+# TR/AB method
+for i in 2:m
+    Gu = G(û)
+    @. û = ( û + 0.5τ*(L*û + 3Gu - G_old) ) / (1 - 0.5τ*L)
+    G_old = Gu
+    U[:,i+1] .= F⁻¹*û
+end
+
+animate("imex",U)
+```
+
+<video autoplay width=480 controls><source src="imex.mp4" type="video/mp4"></video>
 
 ## Split-step integration
 
@@ -185,65 +273,6 @@ animate("splitstep",U)
 
 Thanks to the *Baker--Campbell--Hausdorff formula*, there exist split-step methods of any even order. They aren't often used, though, because they require longer sequences of substeps to advance one full time step, and some of the substep increments are necessarily negative, raising issues with stability (e.g., backward diffusion).
 
-## IMEX methods
-
-In the event of a linear/nonlinear splitting in the form
-
-$$
-\partial_t u = Lu + G(u), 
-$$
-
-a simple idea is to use a hybrid **IMEX** formula for time-stepping. If the linear part is responsible for the stiffness, then we can simultaneously use an implicit method on the linear part and an explicit one on the nonlinear term. For example, we could combine AM2 (Trapezoid) with AB2 via
-
-$$
-u_{n+1} = u_n + \tfrac{1}{2} \tau\bigl[ Lu_{n+1} + Lu_n + 3G(u_n) - G(u_{n-1})  \bigr]. 
-$$
-
-Thus, there is only a linear problem to solve for $u_{n+1}$. We can investigate the absolute stability of this method via the assumptions $Lu=\lambda u$, $G(u)=\mu u$, and $u_k=z^k$, which leads to
-
-$$
-\left(1-\tfrac{1}{2} \tau \lambda\right) z = 1 + \tfrac{1}{2} (\tau\lambda) + \tfrac{3}{2} (\tau \mu) - \tfrac{1}{2}(\tau \mu) z^{-1}. 
-$$
-
-For the KS equation, we could set $\lambda \tau = \alpha$ for $\alpha<0$ and $\mu\tau= i\beta$:
-
-$$
-(2-\alpha)z^2 - (2 +\alpha + 3i\beta)z + i\beta = 0. 
-$$
-
-```{code-cell}
-using Polynomials
-⍺ = range(-31,1,90)
-β = range(0,12,90)
-zpoly(⍺,β) = Polynomial([1im*β, -2-⍺+3im*β, 2-⍺])
-R = [ maximum( abs, roots(zpoly(x,y))) for x in ⍺, y in β ]
-contour(⍺, β, R, levels=0.2:0.1:1, 
-    colorrange=(0.,1.), axis=(xlabel="⍺", ylabel="β"))
-```
-
-As you can see from the yellow curve above, it appears that we can maintain stability if $|\beta| < |\alpha|/4$. For the KS equation we might expect $|\alpha/\beta| = O(N^3)$, so this should not be an issue.
-
-```{code-cell}
-U = [u₀ zeros(N,m)]
-û = F*u₀
-
-# one step of BE/Euler to get starting value
-G_old = G(û)
-û = @. (û + τ*G_old) / (1 - τ*L)
-U[:,2] = F⁻¹*û
-
-# TR/AB method
-for i in 2:m
-    Gu = G(û)
-    @. û = ( û + 0.5τ*(L*û + 3Gu - G_old) ) / (1 - 0.5τ*L)
-    G_old = Gu
-    U[:,i+1] .= F⁻¹*û
-end
-
-animate("imex",U)
-```
-
-<video autoplay width=480 controls><source src="imex.mp4" type="video/mp4"></video>
 
 ## Exponential time differencing
 
