@@ -40,6 +40,8 @@ html:
 
 sphinx:
   config:
+    html_js_files:
+      https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
     numfig_secnum_depth: 2
     # pygments_style: fnc
     mathjax3_config:
