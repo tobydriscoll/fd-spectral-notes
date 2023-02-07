@@ -76,7 +76,7 @@ using LinearAlgebra
 function cheb(N)
     x = [ cos(pi*j/N) for j  in 0:N ]
     c(n) = (n==0) || (n==N) ? 2 : 1
-    entry(i,j) = i==j ? 0 : c(i)/c(j) * (-1)^(i+j) / (x[i+1] - x[j+1])
+    entry(i,j) = i==j ? 0.0 : c(i)/c(j) * (-1)^(i+j) / (x[i+1] - x[j+1])
     D = [ entry(i,j) for i in 0:N, j in 0:N ]
     D  = D - diagm(vec(sum(D,dims=2)));    # diagonal entries
     return D, x
